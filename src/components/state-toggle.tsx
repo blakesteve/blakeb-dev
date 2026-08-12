@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Button } from "@blakesteve/roster";
+import { RButton } from "@/lib/roster-ui";
 
 /**
  * The production state lives on <html> as a class, because the blocking script
@@ -43,7 +43,7 @@ export function StateToggle() {
   }
 
   return (
-    <Button
+    <RButton
       variant="ghost"
       colorScheme="neutral"
       size="xs"
@@ -57,6 +57,6 @@ export function StateToggle() {
       }
     >
       <span className="min-w-[68px] text-left">{isBlueline ? "Blueline" : "Press sheet"}</span>
-    </Button>
+    </RButton>
   );
 }

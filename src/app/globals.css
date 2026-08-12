@@ -110,6 +110,34 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* X-ray mode — outlines every annotated Roster component and names it.
+   Unlayered on purpose, for the same cascade reason as the swap rules below. */
+.xray [data-roster] {
+  position: relative;
+  outline: 1px dashed var(--spot);
+  outline-offset: 2px;
+}
+.xray [data-roster]::after {
+  content: attr(data-roster);
+  position: absolute;
+  /* Inside the box, not above it: several annotated components set
+     overflow:hidden for their rounded corners, which would clip an
+     outdented label. */
+  top: 0;
+  left: 0;
+  z-index: 40;
+  padding: 1px 5px;
+  border-radius: 0 0 2px 0;
+  background: var(--spot);
+  color: var(--paper);
+  font-family: var(--font-util);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 /* Screenshot pairs swap by state.
    These get their own unlayered rules rather than `hidden`/`dark:block`
    because Roster's bundled Tailwind build is inlined UNLAYERED, and unlayered
