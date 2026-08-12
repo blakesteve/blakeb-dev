@@ -1,26 +1,148 @@
 @import "tailwindcss";
+@import "@blakesteve/roster/tokens.css";
+@import "@blakesteve/roster/style.css";
+
+/* Roster toggles dark mode with a `.dark` class rather than the OS preference,
+   so Tailwind's `dark:` variant has to agree with it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Two production states.
+
+   Light is the PRESS SHEET: cool paper stock, ink black, spot magenta.
+   Dark is the BLUELINE PROOF: the stage before you go to press, printed in
+   blue — which is why the accent shifts to blueprint cyan rather than staying
+   magenta. Same grid, same furniture, different ink.
+
+   Every color the site uses is declared in both states below. Components read
+   the semantic names only (--ink, --rule, --spot); they never hardcode a hex.
+   --------------------------------------------------------------------------- */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --paper: #e7e8e3;
+  --panel: #f2f3ef;
+  --ink: #14150f;
+  --ink-soft: #54564d;
+  --ink-faint: #7e8078;
+  --rule: #c6c8c0;
+  --hair: #d5d7cf;
+  --spot: #d6006d;
+  --second: #0090ce;
+  --stamp: rgb(214 0 109 / 0.1);
+
+  /* Process inks for the CMYK footer rule. */
+  --process-c: #0090ce;
+  --process-m: #d6006d;
+  --process-y: #f5d400;
+
+  /* Roster's own tokens, remapped onto the press sheet. Roster's classes
+     compile to var(--color-*) which resolve through these, so overriding here
+     recolors every Roster component at once. */
+  --roster-primary-400: #e8408f;
+  --roster-primary-500: #d6006d;
+  --roster-primary-600: #ae0059;
+  --roster-gray-50: #f2f3ef;
+  --roster-gray-100: #e7e8e3;
+  --roster-gray-200: #c6c8c0;
+  --roster-gray-300: #b0b2a9;
+  --roster-gray-500: #7e8078;
+  --roster-gray-600: #54564d;
+  --roster-gray-900: #14150f;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --paper: #0a0c11;
+  --panel: #121620;
+  --ink: #e4e8f0;
+  --ink-soft: #8c97ac;
+  --ink-faint: #5a6577;
+  --rule: #232936;
+  --hair: #1b2029;
+  --spot: #38d6e8;
+  --second: #6d6bf2;
+  --stamp: rgb(56 214 232 / 0.09);
+
+  --process-c: #38d6e8;
+  --process-m: #6d6bf2;
+  --process-y: #f5d400;
+
+  /* On the blueline, cyan is too light to carry a filled button, so indigo
+     takes the interactive role and cyan stays on annotation and hairlines. */
+  --roster-primary-400: #8b87f5;
+  --roster-primary-500: #6d6bf2;
+  --roster-primary-600: #5754d8;
+  --roster-gray-100: #e4e8f0;
+  --roster-gray-200: #323a4d;
+  --roster-gray-300: #5a6577;
+  --roster-gray-500: #8c97ac;
+  --roster-gray-700: #232936;
+  --roster-gray-800: #232936;
+  --roster-gray-900: #121620;
+  --roster-gray-950: #0a0c11;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper: var(--paper);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-hair: var(--hair);
+  --color-spot: var(--spot);
+  --color-second: var(--second);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-archivo), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  --font-read: var(--font-source-serif), Charter, "Iowan Old Style", Georgia,
+    serif;
+  --font-util: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-read);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
+
+/* Each project carries its own accent, and a color that reads on paper usually
+   has to lift on the blueline. The element declares both; the state picks. */
+.world {
+  --world: var(--world-press);
+}
+.dark .world {
+  --world: var(--world-blueline);
+}
+
+/* The uppercase utility labels that carry the folio, the prop rows, and the
+   token strip. Used often enough to earn a class. */
+.u {
+  font-family: var(--font-util);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* KNOWN ISSUE — @blakesteve/roster ships a full Tailwind v4 build whose
+   @layer properties block resets --tw-* custom properties. Utilities that
+   work through those variables (aspect-video, text-shadow-*, and friends)
+   silently no-op. Use an inline style prop for those specific properties.
+   The fix belongs in Roster itself: its dist CSS should not bundle a full
+   Tailwind build. */
