@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
-import { Card } from "@blakesteve/roster";
+import { RCard } from "@/lib/roster-ui";
 import { RegistrationMark } from "@/components/registration-mark";
 import { StateToggle } from "@/components/state-toggle";
 import { projects } from "@/lib/projects";
@@ -130,7 +130,7 @@ export default function Home() {
 
         <div className="grid gap-3 sm:grid-cols-2">
           {projects.map((project, i) => (
-            <Card
+            <RCard
               key={project.slug}
               branded
               brandColorTop="var(--world)"
@@ -193,7 +193,7 @@ export default function Home() {
                   </div>
                 ))}
               </dl>
-            </Card>
+            </RCard>
           ))}
         </div>
       </section>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
+import { XRay } from "@/components/xray";
+import { getRosterComponents } from "@/lib/roster";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -55,6 +57,12 @@ const themeScript = `
 `;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  // Name → tier, read from the installed package so X-ray can build Storybook
+  // links without a hand-maintained map.
+  const tiers = Object.fromEntries(
+    getRosterComponents().map(({ name, tier }) => [name, tier]),
+  );
+
   return (
     <html
       lang="en"
@@ -64,7 +72,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <XRay tiers={tiers} />
+      </body>
     </html>
   );
 }
