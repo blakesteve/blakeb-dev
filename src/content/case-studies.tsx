@@ -5,9 +5,12 @@ import ncaamDark from "@/images/megasquad/megasquad-ncaam-dark.png";
 import ncaamLight from "@/images/megasquad/megasquad-ncaam-light.png";
 import squidDark from "@/images/megasquad/megasquad-sad-squid-dark.png";
 import squidLight from "@/images/megasquad/megasquad-sad-squid-light.png";
-import scheduleMobile from "@/images/megasquad/megasquad-schedule-dark-mobile.png";
-import standingsCollapsed from "@/images/megasquad/megasquad-standings-collapsed.png";
-import standingsExpanded from "@/images/megasquad/megasquad-standings-expanded.png";
+import mobileDark from "@/images/megasquad/megasquad-schedule-dark-mobile.png";
+import mobileLight from "@/images/megasquad/megasquad-schedule-light-mobile.png";
+import collapsedDark from "@/images/megasquad/megasquad-standings-collapsed-dark.png";
+import collapsedLight from "@/images/megasquad/megasquad-standings-collapsed-light.png";
+import expandedDark from "@/images/megasquad/megasquad-standings-expanded-dark.png";
+import expandedLight from "@/images/megasquad/megasquad-standings-expanded-light.png";
 
 export type Stat = { value: string; label: string; source: string };
 export type Row = { k: string; v: string };
@@ -309,7 +312,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             standings nobody can argue with.
           </p>
           <Shot
-            press={standingsCollapsed}
+            press={collapsedLight}
+            blueline={collapsedDark}
             alt="A MegaSquad league leaderboard: six members ranked by record, the leader at 48-15 with a gold trophy and an Admin badge."
             caption="A league, settled — six members, 63 games, no arguing"
             priority
@@ -327,7 +331,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             can see exactly which four teams did it.
           </Pull>
           <Shot
-            press={standingsExpanded}
+            press={expandedLight}
+            blueline={expandedDark}
             alt="An expanded MegaSquad standings row showing 76.19% win percentage and a per-round breakdown; the Sweet 16 row displays eight team logos, each badged with a green check or a red X."
             caption="The round breakdown — logos badged correct or incorrect"
           />
@@ -357,7 +362,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             every phone width takes the same path — the card stacks, and the pill keeps its place.
           </p>
           <Shot
-            press={scheduleMobile}
+            press={mobileLight}
+            blueline={mobileDark}
             alt="The same NCAA tournament schedule on a phone: matchup cards stacked vertically with the result pill centered above each pair of teams."
             caption="430 pt"
             frame="phone"

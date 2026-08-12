@@ -54,12 +54,7 @@ export function Shot({
         ) : null}
       </div>
 
-      <figcaption className="u !tracking-[0.12em]">
-        {caption}
-        {isPair ? (
-          <span className="text-[var(--world)]"> · both states</span>
-        ) : null}
-      </figcaption>
+      <figcaption className="u !tracking-[0.12em]">{caption}</figcaption>
     </figure>
   );
 }
