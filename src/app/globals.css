@@ -110,6 +110,26 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* Screenshot pairs swap by state.
+   These get their own unlayered rules rather than `hidden`/`dark:block`
+   because Roster's bundled Tailwind build is inlined UNLAYERED, and unlayered
+   rules outrank everything in @layer utilities no matter the specificity — so
+   Roster's plain `.block` silently beats our `dark:hidden`. Declaring the swap
+   here, after the imports, puts it back in our control. Same root cause as the
+   --tw-* clobbering noted at the bottom of this file. */
+.plate-press {
+  display: block;
+}
+.plate-blueline {
+  display: none;
+}
+.dark .plate-press {
+  display: none;
+}
+.dark .plate-blueline {
+  display: block;
+}
+
 /* Each project carries its own accent, and a color that reads on paper usually
    has to lift on the blueline. The element declares both; the state picks. */
 .world {

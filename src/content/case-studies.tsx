@@ -1,4 +1,13 @@
 import type { ReactNode } from "react";
+import { Shot } from "@/components/shot";
+
+import ncaamDark from "@/images/megasquad/megasquad-ncaam-dark.png";
+import ncaamLight from "@/images/megasquad/megasquad-ncaam-light.png";
+import squidDark from "@/images/megasquad/megasquad-sad-squid-dark.png";
+import squidLight from "@/images/megasquad/megasquad-sad-squid-light.png";
+import scheduleMobile from "@/images/megasquad/megasquad-schedule-dark-mobile.png";
+import standingsCollapsed from "@/images/megasquad/megasquad-standings-collapsed.png";
+import standingsExpanded from "@/images/megasquad/megasquad-standings-expanded.png";
 
 export type Stat = { value: string; label: string; source: string };
 export type Row = { k: string; v: string };
@@ -299,6 +308,12 @@ export const caseStudies: Record<string, CaseStudy> = {
             source of truth — squads, leagues, weekly picks that lock the moment a game starts, and
             standings nobody can argue with.
           </p>
+          <Shot
+            press={standingsCollapsed}
+            alt="A MegaSquad league leaderboard: six members ranked by record, the leader at 48-15 with a gold trophy and an Admin badge."
+            caption="A league, settled — six members, 63 games, no arguing"
+            priority
+          />
         </Section>
 
         <Section eyebrow="The hard thing" title="Showing you how your bracket fell apart">
@@ -311,6 +326,11 @@ export const caseStudies: Record<string, CaseStudy> = {
             Round 1 at 26&ndash;6. Round 2 at 11&ndash;5. Then the Sweet 16 goes 4&ndash;4, and you
             can see exactly which four teams did it.
           </Pull>
+          <Shot
+            press={standingsExpanded}
+            alt="An expanded MegaSquad standings row showing 76.19% win percentage and a per-round breakdown; the Sweet 16 row displays eight team logos, each badged with a green check or a red X."
+            caption="The round breakdown — logos badged correct or incorrect"
+          />
           <p>
             None of those numbers are stored twice. The record, the win percentage, the per-round
             tallies, and the completed-game count all derive from the same picks — which is why they
@@ -326,10 +346,32 @@ export const caseStudies: Record<string, CaseStudy> = {
             three ways at once — border color, a result pill, and the score — so an entire week reads
             without parsing anything.
           </p>
+          <Shot
+            press={ncaamLight}
+            blueline={ncaamDark}
+            alt="MegaSquad's NCAA tournament Round 1 schedule: matchup cards with team logos, seeds, and final scores, each outlined red or green with a result pill reading “Gross, dude.” or “Incredible!”"
+            caption="Round 1, settled"
+          />
+          <p>
+            All three signals survive the narrow layout. The schedule has exactly one breakpoint, so
+            every phone width takes the same path — the card stacks, and the pill keeps its place.
+          </p>
+          <Shot
+            press={scheduleMobile}
+            alt="The same NCAA tournament schedule on a phone: matchup cards stacked vertically with the result pill centered above each pair of teams."
+            caption="430 pt"
+            frame="phone"
+          />
           <p>
             When no league is in season, a dejected squid offers sports trivia instead. It is the
             kind of thing nobody asks for in a spec.
           </p>
+          <Shot
+            press={squidLight}
+            blueline={squidDark}
+            alt="MegaSquad's empty state: a cartoon squid with a tear, the message “No games found for Week 1, Season 2026,” and a sports trivia card with a Get Another Fact button."
+            caption="No league in season"
+          />
         </Section>
 
         <Section eyebrow="Working to someone else's contract" title="Two languages, one product">
