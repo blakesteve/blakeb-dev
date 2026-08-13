@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { StateToggle } from "@/components/state-toggle";
+import { CrtEasterEgg } from "@/components/crt-easter-egg";
 import { caseStudies } from "@/content/case-studies";
 import { getProject, projects } from "@/lib/projects";
 
@@ -89,6 +90,10 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           </dl>
         </div>
       </header>
+
+      {/* The page describes Game Verdict's CRT easter egg, so it also has one.
+          Scoped to this slug: the egg belongs where its story is. */}
+      {slug === "game-verdict" && <CrtEasterEgg />}
 
       <div className="mx-auto grid w-full max-w-[1180px] gap-7 px-6 pt-8 sm:px-8 lg:grid-cols-[1.5fr_0.95fr] lg:gap-12">
         {/* Capped for the stacked layout — above lg the grid column does it. */}
