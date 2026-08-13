@@ -26,6 +26,12 @@ import gvQuickVoteMobile from "@/images/game-verdict/gameverdict-quickvote-mobil
 import gvResults from "@/images/game-verdict/gameverdict-resultscard.png";
 import gvVerdictCard from "@/images/game-verdict/gameverdict-verdictcard.png";
 import gvCasting from "@/images/game-verdict/gameverdict-verdictcastingcard.png";
+import gvCrtOff from "@/images/game-verdict/gameverdict-crt-off.png";
+import gvCrtOn from "@/images/game-verdict/gameverdict-crt-on.png";
+import gvKonami1p from "@/images/game-verdict/gameverdict-konami-1p.png";
+import gvKonami2p from "@/images/game-verdict/gameverdict-konami-2p.png";
+import gvRain from "@/images/game-verdict/gameverdict-konami-rain.png";
+import gvSettings from "@/images/game-verdict/gameverdict-settings-steamimport-crt.png";
 
 export type Stat = { value: string; label: string; source: string };
 export type Row = { k: string; v: string };
@@ -148,7 +154,7 @@ export const caseStudies: Record<string, CaseStudy> = {
       <>
         <Section eyebrow="The problem" title="Everyone has an opinion, nobody has data">
           <p>
-            Steam will tell you a game has “full controller support.” It will not tell you whether
+            Steam will tell you a game has “full controller support.” It won&rsquo;t tell you whether
             anyone actually <strong>prefers</strong> playing it that way. Game Verdict asks players
             directly, dedupes anonymous votes with a browser fingerprint, and surfaces the leading
             input method as a community badge.
@@ -168,13 +174,13 @@ export const caseStudies: Record<string, CaseStudy> = {
 
         <Section eyebrow="The core loop" title="Free to vote, hard to fake">
           <p>
-            The whole thing only works if voting is nearly free, and only means anything if the votes
+            The whole thing only works if voting is nearly free, and it only means anything if the votes
             can be trusted. Those pull against each other, and almost every decision in the app is an
             answer to that tension.
           </p>
           <p>
-            Quick Vote takes the friction out: no account, one game at a time, skip anything you do
-            not recognize. A browser fingerprint keeps it honest without putting the friction back,
+            Quick Vote takes the friction out: no account, one game at a time, skip anything you don&rsquo;t
+            recognize. A browser fingerprint keeps it honest without putting the friction back,
             counting each voter once whether or not they ever sign up. Sign in later and the votes
             you already cast are claimed rather than lost.
           </p>
@@ -217,7 +223,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <p>
             Asking someone to judge a control scheme only works if they have actually played the
             game, so the queue is ordered by <strong>Steam review count</strong> rather than by how
-            many verdicts a game already has. Review count is a proxy for “have you played this?”.
+            many verdicts a game already has. Review count is a proxy for “have you actually played this?”.
             Verdict count would surface the games that are already well answered, which is backwards.
           </p>
           <p>
@@ -241,7 +247,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section eyebrow="One sentence, two audiences" title="Prose generated from data, not from a model">
           <p>
             Every game page ends with a plain-language verdict: how many people voted, which way they
-            leaned, and which controller they tend to use. It is written by a{" "}
+            leaned, and which controller they tend to use. It&rsquo;s written by a{" "}
             <Code>buildVerdictSummary()</Code> function, not by a language model. Four branches on the
             leading choice, an extra clause when the top two land within ten points of each other, and
             a controller-subtype sentence that only appears once at least two people have reported
@@ -345,6 +351,65 @@ export const caseStudies: Record<string, CaseStudy> = {
             alt="Game Verdict's compare view: Counter-Strike 2 against ELDEN RING, with mirrored bars showing 97 percent keyboard and mouse against 80 percent controller."
             caption="Compare: Counter-Strike 2 against ELDEN RING"
           />
+        </Section>
+
+        <Section eyebrow="The part nobody asked for" title="An easter egg you get to keep">
+          <p>
+            Type <Code>↑ ↑ ↓ ↓ ← → ← → B A</Code> and hit Enter or Space. Keyboards, mice, and
+            controllers rain down the page, which is a nice five seconds and then it&rsquo;s over.
+          </p>
+          <Shot
+            press={gvRain}
+            alt="Game Verdict's Quick Vote page with keyboard, mouse and controller icons falling down the screen after entering the Konami code."
+            caption="The icons that fall are the three things you are voting between"
+          />
+          <p>
+            What&rsquo;s actually interesting is what survives the five seconds. The code unlocks{" "}
+            <strong>CRT mode</strong>, and CRT mode isn&rsquo;t a moment: it&rsquo;s a real setting, saved to
+            your profile and hydrated on the server, that you can turn back on whenever you like.
+            Three fixed layers do the work, all of them <Code>pointer-events: none</Code> so nothing
+            underneath stops being clickable.
+          </p>
+          <Shot
+            press={gvCrtOff}
+            blueline={gvCrtOn}
+            alt="The browse page with CRT mode toggled on: scanlines, a vignette, and a subtle red and blue channel shift over the game grid."
+            caption="Browse, with and without CRT. Flip the production state to compare"
+          />
+          <p>
+            It also lives in Settings, next to the Steam library import, which is where an easter egg
+            stops being a joke and becomes a feature somebody might actually prefer.
+          </p>
+          <Shot
+            press={gvSettings}
+            alt="Game Verdict's settings page showing the Steam library import panel and the CRT mode toggle."
+            caption="Settings: Steam import, and CRT sitting there like it always belonged"
+          />
+          <p>
+            There&rsquo;s a second code. Finish the sequence, tap <strong>Tab</strong> for Select,
+            then hit Enter, and you get the Contra two-player variant. It greets you differently,
+            keeps greeting you on every entry rather than only the first, and offers the most secret
+            badge on the site.
+          </p>
+          <Shot
+            press={gvKonami1p}
+            alt="The first-time Konami dialog, titled with the arrow sequence, reading: the debate is settled."
+            caption="1P: the debate is settled"
+          />
+          <Shot
+            press={gvKonami2p}
+            alt="The two-player Konami dialog, titled with the sequence plus Select and Start, reading: 30 lives. Player 2 has entered the game. You remembered the Contra 2-player code. Respect."
+            caption="2P: 30 lives, and the most secret badge on the site"
+          />
+          <p>
+            All of it works signed out. The rain falls, the CRT turns on, and the badge waits until
+            you feel like claiming it. Which is the same idea as the voting, arrived at from a
+            completely different direction: <strong>the good part should never be behind the
+            account.</strong>
+          </p>
+          <Pull cite="Try it on this page">
+            The code works here too. This page has been listening the whole time.
+          </Pull>
         </Section>
       </>
     ),
