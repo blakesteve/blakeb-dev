@@ -2,9 +2,27 @@ import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { StateToggle } from "@/components/state-toggle";
+import {
+  RDescriptionList,
+  REyebrow,
+  RStat,
+} from "@/lib/roster-ui";
 import { CrtEasterEgg } from "@/components/crt-easter-egg";
 import { caseStudies } from "@/content/case-studies";
 import { getProject, projects } from "@/lib/projects";
+
+/** The two metadata panels in the sidebar. Same shape, same treatment. */
+function SidebarPanel({ label, rows }: { label: string; rows: { k: string; v: string }[] }) {
+  return (
+    <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+      <REyebrow>{label}</REyebrow>
+      <RDescriptionList
+        items={rows.map((row) => ({ term: row.k, description: row.v }))}
+        className="text-[10.5px] [&>div>dt]:normal-case [&>div>dt]:tracking-normal"
+      />
+    </div>
+  );
+}
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -42,15 +60,19 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
     >
       <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-rule py-3">
-          <nav aria-label="Breadcrumb" className="u flex items-center gap-2">
-            <Link href="/" className="text-ink-faint no-underline hover:text-spot">
+          {/* Hand-rolled rather than Roster's Breadcrumbs: that component
+              renders plain anchors with no way to swap in next/link, so
+              adopting it would turn this into a full page load. Eyebrow still
+              carries the typography. */}
+          <REyebrow as="nav" aria-label="Breadcrumb" className="flex items-center gap-2">
+            <Link href="/" className="no-underline hover:text-spot">
               Work
             </Link>
             <span aria-hidden="true">/</span>
-            <span className="!text-[var(--world)]" aria-current="page">
+            <span className="text-[var(--world)]" aria-current="page">
               {project.name}
             </span>
-          </nav>
+          </REyebrow>
           <StateToggle />
         </div>
       </div>
@@ -75,17 +97,19 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
             {study.lede}
           </p>
 
-          <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4">
+          {/* `current` lets each project's accent reach the figures without
+              Roster knowing anything about this site's palette. The display
+              face is the one thing Stat does not offer, so it rides along. */}
+          <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4 text-[var(--world)]">
             {study.stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col gap-[3px]">
-                <dd className="m-0 font-[family-name:var(--font-display)] text-[clamp(1.5rem,3.6vw,2.25rem)] font-bold leading-none tracking-[-0.04em] tabular-nums text-[var(--world)]">
-                  {stat.value}
-                </dd>
-                <dt className="u !tracking-[0.14em]">{stat.label}</dt>
-                <span className="font-[family-name:var(--font-util)] text-[8.5px] tracking-[0.06em] text-ink-faint opacity-75">
-                  {stat.source}
-                </span>
-              </div>
+              <RStat
+                key={stat.label}
+                colorScheme="current"
+                value={stat.value}
+                label={stat.label}
+                source={stat.source}
+                className="[&>dd]:font-[family-name:var(--font-display)]"
+              />
             ))}
           </dl>
         </div>
@@ -100,29 +124,8 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         <div className="max-w-[68ch]">{study.body}</div>
 
         <aside className="flex flex-col gap-3">
-          <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
-            <span className="u">Stack</span>
-            <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-[5px] font-[family-name:var(--font-util)] text-[10.5px]">
-              {study.stack.map((row) => (
-                <div key={row.k} className="contents">
-                  <dt className="text-ink-faint">{row.k}</dt>
-                  <dd className="m-0 text-ink">{row.v}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
-            <span className="u">Also shipped</span>
-            <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-[5px] font-[family-name:var(--font-util)] text-[10.5px]">
-              {study.also.map((row) => (
-                <div key={row.k} className="contents">
-                  <dt className="whitespace-nowrap text-ink-faint">{row.k}</dt>
-                  <dd className="m-0 text-ink">{row.v}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          <SidebarPanel label="Stack" rows={study.stack} />
+          <SidebarPanel label="Also shipped" rows={study.also} />
 
           {project.href ? (
             <a
@@ -143,11 +146,13 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           <i className="flex-1 bg-ink" />
         </div>
         <div className="flex flex-wrap justify-between gap-3 pb-8 pt-2">
-          <Link href="/" className="u no-underline hover:!text-spot">
-            ← Back to work
+          <Link href="/" className="no-underline">
+            <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
           </Link>
-          <Link href={`/work/${next.slug}`} className="u no-underline hover:!text-spot">
-            Next: {next.name} →
+          <Link href={`/work/${next.slug}`} className="no-underline">
+            <REyebrow className="transition-colors hover:!text-spot">
+              Next: {next.name} →
+            </REyebrow>
           </Link>
         </div>
       </div>

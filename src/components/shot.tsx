@@ -1,4 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
+import { REyebrow } from "@/lib/roster-ui";
 
 /**
  * A screenshot, framed as a printed plate.
@@ -54,7 +55,9 @@ export function Shot({
         ) : null}
       </div>
 
-      <figcaption className="u !tracking-[0.12em]">{caption}</figcaption>
+      <figcaption>
+        <REyebrow className="!tracking-[0.12em]">{caption}</REyebrow>
+      </figcaption>
     </figure>
   );
 }

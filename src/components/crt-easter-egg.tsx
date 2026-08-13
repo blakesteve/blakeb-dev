@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
+import { KONAMI_CODE, useKeySequence } from "@blakesteve/roster";
 
 /**
  * A port of Game Verdict's CRT easter egg onto its own case study page.
@@ -17,26 +18,19 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
  * (Select) is tapped after the sequence and before the finalizer, but that one
  * awards a server-side badge, which this page has nothing to award.
  *
- * The sequence, the overlay layers, and the persistence all mirror the
- * original. Deliberately scoped to this page rather than the whole site: the
- * egg belongs where its story is.
+ * The key handling now comes from Roster's `useKeySequence`, which started life
+ * as this exact handler. Space and Enter both finish the code the way the
+ * arcade original took Start, so the sequence is registered twice — once per
+ * finalizer — rather than reimplementing the matcher to accept a set.
+ *
+ * Deliberately scoped to this page rather than the whole site: the egg belongs
+ * where its story is.
  */
 
-const SEQUENCE = [
-  "ArrowUp",
-  "ArrowUp",
-  "ArrowDown",
-  "ArrowDown",
-  "ArrowLeft",
-  "ArrowRight",
-  "ArrowLeft",
-  "ArrowRight",
-  "b",
-  "a",
-];
+/** `KONAMI_CODE` ends on Enter; this page also takes Space, as the game does. */
+const WITH_ENTER = [...KONAMI_CODE];
+const WITH_SPACE = [...KONAMI_CODE.slice(0, -1), " "];
 
-/** "Start" on a NES pad. */
-const FINALIZERS = new Set(["Enter", " "]);
 const STORAGE_KEY = "gv-crt";
 
 /** The three layers from Game Verdict's CrtOverlay, same values. */
@@ -119,39 +113,16 @@ export function CrtEasterEgg() {
   const unlocked = stored !== null;
   const on = stored === "on";
 
-  const progress = useRef(0);
-
   const activate = useCallback(() => {
     writeStored("on");
     setJustUnlocked(true);
     window.setTimeout(() => setJustUnlocked(false), 6000);
   }, []);
 
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      const { key } = event;
-
-      if (progress.current === SEQUENCE.length) {
-        if (FINALIZERS.has(key)) {
-          progress.current = 0;
-          activate();
-        } else {
-          progress.current = 0;
-        }
-        return;
-      }
-
-      if (key === SEQUENCE[progress.current]) {
-        progress.current += 1;
-      } else {
-        // A wrong key still counts as a fresh start if it opens the sequence.
-        progress.current = key === SEQUENCE[0] ? 1 : 0;
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activate]);
+  // preventDefault so the arrows do not scroll the page out from under the
+  // sequence, and no timeout because this one is meant to be discovered.
+  useKeySequence(WITH_ENTER, activate, { preventDefault: true, timeout: 0 });
+  useKeySequence(WITH_SPACE, activate, { preventDefault: true, timeout: 0 });
 
   function toggle() {
     writeStored(on ? "off" : "on");
