@@ -12,6 +12,21 @@ import collapsedLight from "@/images/megasquad/megasquad-standings-collapsed-lig
 import expandedDark from "@/images/megasquad/megasquad-standings-expanded-dark.png";
 import expandedLight from "@/images/megasquad/megasquad-standings-expanded-light.png";
 
+import gvBrowse from "@/images/game-verdict/gameverdict-browsegames-filtered.png";
+import gvCompare from "@/images/game-verdict/gameverdict-compare.png";
+import gvDiscordCompare from "@/images/game-verdict/gameverdict-discord-compare.png";
+import gvDiscordVerdict from "@/images/game-verdict/gameverdict-discord-verdict.png";
+import gvDetail from "@/images/game-verdict/gameverdict-gamedetail-herocrop.png";
+import gvContestedDesktop from "@/images/game-verdict/gameverdict-mostcontested-desktop.png";
+import gvContestedMobile from "@/images/game-verdict/gameverdict-mostcontested-mobile.png";
+import gvBadges from "@/images/game-verdict/gameverdict-profile-badgeshelf.png";
+import gvQuickVote from "@/images/game-verdict/gameverdict-quickvote-desktop.png";
+import gvQuickVoteLibrary from "@/images/game-verdict/gameverdict-quickvote-library.png";
+import gvQuickVoteMobile from "@/images/game-verdict/gameverdict-quickvote-mobile.png";
+import gvResults from "@/images/game-verdict/gameverdict-resultscard.png";
+import gvVerdictCard from "@/images/game-verdict/gameverdict-verdictcard.png";
+import gvCasting from "@/images/game-verdict/gameverdict-verdictcastingcard.png";
+
 export type Stat = { value: string; label: string; source: string };
 export type Row = { k: string; v: string };
 
@@ -55,6 +70,44 @@ function Pull({ children, cite }: { children: ReactNode; cite: string }) {
       </blockquote>
       <figcaption className="u mt-[7px] !tracking-[0.14em]">{cite}</figcaption>
     </figure>
+  );
+}
+
+/**
+ * The three states the vote queue degrades through. A table rather than prose
+ * because the point is the comparison: each row is a different answer to the
+ * same question, and they only read as a set side by side.
+ */
+function Tiers() {
+  const rows: [string, string][] = [
+    ["Signed in, library synced", "Your unplayed games, then popular ones"],
+    ["Signed in, no library", "Popular games, minus voted and skipped"],
+    ["Anonymous", "Popular games, minus what your fingerprint already voted"],
+  ];
+
+  return (
+    <div className="my-2 overflow-x-auto">
+      <table className="w-full border-collapse text-left text-sm">
+        <thead>
+          <tr>
+            <th className="u border-b border-rule pb-2 pr-4 font-medium">State</th>
+            <th className="u border-b border-rule pb-2 font-medium">Queue order</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([state, order]) => (
+            <tr key={state}>
+              <td className="whitespace-nowrap border-b border-rule py-2 pr-4 font-[family-name:var(--font-util)] text-[11px] text-ink">
+                {state}
+              </td>
+              <td className="border-b border-rule py-2 text-[0.9375rem] leading-snug text-ink-soft">
+                {order}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -105,9 +158,113 @@ export const caseStudies: Record<string, CaseStudy> = {
             metadata, cover art, and Steam library hero images pulled in automatically when a game is
             added.
           </p>
+          <Shot
+            press={gvDetail}
+            alt="A Game Verdict game page for The Binding of Isaac: Rebirth, showing cover art, a green Controller verdict badge, developer, release year, and genre tags."
+            caption="A game page: verdict badge, metadata pulled from Steam and IGDB"
+            priority
+          />
         </Section>
 
-        <Section eyebrow="The hard thing" title="The bug that froze the front page">
+        <Section eyebrow="The core loop" title="Free to vote, hard to fake">
+          <p>
+            The whole thing only works if voting is nearly free, and only means anything if the votes
+            can be trusted. Those pull against each other, and almost every decision in the app is an
+            answer to that tension.
+          </p>
+          <p>
+            Quick Vote takes the friction out: no account, one game at a time, skip anything you do
+            not recognize. A browser fingerprint keeps it honest without putting the friction back,
+            counting each voter once whether or not they ever sign up. Sign in later and the votes
+            you already cast are claimed rather than lost.
+          </p>
+          <Shot
+            press={gvQuickVote}
+            alt="Game Verdict's Quick Vote screen: a queue counter, a session counter, and a single large game card showing Counter-Strike 2."
+            caption="Quick Vote: one game at a time, no account required"
+          />
+          <p>
+            A quarter of the traffic is on a phone, and the one-card-at-a-time shape was built for
+            exactly that. Nothing about the loop changes on a small screen.
+          </p>
+          <Shot
+            press={gvQuickVoteMobile}
+            alt="Quick Vote on a phone: the same single-card layout, sized to a narrow screen."
+            caption="The same loop, thumb-sized"
+            frame="phone"
+          />
+          <Pull cite="The design constraint">
+            How do you count a vote from someone who refuses to identify themselves, without letting
+            them vote a hundred times?
+          </Pull>
+          <p>
+            You can also vote from the game page itself, and the breakdown updates in place rather
+            than sending you somewhere to see what you just did.
+          </p>
+          <Shot
+            press={gvCasting}
+            alt="The verdict casting card on a game page, offering Keyboard & Mouse, Controller, Both, and a smaller Other option."
+            caption="Casting a verdict without leaving the page"
+          />
+          <Shot
+            press={gvResults}
+            alt="The results card showing a proportional tricolor bar with percentages for keyboard and mouse, controller, and both."
+            caption="The breakdown, right after you vote"
+          />
+        </Section>
+
+        <Section eyebrow="A small thing I like" title="The queue knows what you have played">
+          <p>
+            Asking someone to judge a control scheme only works if they have actually played the
+            game, so the queue is ordered by <strong>Steam review count</strong> rather than by how
+            many verdicts a game already has. Review count is a proxy for “have you played this?”.
+            Verdict count would surface the games that are already well answered, which is backwards.
+          </p>
+          <p>
+            On top of that it subtracts what you have voted on, skipped, watched, and owned — all
+            resolved in a single parallel round trip — then promotes your own unplayed library games
+            to the front while keeping them in popularity order. A stable partition, not a re-sort.
+          </p>
+          <p>
+            The fingerprint does double duty here. Because the exclusion set is fingerprint-aware,
+            an anonymous voter&rsquo;s queue shrinks as they vote. The queue gets personal for
+            someone who never made an account.
+          </p>
+          <Tiers />
+          <Shot
+            press={gvQuickVoteLibrary}
+            alt="Quick Vote with a synced Steam library: the top card is TUNIC, tagged 'In your library', with a queue of 378 and 535 skipped."
+            caption="Library synced: your own games surface first, tagged in place"
+          />
+        </Section>
+
+        <Section eyebrow="One sentence, two audiences" title="Prose generated from data, not from a model">
+          <p>
+            Every game page ends with a plain-language verdict: how many people voted, which way they
+            leaned, and which controller they tend to use. It is written by a{" "}
+            <Code>buildVerdictSummary()</Code> function, not by a language model. Four branches on the
+            leading choice, an extra clause when the top two land within ten points of each other, and
+            a controller-subtype sentence that only appears once at least two people have reported
+            one.
+          </p>
+          <Shot
+            press={gvVerdictCard}
+            alt="The Verdict card for Cyberpunk 2077, reading: based on 28 community verdicts, Cyberpunk 2077 works well either way, 53% of players say both inputs feel good, 11% lean controller, and 36% lean keyboard and mouse. Among controller players, Xbox is the most common setup."
+            caption="Deterministic prose: same data in, same sentence out"
+          />
+          <p>
+            The same string is also emitted as the <Code>FAQPage</Code> answer in structured data. So
+            roughly 1,600 pages that would otherwise be near-identical templates each carry unique
+            text answering the literal thing people search for, and the reader and the crawler are
+            served by one sentence rather than two systems.
+          </p>
+          <Pull cite="Why not an LLM">
+            No latency, no per-call cost, no hallucinated percentages, and the same input always
+            produces the same output. A model would have done this worse, slower, and for money.
+          </Pull>
+        </Section>
+
+        <Section eyebrow="Then scale arrived" title="The bug that froze the front page">
           <p>
             Home page stats stopped moving. Not wrong — <strong>frozen</strong>, at a number that
             looked perfectly plausible. The cause was that <Code>getAllGames()</Code> ran an
@@ -134,6 +291,60 @@ export const caseStudies: Record<string, CaseStudy> = {
             one cost about 1.8 MB — <strong>every single pageview</strong>, and worst during crawler
             bursts, when concurrent requests each independently pulled the whole list.
           </p>
+          <Shot
+            press={gvBrowse}
+            alt="Game Verdict's browse page with platform and sort filters applied, showing a grid of games with verdict badges and vote counts."
+            caption="Browse: filtering, sorting and counting all happen in SQL"
+          />
+        </Section>
+
+        <Section eyebrow="Beyond the vote" title="Reasons to come back, and somewhere else to be">
+          <p>
+            Twenty badges across six categories are evaluated after every verdict, reaction, and
+            library change, with the first unlock arriving as a toast. Profiles are public, with a
+            verdict history and an input-method tendency bar you can click to filter.
+          </p>
+          <Shot
+            press={gvBadges}
+            alt="A public Game Verdict profile showing a shelf of earned achievement badges."
+            caption="The badge shelf on a public profile"
+          />
+          <p>
+            The Discord bot is the part that leaves the site entirely. Five slash commands run on a
+            Cloudflare Worker that verifies Discord&rsquo;s Ed25519 signatures, returning rich embeds
+            with cover art, the verdict color, and the bar breakdown, so an argument in a group chat
+            can be settled without anyone opening a browser.
+          </p>
+          <Shot
+            press={gvDiscordVerdict}
+            alt="A Discord embed from the Game Verdict bot showing the verdict for Hades II, with cover art thumbnail and a vote breakdown."
+            caption="/verdict in Discord"
+          />
+          <Shot
+            press={gvDiscordCompare}
+            alt="A Discord embed comparing two games side by side with their vote breakdowns."
+            caption="/compare, side by side"
+          />
+          <p>
+            And the home page keeps the most contested games up front, because a game the community
+            cannot agree on is a better invitation to vote than one that is already settled.
+          </p>
+          <Shot
+            press={gvContestedDesktop}
+            alt="The Most Contested section of the Game Verdict home page, showing Steam hero art with the game logo composited on top, a tricolor vote bar, and inline vote buttons."
+            caption="Most Contested, with Steam hero art and the logo composited on top"
+          />
+          <Shot
+            press={gvContestedMobile}
+            alt="The Most Contested card on a phone, with the hero art, vote bar and buttons stacked."
+            caption="The same card, narrow"
+            frame="phone"
+          />
+          <Shot
+            press={gvCompare}
+            alt="Game Verdict's compare view: Counter-Strike 2 against ELDEN RING, with mirrored bars showing 97 percent keyboard and mouse against 80 percent controller."
+            caption="Compare: Counter-Strike 2 against ELDEN RING"
+          />
         </Section>
       </>
     ),

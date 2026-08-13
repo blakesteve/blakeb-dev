@@ -27,16 +27,28 @@ export function getRosterVersion(): string {
  * Every component is re-exported as `./components/<tier>/<Name>/<Name>`. The
  * sibling `<name>-variants` modules are CVA config, not components, so the
  * matching folder-and-file name is what separates the two.
+ *
+ * Both entry points are read. As of Roster 4.0.0 DataTable ships from its own
+ * entry so its TanStack peer stays optional, and reading only index.d.ts would
+ * quietly undercount the library by one.
  */
 export function getRosterComponents(): { tier: string; name: string }[] {
-  const dts = read("dist", "index.d.ts");
   const found = new Map<string, string>();
 
-  for (const line of dts.split("\n")) {
-    const match = line.match(
-      /\.\/components\/(atoms|molecules|organisms)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)['"]/,
-    );
-    if (match && match[2] === match[3]) found.set(match[3], match[1]);
+  for (const entry of ["index.d.ts", "data-table.d.ts"]) {
+    let dts: string;
+    try {
+      dts = read("dist", entry);
+    } catch {
+      continue; // Entry points come and go between majors; skip what is absent.
+    }
+
+    for (const line of dts.split("\n")) {
+      const match = line.match(
+        /\.\/components\/(atoms|molecules|organisms)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)['"]/,
+      );
+      if (match && match[2] === match[3]) found.set(match[3], match[1]);
+    }
   }
 
   return [...found].map(([name, tier]) => ({ name, tier }));
