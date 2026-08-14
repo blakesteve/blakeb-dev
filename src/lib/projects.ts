@@ -1,3 +1,6 @@
+import { getRosterComponentCount } from "./roster";
+import type { GameVerdictStats } from "./game-verdict-stats";
+
 /**
  * The work. `world` is the project's own accent — it shows up as a 2px rule
  * across the top of its card on the home page, and takes over the whole field
@@ -13,7 +16,16 @@ export type Project = {
   host: string;
   href: string | null;
   world: { press: string; blueline: string };
-  props: { label: string; value: string; accent?: boolean }[];
+  props: {
+    label: string;
+    value: string;
+    accent?: boolean;
+    /**
+     * Rebuilds `value` from figures fetched at build time. Only called when
+     * they resolved, so `value` stays the fallback for an unreachable API.
+     */
+    live?: (stats: GameVerdictStats) => string;
+  }[];
 };
 
 export const projects: Project[] = [
@@ -29,7 +41,12 @@ export const projects: Project[] = [
     world: { press: "#4b45c7", blueline: "#6d6bf2" },
     props: [
       { label: "Stack", value: "Next 16 · Supabase · Upstash" },
-      { label: "Scale", value: "1,573 games · 822 commits", accent: true },
+      {
+        label: "Scale",
+        value: "1,580 games · 822 commits",
+        accent: true,
+        live: (stats) => `${stats.games?.toLocaleString("en-US")} games · 822 commits`,
+      },
       { label: "Note", value: "Cut page egress 1.8 MB → 50 KB" },
     ],
   },
@@ -38,14 +55,18 @@ export const projects: Project[] = [
     name: "Roster",
     tagline: "The library this site is made of.",
     blurb:
-      "A production-grade atomic component library — accessible, theme-aware, documented in Storybook, and imported by every project beside it.",
+      "A production-grade atomic component library: accessible, theme-aware, documented in Storybook, and imported by every project beside it.",
     status: "npm",
     host: "@blakesteve/roster",
     href: "https://www.npmjs.com/package/@blakesteve/roster",
     world: { press: "#0e9b74", blueline: "#12b886" },
     props: [
       { label: "Stack", value: "React 19 · TS · Tailwind v4" },
-      { label: "Scale", value: "30 components · 298 commits", accent: true },
+      {
+        label: "Scale",
+        value: `${getRosterComponentCount()} components · 298 commits`,
+        accent: true,
+      },
       { label: "Note", value: "Press ⌥X to see it on this page" },
     ],
   },
@@ -62,7 +83,7 @@ export const projects: Project[] = [
     props: [
       { label: "Stack", value: "Next 16 · astronomy-engine · R2" },
       { label: "Scale", value: "25 sky × measure trials", accent: true },
-      { label: "Note", value: "Read the math — the repo is public" },
+      { label: "Note", value: "Read the math; the repo is public" },
     ],
   },
   {
@@ -70,7 +91,7 @@ export const projects: Project[] = [
     name: "MegaSquad",
     tagline: "Pick'ems for your friend group.",
     blurb:
-      "Ten leagues across five sports. Picks auto-lock at tip-off, and every settled pick answers back — “Bullseye!”, “So Fetch!”, “Gross, dude.”",
+      "Ten leagues across five sports. Picks auto-lock at tip-off, and every settled pick answers back: “Bullseye!”, “So Fetch!”, “Gross, dude.”",
     status: "Private",
     host: "megasquad.org",
     href: "https://megasquad.org",
