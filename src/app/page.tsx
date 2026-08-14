@@ -9,6 +9,7 @@ import {
 import { RegistrationMark } from "@/components/registration-mark";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
+import { AlsoSeparately } from "@/components/also-separately";
 import { projects } from "@/lib/projects";
 import { getRosterComponentCount, getRosterTokens, getRosterVersion } from "@/lib/roster";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
@@ -175,7 +176,7 @@ export default async function Home() {
                       props, so this needs no wrapper and no group. */}
                   <REyebrow
                     as="a"
-                    href={project.href ?? undefined}
+                    href={project.links[0]?.href}
                     className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world)]"
                   >
                     <span
@@ -222,23 +223,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Outside the numbered set, and deliberately so. */}
-      <section className="mt-5 flex flex-col gap-[7px] rounded-[3px] border border-dashed border-rule px-[18px] py-4">
-        <REyebrow>Also, and separately</REyebrow>
-        <h2 className="m-0 text-[1.1875rem] font-semibold tracking-[-0.01em]">BB&rsquo;s Grove</h2>
-        <p className="m-0 max-w-[62ch] text-sm leading-[1.55] text-ink-soft">
-          A memorial for my older brother, where everyone who knew him can share memories, photos,
-          and his BBisms. The homepage grows a grove of Texas trees, one per story. It is not a
-          case study and there is nothing to measure; if you would like to see it, it is at{" "}
-          <a
-            href="https://who-bb.com"
-            className="text-ink underline decoration-rule underline-offset-2 transition-colors hover:decoration-spot"
-          >
-            who-bb.com
-          </a>
-          .
-        </p>
-      </section>
+      <AlsoSeparately />
 
       </div>
       <SiteFooter />

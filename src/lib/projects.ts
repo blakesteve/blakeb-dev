@@ -7,14 +7,29 @@ import type { GameVerdictStats } from "./game-verdict-stats";
  * on its case-study page. Two values because a color that reads well on paper
  * usually needs to lift on the blueline.
  */
+/**
+ * Where a project can be reached. Several have more than one front door:
+ * Roster is a package, a repo, and a deployed Storybook, and listing only the
+ * npm page hides two thirds of it.
+ *
+ * The first entry is the primary — it is what the home page card links to and
+ * what `host` labels. The rest appear on /work and in the case study sidebar.
+ */
+export type ProjectLink = {
+  label: string;
+  href: string;
+  kind: "live" | "source" | "package" | "docs";
+};
+
 export type Project = {
   slug: string;
   name: string;
   tagline: string;
   blurb: string;
   status: string;
+  /** Short label for the primary link, used on cards where space is tight. */
   host: string;
-  href: string | null;
+  links: ProjectLink[];
   world: { press: string; blueline: string };
   props: {
     label: string;
@@ -37,7 +52,10 @@ export const projects: Project[] = [
       "Players vote, the community decides, and the verdict lands as a live tricolor bar on every tracked game.",
     status: "Live",
     host: "gameverdict.app",
-    href: "https://gameverdict.app",
+    /* No public repo: github.com/blakesteve/game-verdict is not reachable. */
+    links: [
+      { label: "gameverdict.app", href: "https://gameverdict.app", kind: "live" },
+    ],
     world: { press: "#4b45c7", blueline: "#6d6bf2" },
     props: [
       { label: "Stack", value: "Next 16 · Supabase · Upstash" },
@@ -58,7 +76,20 @@ export const projects: Project[] = [
       "A production-grade atomic component library: accessible, theme-aware, documented in Storybook, and imported by every project beside it.",
     status: "npm",
     host: "@blakesteve/roster",
-    href: "https://www.npmjs.com/package/@blakesteve/roster",
+    links: [
+      {
+        label: "npm",
+        href: "https://www.npmjs.com/package/@blakesteve/roster",
+        kind: "package",
+      },
+      {
+        /* Same deployment /system links component names into. */
+        label: "Storybook",
+        href: process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "https://roster-tan.vercel.app",
+        kind: "docs",
+      },
+      { label: "GitHub", href: "https://github.com/blakesteve/roster", kind: "source" },
+    ],
     world: { press: "#0e9b74", blueline: "#12b886" },
     props: [
       { label: "Stack", value: "React 19 · TS · Tailwind v4" },
@@ -77,8 +108,15 @@ export const projects: Project[] = [
     blurb:
       "Every scrobble you have ever logged, cross-referenced against real retrogrades, full moons, and eclipses computed from planetary positions. Astrology asks; a permutation test answers.",
     status: "MIT",
-    host: "open source",
-    href: "https://github.com/blakesteve/retrospect",
+    host: "retrospect-seven.vercel.app",
+    links: [
+      {
+        label: "retrospect-seven.vercel.app",
+        href: "https://retrospect-seven.vercel.app",
+        kind: "live",
+      },
+      { label: "GitHub", href: "https://github.com/blakesteve/retrospect", kind: "source" },
+    ],
     world: { press: "#b98a12", blueline: "#d9a82c" },
     props: [
       { label: "Stack", value: "Next 16 · astronomy-engine · R2" },
@@ -94,7 +132,10 @@ export const projects: Project[] = [
       "Ten leagues across five sports. Picks auto-lock at tip-off, and every settled pick answers back: “Bullseye!”, “So Fetch!”, “Gross, dude.”",
     status: "Private",
     host: "megasquad.org",
-    href: "https://megasquad.org",
+    /* Private: the front end is mine, the API is my brother's. */
+    links: [
+      { label: "megasquad.org", href: "https://megasquad.org", kind: "live" },
+    ],
     world: { press: "#c62828", blueline: "#e23b3b" },
     props: [
       { label: "Stack", value: "Vite · React 19 · Zustand" },
