@@ -8,9 +8,13 @@ import {
 } from "@/lib/roster-ui";
 import { RegistrationMark } from "@/components/registration-mark";
 import { TopBar } from "@/components/top-bar";
+import { SiteFooter } from "@/components/site-footer";
 import { projects } from "@/lib/projects";
 import { getRosterComponentCount, getRosterTokens, getRosterVersion } from "@/lib/roster";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
+import { yearsShippingWords } from "@/lib/career";
+
+const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 const TOKEN_STRIP = [
   "roster-primary-500",
@@ -84,7 +88,7 @@ export default async function Home() {
 
         <div className="mt-8 grid gap-6 border-t border-rule pt-6 sm:grid-cols-[1.55fr_1fr] sm:gap-12">
           <p className="m-0 max-w-[48ch] text-[1.0625rem] leading-relaxed">
-            Sixteen years building interfaces, and lately everything behind them: Postgres
+            {capitalize(yearsShippingWords())} years building interfaces, and lately everything behind them: Postgres
             schemas, cached queries, rate limits, cron jobs, a Discord bot. Currently Lead Front
             End Engineer at <strong className="font-bold">Revmatics</strong>, before that findhelp,
             Cart.com, and five and a half years at <strong className="font-bold">IBM</strong>. I
@@ -234,18 +238,8 @@ export default async function Home() {
         </p>
       </section>
 
-      {/* The four process inks, in order. */}
-      <div className="mt-8 flex h-[6px]" aria-hidden="true">
-        <i className="flex-1 bg-[var(--process-c)]" />
-        <i className="flex-1 bg-[var(--process-m)]" />
-        <i className="flex-1 bg-[var(--process-y)]" />
-        <i className="flex-1 bg-ink" />
       </div>
-      <footer className="flex flex-wrap justify-between gap-3 pb-8 pt-2">
-        <REyebrow>© 2026 Blake Ball</REyebrow>
-        <REyebrow>Set in Archivo, Source Serif &amp; IBM Plex Mono</REyebrow>
-      </footer>
-      </div>
+      <SiteFooter />
     </main>
   );
 }

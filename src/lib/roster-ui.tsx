@@ -61,6 +61,42 @@ export function RLink(props: ComponentProps<typeof RosterLink>) {
   return <RosterLink data-roster="Link" {...props} />;
 }
 
+/**
+ * The bordered call to action: "Visit gameverdict.app →", "Email →".
+ *
+ * A Roster `Link` rather than a `Button`, because it navigates. Roster's Button
+ * is typed to `HTMLButtonElement` with no `as` or `href`, so it cannot render
+ * an anchor at all — a CTA built from it would be a button that fakes a link,
+ * which loses middle-click, open-in-new-tab, and the right role. `Link` is
+ * polymorphic and already knows about `external`.
+ *
+ * The press-sheet CTA shape is this site's, not Roster's: 3px radius, mono
+ * caps, a 10% wash of whatever ink the context supplies. `tint` defaults to
+ * `--spot` and takes `--world` on a case study so the button carries that
+ * project's accent.
+ */
+export function RCta({
+  tint = "var(--spot)",
+  className = "",
+  ...props
+}: ComponentProps<typeof RosterLink> & { tint?: string }) {
+  return (
+    <RosterLink
+      data-roster="Link"
+      underline="none"
+      style={{ "--cta": tint } as React.CSSProperties}
+      className={
+        "inline-block rounded-[3px] border border-[var(--cta)] bg-[var(--cta)]/10 " +
+        "px-4 py-[10px] text-center font-[family-name:var(--font-util)] text-[10px] " +
+        "uppercase tracking-[0.14em] !text-[var(--cta)] no-underline " +
+        "transition-opacity hover:opacity-80 " +
+        className
+      }
+      {...props}
+    />
+  );
+}
+
 /* RBreadcrumbs lives in components/breadcrumbs.tsx instead: it has to bind
    next/link, and a function prop cannot cross the server/client boundary. */
 

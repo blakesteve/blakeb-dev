@@ -63,6 +63,7 @@ declared unlayered, where they beat both.
 | Figure | Source |
 |---|---|
 | Roster version, component count, tier split | the installed package's own `.d.ts` and `package.json` |
+| Employment durations, years shipping | computed from dates in `lib/career.ts`, never written down |
 | Token ramps | the shipped `tokens.css` |
 | Game Verdict games and verdicts | `GET https://www.gameverdict.app/api/stats`, hourly |
 
@@ -81,8 +82,37 @@ another app hiccuped, but it should not quietly stop updating either.
 - `/work/[slug]` — case studies, statically generated per project
 - `/system` — the library itself: token ramps shown shipped-versus-remapped, the
   full catalog linked into Storybook, and live component specimens
+- `/about` — the arc, the two-ink portrait, and the colophon
+- `/resume` — the same career data, print-shaped
 
-`/work`, `/about`, and `/writing` are linked from the nav and not yet built.
+`/work` and `/writing` are linked from the nav and not yet built. `/work` may
+end up redundant with the home page, which already lists every project.
+
+## The résumé
+
+`/resume` and the `/about` timeline read one source, `lib/career.ts`, because a
+résumé that disagrees with the about page is worse than having neither. Every
+duration is computed from its dates.
+
+The browser's print dialog is the PDF export, so the page and the downloadable
+file cannot drift apart. `@media print` forces the press sheet regardless of
+which state the visitor is in — printing a near-black page wastes a cartridge —
+and drops the nav, the footer, and the print button itself.
+
+Dropping a PDF at `public/blake-ball-resume.pdf` adds a download link. Its
+presence is checked with `existsSync` at build time rather than assumed, so the
+link only appears when the file is really there.
+
+## Guards
+
+`npm run check:ramps` fails if a color ramp is not monotonic — if a step is
+lighter than the one before it. It runs on `prebuild`.
+
+It exists because that rule was broken twice by hand, both times by assigning a
+step according to what a color was *for* rather than how light it is: once with
+`--ink-faint` at 300 and `--ink-soft` at 400, and once with a border color left
+at 200 where it sat darker than 700 between two near-white neighbors. Both were
+caught by a person looking at `/system`, which is not a process.
 
 ## X-ray
 
@@ -98,9 +128,12 @@ the usage rather than in a table that will drift.
 ## Testing
 
 There is no test suite. The site is almost entirely static composition, and the
-parts with real logic — the package reader, the stats fetcher and its fallback —
-are verified by hand against the deployed endpoints. That is a gap rather than a
-position, and the fallback path in particular deserves a unit test.
+parts with real logic — the package reader, the stats fetcher and its fallback,
+the date arithmetic in `lib/career.ts` — are verified by hand. That is a gap
+rather than a position. The stats fallback and the duration formatting are the
+two things most worth covering first.
+
+`check:ramps` is the one automated check, and it only guards color ordering.
 
 ## Deploying
 
