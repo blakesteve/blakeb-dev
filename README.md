@@ -76,6 +76,22 @@ falls back to the written figure, relabels it as a dated snapshot instead of as
 live, and warns in the build log. A portfolio deploy should not fail because
 another app hiccuped, but it should not quietly stop updating either.
 
+## Writing
+
+Posts are content modules in `content/posts.tsx`, the same shape as the case
+studies, so a post uses the site's own components rather than a parallel set of
+markdown styles — the pullquotes and inline code are the real Roster ones, and
+they repigment with the state and show up under X-ray.
+
+There is no reading-time estimate. The body is JSX rather than text, so it would
+have to be typed by hand, and a hand-typed "4 min read" is exactly the kind of
+number this site refuses to print.
+
+Hand-authored data that routing depends on gets checked rather than trusted: a
+duplicated slug or a date typed `2026-8-14` fails quietly as a 404 or a
+malformed byline, so `posts.test.ts` asserts the invariants the type system
+cannot.
+
 ## Pages
 
 - `/` — folio, hero, live system strip, project cards
@@ -158,16 +174,17 @@ npm test          # vitest run
 npm run test:watch
 ```
 
-Vitest, node environment, no jsdom. The suite covers the three modules that
-have behavior rather than markup, and stops there. The site is almost entirely
-static composition, and a component test asserting that a heading renders a
-heading buys nothing.
+Vitest, node environment, no jsdom. The suite covers the modules that have
+behavior rather than markup, and stops there. The site is almost entirely static
+composition, and a component test asserting that a heading renders a heading
+buys nothing.
 
 | Module | What is covered |
 |---|---|
 | `lib/career.ts` | month arithmetic, the open-ended role, singular versus plural units, a position whose title changed in place, and the rounding boundary in `yearsShipping` |
 | `lib/game-verdict-stats.ts` | every degradation path: non-ok response, non-object body, unparseable body, both counts null, fetch throwing |
 | `lib/roster.ts` | the `.d.ts` parse across both entry points, and the token and ramp readers against the shipped `tokens.css` |
+| `content/posts.ts` | date formatting, lookup, sort order, and the data invariants routing depends on: unique slugs, URL-safe slugs, `YYYY-MM-DD` dates, and a dek short enough to survive as a meta description |
 
 Three things are worth knowing about how these are written.
 

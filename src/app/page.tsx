@@ -94,9 +94,10 @@ export default async function Home() {
             {capitalize(yearsShippingWords())} years building interfaces, and lately everything behind them: Postgres
             schemas, cached queries, rate limits, cron jobs, a Discord bot. Currently Lead Front
             End Engineer at <strong className="font-bold">Revmatics</strong>, before that findhelp,
-            Cart.com, and five and a half years at <strong className="font-bold">IBM</strong>. I
-            came up in graphic design, which is mostly useful now for one thing: design partners
-            know I will speak their language and go to bat for the details worth fighting for.
+            Cart.com, and five and a half years at <strong className="font-bold">IBM</strong>. The
+            design degree pays off in two directions: with no designer on a project I can make
+            the call myself and know it holds up, and with one I can argue in their language and
+            still know where my lane ends.
           </p>
 
           {/* `split` is exactly this shape: term left, value right-aligned and
