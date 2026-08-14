@@ -156,21 +156,19 @@ export default function Home() {
                     {String(i + 1).padStart(2, "0")} / {project.status}
                   </REyebrow>
                   {/* z-10 keeps this above the stretched card link below.
-                      Eyebrow sits inside the anchor rather than becoming it:
-                      its props type does not carry `href`, so the hover moves
-                      to a group instead. */}
-                  <a
+                      Eyebrow IS the anchor: `as` carries the element's own
+                      props, so this needs no wrapper and no group. */}
+                  <REyebrow
+                    as="a"
                     href={project.href ?? undefined}
-                    className="group relative z-10 inline-flex items-center gap-[5px] no-underline"
+                    className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world)]"
                   >
                     <span
                       aria-hidden="true"
                       className="inline-block size-[5px] rounded-full bg-[var(--world)]"
                     />
-                    <REyebrow className="transition-colors group-hover:!text-[var(--world)]">
-                      {project.host}
-                    </REyebrow>
-                  </a>
+                    {project.host}
+                  </REyebrow>
                 </div>
 
                 <h2 className="m-0 font-[family-name:var(--font-display)] text-2xl font-bold uppercase leading-none tracking-[-0.03em]">
