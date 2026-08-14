@@ -30,10 +30,14 @@ export function TopBar({
 }) {
   return (
     <div className="sticky top-0 z-40 border-b border-rule bg-paper/85 backdrop-blur-[6px]">
-      <div className="mx-auto flex w-full max-w-[1180px] flex-wrap items-center gap-y-3 px-6 py-3 sm:px-8">
+      {/* Deliberately no wrapping. With `flex-wrap` a long breadcrumb pushed
+          the toggle onto its own row and the bar doubled in height on a phone.
+          The trail shrinks and truncates instead; the mark and the toggle are
+          fixed. */}
+      <div className="mx-auto flex w-full max-w-[1180px] items-center gap-x-3 px-6 py-3 sm:gap-x-4 sm:px-8">
         <TopBarMark yieldsToFolio={yieldsToFolio} />
-        {children}
-        <div className="ml-auto">
+        <div className="min-w-0 flex-1">{children}</div>
+        <div className="shrink-0">
           <StateToggle />
         </div>
       </div>

@@ -80,11 +80,12 @@ export default function AboutPage() {
               I ever learned how to make one run.
             </p>
             <p className="m-0 max-w-[54ch] pt-4 text-[1.0625rem] leading-[1.58] text-ink-soft">
-              That is mostly useful for one thing now. Design partners figure out
-              quickly that I will speak their language, argue in it, and go to bat
-              for the details worth fighting for. The rest of the time I&rsquo;m
-              building the layers underneath, which these days means schemas,
-              caching, and the occasional bot.
+              It pays off in two directions. On a project with no designer and no
+              direction, I can make the call myself and know it holds up. On one
+              with a designer, I can argue in their language, go to bat for the
+              details worth fighting for, and still know where my lane ends. The
+              rest of the time I&rsquo;m building the layers underneath, which these
+              days means schemas, caching, and the occasional bot.
             </p>
           </div>
 
