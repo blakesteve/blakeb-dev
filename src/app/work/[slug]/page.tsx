@@ -2,8 +2,10 @@ import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
+import { SiteFooter } from "@/components/site-footer";
 import { RBreadcrumbs } from "@/components/breadcrumbs";
 import {
+  RCta,
   RDescriptionList,
   REyebrow,
   RStat,
@@ -151,34 +153,27 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           <SidebarPanel label="Also shipped" rows={study.also} />
 
           {project.href ? (
-            <a
-              href={project.href}
-              className="rounded-[3px] border border-[var(--world)] bg-[var(--world)]/10 px-[15px] py-3 text-center font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-[var(--world)] no-underline transition-opacity hover:opacity-80"
-            >
+            <RCta href={project.href} external tint="var(--world)" showExternalIcon={false}>
               Visit {project.host} →
-            </a>
+            </RCta>
           ) : null}
         </aside>
       </div>
 
-      <div className="mx-auto mt-auto w-full max-w-[1180px] px-6 pt-8 sm:px-8">
-        <div className="flex h-[6px]" aria-hidden="true">
-          <i className="flex-1 bg-[var(--process-c)]" />
-          <i className="flex-1 bg-[var(--process-m)]" />
-          <i className="flex-1 bg-[var(--process-y)]" />
-          <i className="flex-1 bg-ink" />
-        </div>
-        <div className="flex flex-wrap justify-between gap-3 pb-8 pt-2">
-          <Link href="/" className="no-underline">
-            <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
-          </Link>
-          <Link href={`/work/${next.slug}`} className="no-underline">
-            <REyebrow className="transition-colors hover:!text-spot">
-              Next: {next.name} →
-            </REyebrow>
-          </Link>
-        </div>
-      </div>
+      <SiteFooter
+        pageLinks={
+          <>
+            <Link href="/" className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
+            </Link>
+            <Link href={`/work/${next.slug}`} className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">
+                Next: {next.name} →
+              </REyebrow>
+            </Link>
+          </>
+        }
+      />
     </main>
   );
 }

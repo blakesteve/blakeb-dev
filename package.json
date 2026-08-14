@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:ramps": "node scripts/check-ramps.mjs",
+    "prebuild": "node scripts/check-ramps.mjs"
   },
   "dependencies": {
     "@blakesteve/roster": "^4.2.0",

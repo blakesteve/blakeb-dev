@@ -335,19 +335,24 @@
   --roster-purple-900: color-mix(in oklab, var(--anchor-purple) 38%, var(--tint-dark));
   --roster-purple-950: color-mix(in oklab, var(--anchor-purple) 26%, var(--tint-dark));
 
-  /* A dark ramp still runs light to dark as the number climbs; forgetting that
-     is what put --ink-faint at 300 and --ink-soft at 400 here, which is exactly
-     backwards. Semantic steps now reference their token so the two cannot
-     disagree again. */
+  /* A dark ramp still runs light to dark as the number climbs. This block got
+     that wrong twice: first with --ink-faint at 300 and --ink-soft at 400, then
+     by leaving the old border color at 200, where it sat darker than 700 while
+     every step around it was near-white. Both came from assigning slots by what
+     a value was FOR rather than by how light it is.
+
+     The rule is the ordering, and nothing else. --rule lands at 800 because
+     that is where its luminance falls, which happens to be the step Roster
+     reaches for with `dark:border-gray-800` anyway. */
   --roster-gray-50: #f4f6fa;
   --roster-gray-100: var(--ink);
-  --roster-gray-200: #323a4d;
+  --roster-gray-200: #c7cedb;
   --roster-gray-300: var(--ink-soft);
   --roster-gray-400: var(--ink-faint);
   --roster-gray-500: #5f6b80;
   --roster-gray-600: #4a5468;
-  --roster-gray-700: var(--rule);
-  --roster-gray-800: #1b2029;
+  --roster-gray-700: #323a4d;
+  --roster-gray-800: var(--rule);
   --roster-gray-900: var(--panel);
   --roster-gray-950: var(--paper);
 }
@@ -439,3 +444,70 @@ body {
    Utilities that work through --tw-* variables (aspect-video, text-shadow-*)
    behave normally again, and `dark:` variants resolve as long as Roster is
    imported before Tailwind, as it is at the top of this file. */
+
+/* ---------------------------------------------------------------------------
+   Print.
+
+   Only /resume is meant to be printed, and it is the actual PDF export: the
+   browser's "Save as PDF" is what people download, so the page and the file
+   can never disagree.
+
+   The blueline is forced back to a press sheet here regardless of which state
+   the visitor is in. Printing a near-black page is a waste of a cartridge, and
+   a résumé that arrives dark is a résumé nobody prints twice.
+   --------------------------------------------------------------------------- */
+@media print {
+  :root,
+  :root.dark {
+    color-scheme: light;
+
+    --paper: #ffffff;
+    --panel: #ffffff;
+    --ink: #101010;
+    --ink-soft: #33352f;
+    --ink-faint: #55574f;
+    --rule: #9a9c94;
+    --hair: #d2d4cc;
+    --spot: #000000;
+
+    --tint-light: #ffffff;
+    --tint-dark: #101010;
+  }
+
+  body {
+    background: #fff;
+    /* Let the browser keep our rules and hairlines rather than dropping them. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    size: letter portrait;
+    margin: 14mm 15mm;
+  }
+
+  .resume-sheet {
+    /* The sheet supplies its own margin through @page. */
+    max-width: none;
+    padding: 0;
+  }
+
+  /* Chrome will happily strand a heading at the foot of a page. */
+  h1, h2, h3 {
+    break-after: avoid;
+  }
+
+  /* Screen-only furniture. `position: sticky` and `fixed` have no meaning on
+     paper: the browser lays them out in place, so the nav bar and the X-ray
+     button print on top of whatever they happen to overlap. This was only
+     handled on /resume, which wrapped them by hand — every other page printed
+     with the bar stamped across the first paragraph.
+
+     Targeted here rather than with a `print:hidden` on each component so a new
+     piece of fixed chrome is covered the day it is added. */
+  .sticky,
+  [data-screen-only],
+  .fixed:not(.resume-sheet *) {
+    display: none !important;
+  }
+}
