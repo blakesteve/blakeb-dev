@@ -153,13 +153,49 @@ the usage rather than in a table that will drift.
 
 ## Testing
 
-There is no test suite. The site is almost entirely static composition, and the
-parts with real logic — the package reader, the stats fetcher and its fallback,
-the date arithmetic in `lib/career.ts` — are verified by hand. That is a gap
-rather than a position. The stats fallback and the duration formatting are the
-two things most worth covering first.
+```bash
+npm test          # vitest run
+npm run test:watch
+```
 
-`check:ramps` is the one automated check, and it only guards color ordering.
+Vitest, node environment, no jsdom. The suite covers the three modules that
+have behavior rather than markup, and stops there. The site is almost entirely
+static composition, and a component test asserting that a heading renders a
+heading buys nothing.
+
+| Module | What is covered |
+|---|---|
+| `lib/career.ts` | month arithmetic, the open-ended role, singular versus plural units, a position whose title changed in place, and the rounding boundary in `yearsShipping` |
+| `lib/game-verdict-stats.ts` | every degradation path: non-ok response, non-object body, unparseable body, both counts null, fetch throwing |
+| `lib/roster.ts` | the `.d.ts` parse across both entry points, and the token and ramp readers against the shipped `tokens.css` |
+
+Three things are worth knowing about how these are written.
+
+The career tests pin the clock. `monthsBetween(start, null)` reads the wall
+clock in UTC, so anything asserting a duration to the present sets a fixed
+system time first. The boundary case is the one that matters: Nov 2010 to Aug
+2026 is 189 months, which is 15.75 years, which every human calls sixteen. That
+disagreement between a floor and a reader is the bug the function was written
+to fix, and the test holds it in place.
+
+The stats tests assert that nothing throws. This module runs at build time on
+Vercel, so a throw fails a deploy that has nothing to do with Game Verdict.
+Each failure path has to resolve to `{ games: null, verdicts: null }` and warn.
+
+The Roster tests run against the really installed package, not a fixture. The
+failure they exist to catch is a Roster major moving a file so the parser
+quietly returns fewer components, and a fixture would keep passing through
+exactly that. So they assert shapes and invariants rather than an exact count,
+which every minor bump would break for no reason. One of them checks that
+`DataTable` is found and that `index.d.ts` does not contain it, which is the
+whole argument for reading the second entry point.
+
+Nothing covers the pages, the layout, or the X-ray overlay. That is still a
+gap, just a smaller and more deliberate one than before.
+
+`check:ramps` is the other automated check, and it only guards color ordering.
+It runs on `prebuild`; the tests do not, so a red suite will not block a
+deploy.
 
 ## Deploying
 

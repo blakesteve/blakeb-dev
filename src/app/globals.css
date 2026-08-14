@@ -546,3 +546,27 @@ body {
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   404: the sheet, out of register.
+
+   Each plate sits at its own offset until the recovery link is hovered, then
+   they all snap home together. Same easing as the mark, since it is the same
+   idea at a much larger size — the overshoot is what makes it read as plates
+   seating rather than text sliding.
+   --------------------------------------------------------------------------- */
+.misplate {
+  transform: var(--rest);
+  transition: transform 0.55s cubic-bezier(0.34, 1.5, 0.5, 1);
+}
+
+/* Hovering either way out fixes the registration. */
+.group\/sheet:has(a:hover) .misplate {
+  transform: translate(0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .misplate {
+    transition: none;
+  }
+}
