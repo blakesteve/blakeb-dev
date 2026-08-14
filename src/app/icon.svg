@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
+  <!--
+    The site's registration mark, off register.
+
+    A favicon is its own document and cannot see the page's custom properties,
+    so the two process inks and the crosshair are declared here. The media query
+    is the only way this reads on a dark browser chrome: the crosshair is ink on
+    the sheet and paper on the proof, and it would otherwise vanish into one or
+    the other.
+
+    Weights are heavier than the in-page mark. At 16px a 1.2 stroke disappears.
+  -->
+  <style>
+    .plate-a { stroke: #d6006d }
+    .plate-b { stroke: #0090ce }
+    .cross   { stroke: #14150f }
+    @media (prefers-color-scheme: dark) {
+      .plate-a { stroke: #38d6e8 }
+      .plate-b { stroke: #6d6bf2 }
+      .cross   { stroke: #e4e8f0 }
+    }
+  </style>
+  <circle class="plate-a" cx="12.9" cy="11.15" r="8.2" fill="none" stroke-width="2.5"/>
+  <circle class="plate-b" cx="11.25" cy="12.7" r="8.2" fill="none" stroke-width="2.5"/>
+  <path class="cross" d="M12 0v24M0 12h24" stroke-width="1.9"/>
+</svg>

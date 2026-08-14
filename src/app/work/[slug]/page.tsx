@@ -96,9 +96,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
             { label: "Work", href: "/" },
             { label: project.name },
           ]}
-          separator={<span aria-hidden="true">/</span>}
           currentClassName="!text-[var(--world)]"
-          className="items-center [&_*]:!font-mono [&_*]:!text-[0.625rem] [&_*]:!uppercase [&_*]:!tracking-[0.16em] [&_a]:!font-normal [&_a]:!text-ink-faint [&_a:hover]:!text-spot [&_span]:!font-normal"
         />
       </TopBar>
 

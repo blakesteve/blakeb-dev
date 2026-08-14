@@ -48,8 +48,10 @@ export default async function Home() {
           allowed to scroll away. The bar below it is what stays. */}
       <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2 pt-3">
-          <span className="inline-flex items-center gap-2">
-            <RegistrationMark />
+          {/* `group` so the plates snap when the whole folio mark is hovered,
+              not only the svg itself. */}
+          <span className="group inline-flex cursor-default items-center gap-[9px]">
+            <RegistrationMark size={24} data-folio-mark />
             <REyebrow tone="strong" weight="semibold" className="!tracking-[0.1em]">
               Blake Ball
             </REyebrow>
@@ -59,7 +61,7 @@ export default async function Home() {
       </div>
 
       {/* The home page has no breadcrumb, so the nav takes that slot. */}
-      <TopBar>
+      <TopBar yieldsToFolio>
         <nav aria-label="Primary">
           <ul className="m-0 flex list-none gap-5 p-0">
             {["Work", "System", "About", "Writing"].map((item) => (

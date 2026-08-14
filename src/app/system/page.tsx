@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
+import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { SiteFooter } from "@/components/site-footer";
 import { REyebrow, RLabeledDivider, RDescriptionList, storyHref } from "@/lib/roster-ui";
 import {
@@ -33,15 +34,9 @@ export default function SystemPage() {
   return (
     <main className="flex min-h-full flex-col">
       <TopBar>
-        <REyebrow as="nav" aria-label="Breadcrumb" className="flex items-center gap-2">
-          <Link href="/" className="no-underline hover:text-spot">
-            Blake Ball
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-spot" aria-current="page">
-            System
-          </span>
-        </REyebrow>
+        <RBreadcrumbs
+          items={[{ label: "Blake Ball", href: "/" }, { label: "System" }]}
+        />
       </TopBar>
 
       <header className="mx-auto w-full max-w-[1180px] px-6 pb-2 pt-11 sm:px-8">

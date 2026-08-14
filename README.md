@@ -114,6 +114,32 @@ step according to what a color was *for* rather than how light it is: once with
 at 200 where it sat darker than 700 between two near-white neighbors. Both were
 caught by a person looking at `/system`, which is not a process.
 
+## The mark
+
+The logo is a **registration mark** — the crosshair a printer uses to check
+that the ink plates line up. This one is deliberately a hair out of register,
+which is the only thing that turns a standard printer's symbol into a mark that
+belongs to this site. Hover it and the plates snap into alignment.
+
+The offsets are in viewBox units, so they scale with the rendered size. The
+first version sat at 14px, where each plate moved about half a pixel and the
+misregistration was invisible — fatal for a mark whose whole idea is that you
+can see it. It renders at 24px in the folio and 19px in the bar.
+
+It appears once per screen. The home page prints it beside the name, so the
+copy in the sticky bar stays hidden until the folio's has scrolled away, handed
+over by an `IntersectionObserver` on the folio mark itself. Pages without a
+folio just show it. In both places it is a link home, which is also what makes
+the snap discoverable: nobody hovers a decorative glyph, everybody hovers the
+thing in the top-left corner.
+
+`src/app/icon.svg` carries its own colors and its own `prefers-color-scheme`
+swap, because a favicon is a separate document and cannot see the page's
+tokens. `src/app/opengraph-image.tsx` generates the share card at build time
+from color, crop marks, and the process bar rather than a typeface — loading a
+font would put a network dependency on the one artifact with no fallback if the
+fetch fails.
+
 ## X-ray
 
 Press <kbd>⌥X</kbd> on any page to outline and name every Roster component on it.
