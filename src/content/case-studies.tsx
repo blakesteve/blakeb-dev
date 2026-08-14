@@ -1,6 +1,19 @@
 import type { ReactNode } from "react";
 import { Shot } from "@/components/shot";
 import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
+import {
+  getRosterComponentCount,
+  getRosterComponents,
+  getRosterVersion,
+} from "@/lib/roster";
+
+/* Counted from the installed package's own type definitions, so the tier
+   breakdown in the Roster sidebar cannot drift from the count in its stat row.
+   Both come from the same read. */
+const rosterTiers = getRosterComponents().reduce<Record<string, number>>(
+  (acc, { tier }) => ({ ...acc, [tier]: (acc[tier] ?? 0) + 1 }),
+  {},
+);
 
 import ncaamDark from "@/images/megasquad/megasquad-ncaam-dark.png";
 import ncaamLight from "@/images/megasquad/megasquad-ncaam-light.png";
@@ -34,7 +47,27 @@ import gvKonami2p from "@/images/game-verdict/gameverdict-konami-2p.png";
 import gvRain from "@/images/game-verdict/gameverdict-konami-rain.png";
 import gvSettings from "@/images/game-verdict/gameverdict-settings-steamimport-crt.png";
 
-export type CaseStudyStat = { value: string; label: string; source: string };
+/**
+ * `source` is a claim about where the figure came from, so it has to stay true.
+ * "live · …" is reserved for values computed at build time from the thing they
+ * describe; anything measured by hand is pinned to a version or a date instead.
+ * Two figures used to say "live" while being literals — one of them naming an
+ * endpoint that does not exist — which is the sort of detail this site is
+ * supposed to be careful about.
+ */
+export type CaseStudyStat = {
+  /** The fallback. Used verbatim unless `live` names a figure that resolved. */
+  value: string;
+  label: string;
+  source: string;
+  /**
+   * Names a figure fetched at build time. When it resolves, it replaces
+   * `value` and the source becomes the endpoint it came from; when it does
+   * not, `value` and `source` stand as written, so an unreachable API degrades
+   * to an honest snapshot rather than a blank or a stale "live" claim.
+   */
+  live?: "games" | "verdicts";
+};
 export type Row = { k: string; v: string };
 
 export type CaseStudy = {
@@ -138,9 +171,12 @@ export const caseStudies: Record<string, CaseStudy> = {
   "game-verdict": {
     lede: "A crowdsourced answer to an argument PC gamers have been having forever: is this game better with a controller, or with a keyboard and mouse?",
     stats: [
-      { value: "1,573", label: "Games tracked", source: "live · /api/stats" },
-      { value: "822", label: "Commits", source: "GitHub API" },
-      { value: "35", label: "Test files", source: "build time" },
+      /* Verdicts leads: games tracked is inventory that was imported, verdicts
+         cast is people turning up to settle the argument, which is the whole
+         premise. Both are live; the values here are only the fallback. */
+      { value: "2,334", label: "Verdicts cast", source: "Aug 2026 snapshot", live: "verdicts" },
+      { value: "1,580", label: "Games tracked", source: "Aug 2026 snapshot", live: "games" },
+      { value: "822", label: "Commits", source: "GitHub API, Aug 2026" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -425,11 +461,15 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   roster: {
-    lede: "A production-grade atomic component library — and the thing this site is built out of. Thirty components, organized as atoms, molecules, and organisms, each documented in Storybook.",
+    lede: "A production-grade atomic component library — and the thing this site is built out of. Atoms, molecules, and organisms, each documented in Storybook and versioned like the dependency it is.",
     stats: [
-      { value: "30", label: "Components", source: "live · package exports" },
-      { value: "298", label: "Commits", source: "GitHub API" },
-      { value: "30", label: "Test files", source: "build time" },
+      {
+        value: String(getRosterComponentCount()),
+        label: "Components",
+        source: "live · package exports",
+      },
+      { value: "298", label: "Commits", source: "GitHub API, Aug 2026" },
+      { value: "778", label: "Tests", source: `roster @ ${getRosterVersion()}` },
       { value: "5", label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
@@ -443,9 +483,9 @@ export const caseStudies: Record<string, CaseStudy> = {
       { k: "License", v: "MIT" },
     ],
     also: [
-      { k: "Atoms", v: "17 — Button, Input, Tooltip…" },
-      { k: "Molecules", v: "6 — Accordion, EmptyState…" },
-      { k: "Organisms", v: "7 — DataTable, Navbar…" },
+      { k: "Atoms", v: `${rosterTiers.atoms} — Button, Input, Tooltip…` },
+      { k: "Molecules", v: `${rosterTiers.molecules} — Accordion, EmptyState…` },
+      { k: "Organisms", v: `${rosterTiers.organisms} — DataTable, Navbar…` },
       { k: "Ships", v: '"use client" pre-bundled' },
     ],
     body: (

@@ -10,6 +10,7 @@ import { RegistrationMark } from "@/components/registration-mark";
 import { StateToggle } from "@/components/state-toggle";
 import { projects } from "@/lib/projects";
 import { getRosterComponentCount, getRosterTokens, getRosterVersion } from "@/lib/roster";
+import { getGameVerdictStats } from "@/lib/game-verdict-stats";
 
 const TOKEN_STRIP = [
   "roster-primary-500",
@@ -30,10 +31,12 @@ const META = [
   { k: "Since", v: "2010" },
 ];
 
-export default function Home() {
+export default async function Home() {
   const version = getRosterVersion();
   const componentCount = getRosterComponentCount();
   const tokens = getRosterTokens(TOKEN_STRIP);
+  /* One fetch for the page; the card that needs it rebuilds its own row. */
+  const liveStats = await getGameVerdictStats();
 
   return (
     <main className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
@@ -76,7 +79,7 @@ export default function Home() {
 
         <div className="mt-8 grid gap-6 border-t border-rule pt-6 sm:grid-cols-[1.55fr_1fr] sm:gap-12">
           <p className="m-0 max-w-[48ch] text-[1.0625rem] leading-relaxed">
-            Sixteen years building interfaces — currently Lead Front End Engineer at{" "}
+            Sixteen years building interfaces, currently as Lead Front End Engineer at{" "}
             <strong className="font-bold">Revmatics</strong>, before that findhelp, Cart.com, and
             five and a half years at <strong className="font-bold">IBM</strong>. I came up in
             graphic design, which is mostly useful now for one thing: design partners know I will
@@ -195,7 +198,9 @@ export default function Home() {
                         "tabular-nums " + (row.accent ? "text-[var(--world)]" : "text-ink")
                       }
                     >
-                      {row.value}
+                      {row.live && liveStats.games !== null
+                        ? row.live(liveStats)
+                        : row.value}
                     </span>
                   ),
                 }))}
@@ -211,7 +216,7 @@ export default function Home() {
         <h2 className="m-0 text-[1.1875rem] font-semibold tracking-[-0.01em]">BB&rsquo;s Grove</h2>
         <p className="m-0 max-w-[62ch] text-sm leading-[1.55] text-ink-soft">
           A memorial for my older brother, where everyone who knew him can share memories, photos,
-          and his BBisms. The homepage grows a grove of Texas trees — one per story. It is not a
+          and his BBisms. The homepage grows a grove of Texas trees, one per story. It is not a
           case study and there is nothing to measure; if you would like to see it, it is at{" "}
           <a
             href="https://who-bb.com"

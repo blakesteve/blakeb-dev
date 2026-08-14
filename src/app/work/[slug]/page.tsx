@@ -11,6 +11,31 @@ import {
 import { CrtEasterEgg } from "@/components/crt-easter-egg";
 import { caseStudies } from "@/content/case-studies";
 import { getProject, projects } from "@/lib/projects";
+import { getGameVerdictStats } from "@/lib/game-verdict-stats";
+import type { CaseStudyStat } from "@/content/case-studies";
+
+/**
+ * Swaps in figures fetched at build time for the stats that declare one, and
+ * leaves the rest exactly as written. A figure only gets to claim it is live
+ * once it actually resolved; otherwise the hand-written fallback stands with
+ * its own dated source, so an unreachable API degrades to an honest snapshot.
+ */
+async function resolveStats(stats: CaseStudyStat[]): Promise<CaseStudyStat[]> {
+  if (!stats.some((stat) => stat.live)) return stats;
+
+  const live = await getGameVerdictStats();
+
+  return stats.map((stat) => {
+    const value = stat.live ? live[stat.live] : null;
+    if (value === null) return stat;
+
+    return {
+      ...stat,
+      value: value.toLocaleString("en-US"),
+      source: "live · /api/stats",
+    };
+  });
+}
 
 /** The two metadata panels in the sidebar. Same shape, same treatment. */
 function SidebarPanel({ label, rows }: { label: string; rows: { k: string; v: string }[] }) {
@@ -46,6 +71,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
   const study = caseStudies[slug];
   if (!project || !study) notFound();
 
+  const stats = await resolveStats(study.stats);
   const index = projects.findIndex((p) => p.slug === slug);
   const next = projects[(index + 1) % projects.length];
 
@@ -101,7 +127,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               Roster knowing anything about this site's palette. The display
               face is the one thing Stat does not offer, so it rides along. */}
           <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4 text-[var(--world)]">
-            {study.stats.map((stat) => (
+            {stats.map((stat) => (
               <RStat
                 key={stat.label}
                 colorScheme="current"
