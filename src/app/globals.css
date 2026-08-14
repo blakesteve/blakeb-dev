@@ -511,3 +511,38 @@ body {
     display: none !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The registration mark.
+
+   Offsets are in viewBox units, so they scale with the rendered size: at 14px
+   each plate moved about half a pixel and the misregistration was invisible,
+   which is fatal for a mark whose entire idea is that you can see it.
+
+   The easing overshoots. A plate settling into register on a real press is a
+   mechanical event, and a linear glide reads as a fade rather than a snap.
+   --------------------------------------------------------------------------- */
+.reg-plate {
+  transition: transform 0.42s cubic-bezier(0.34, 1.62, 0.52, 1);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.reg-plate-a {
+  transform: translate(1.7px, -1.5px);
+}
+.reg-plate-b {
+  transform: translate(-1.4px, 1.3px);
+}
+
+/* Snap on the mark itself, or on any `group` wrapping it. */
+.reg-mark:hover .reg-plate,
+.group:hover .reg-mark .reg-plate,
+.group:focus-visible .reg-mark .reg-plate {
+  transform: translate(0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reg-plate {
+    transition: none;
+  }
+}

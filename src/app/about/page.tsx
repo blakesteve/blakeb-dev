@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
+import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { SiteFooter, CONTACT } from "@/components/site-footer";
 import { Portrait } from "@/components/portrait";
 import {
@@ -59,15 +60,9 @@ export default function AboutPage() {
   return (
     <main className="flex min-h-full flex-col">
       <TopBar>
-        <REyebrow as="nav" aria-label="Breadcrumb" className="flex items-center gap-2">
-          <Link href="/" className="no-underline hover:text-spot">
-            Blake Ball
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-spot" aria-current="page">
-            About
-          </span>
-        </REyebrow>
+        <RBreadcrumbs
+          items={[{ label: "Blake Ball", href: "/" }, { label: "About" }]}
+        />
       </TopBar>
 
       {/* ---- Lede and portrait ---- */}
