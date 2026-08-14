@@ -34,7 +34,7 @@ function pdfExists(): boolean {
 }
 
 /** Every project worth a line, newest first, with its own scale figure. */
-const SELECTED = projects.filter((p) => p.href !== null).slice(0, 4);
+const SELECTED = projects.filter((p) => p.links.length > 0).slice(0, 4);
 
 export default function ResumePage() {
   const hasPdf = pdfExists();

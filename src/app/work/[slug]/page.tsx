@@ -93,7 +93,8 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
             Eyebrow class list the rest of the folio uses. */}
         <RBreadcrumbs
           items={[
-            { label: "Work", href: "/" },
+            { label: "Blake Ball", href: "/" },
+            { label: "Work", href: "/work" },
             { label: project.name },
           ]}
           currentClassName="!text-[var(--world)]"
@@ -150,11 +151,20 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           <SidebarPanel label="Stack" rows={study.stack} />
           <SidebarPanel label="Also shipped" rows={study.also} />
 
-          {project.href ? (
-            <RCta href={project.href} external tint="var(--world)" showExternalIcon={false}>
-              Visit {project.host} →
+          {project.links.map((link, i) => (
+            <RCta
+              key={link.href}
+              href={link.href}
+              external
+              showExternalIcon={false}
+              tint="var(--world)"
+              /* The primary keeps the wash; the rest are outlines, so the
+                 sidebar has one obvious destination rather than three. */
+              className={i === 0 ? "" : "!bg-transparent"}
+            >
+              {i === 0 ? `Visit ${link.label}` : link.label} →
             </RCta>
-          ) : null}
+          ))}
         </aside>
       </div>
 
