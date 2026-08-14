@@ -29,11 +29,20 @@ import {
 
 export const STORYBOOK_URL = process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "";
 
-/** Storybook's story ids are kebab-cased: `atoms-button--docs`. */
+/**
+ * Storybook derives a story id from its `title` with `sanitize()`, which
+ * lowercases and swaps punctuation for dashes but does NOT split camelCase.
+ * `ErrorState` becomes `errorstate`, not `error-state`.
+ *
+ * This used to insert the dash, which quietly broke every multi-word component
+ * link in both the X-ray panel and /system. Storybook is a single-page app and
+ * answers 200 to any path, rendering "story not found" client-side, so a bad id
+ * looks fine to anything that only checks the status code. Verified against the
+ * deployed `index.json` instead.
+ */
 export function storyHref(name: string, tier: string) {
   if (!STORYBOOK_URL) return null;
-  const slug = name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-  return `${STORYBOOK_URL}/?path=/docs/${tier}-${slug}--docs`;
+  return `${STORYBOOK_URL}/?path=/docs/${tier}-${name.toLowerCase()}--docs`;
 }
 
 export function RCard(props: ComponentProps<typeof Card>) {

@@ -11,6 +11,9 @@ import { RThemeToggle } from "@/lib/roster-ui";
  * visible label and icon are props rather than a hardcoded "Light"/"Dark", it
  * can say so in the site's own terms.
  *
+ * The visible label is dropped below `sm` so the sticky bar stays one row on a
+ * phone; the icon carries it, and `aria-label` names it either way.
+ *
  * The storage key stays `state`, matching the blocking script in the root
  * layout. Roster writes "dark"/"light" into it rather than the old
  * "blueline"/"press", so the script reads it as a plain dark-mode flag.
@@ -20,8 +23,8 @@ export function StateToggle() {
     <RThemeToggle
       showLabel
       storageKey="state"
-      lightLabel={<span className="min-w-[68px] text-left">Press sheet</span>}
-      darkLabel={<span className="min-w-[68px] text-left">Blueline</span>}
+      lightLabel={<span className="hidden min-w-[68px] text-left sm:inline">Press sheet</span>}
+      darkLabel={<span className="hidden min-w-[68px] text-left sm:inline">Blueline</span>}
       toDarkLabel="Switch to the blueline proof"
       toLightLabel="Switch back to the press sheet"
       lightIcon={

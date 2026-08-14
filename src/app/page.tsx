@@ -7,7 +7,7 @@ import {
   RLabeledDivider,
 } from "@/lib/roster-ui";
 import { RegistrationMark } from "@/components/registration-mark";
-import { StateToggle } from "@/components/state-toggle";
+import { TopBar } from "@/components/top-bar";
 import { projects } from "@/lib/projects";
 import { getRosterComponentCount, getRosterTokens, getRosterVersion } from "@/lib/roster";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
@@ -39,51 +39,57 @@ export default async function Home() {
   const liveStats = await getGameVerdictStats();
 
   return (
-    <main className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
-      {/* Folio — the running head of a printed sheet. */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b-[1.5px] border-ink pb-2 pt-3">
-        <span className="inline-flex items-center gap-2">
-          <RegistrationMark />
-          <REyebrow tone="strong" weight="semibold" className="!tracking-[0.1em]">
-            Blake Ball
-          </REyebrow>
-        </span>
-        <REyebrow>Austin, Texas · Front End Engineer · Est. 2010</REyebrow>
+    <main className="w-full">
+      {/* Folio — the running head of a printed sheet, so it comes first and is
+          allowed to scroll away. The bar below it is what stays. */}
+      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-2 pt-3">
+          <span className="inline-flex items-center gap-2">
+            <RegistrationMark />
+            <REyebrow tone="strong" weight="semibold" className="!tracking-[0.1em]">
+              Blake Ball
+            </REyebrow>
+          </span>
+          <REyebrow>Austin, Texas · Engineer · Est. 2010</REyebrow>
+        </div>
       </div>
 
-      <nav className="flex flex-wrap items-center justify-between gap-4 pt-3">
-        <ul className="flex gap-5">
-          {["Work", "System", "About", "Writing"].map((item) => (
-            <li key={item}>
-              <a
-                href={`/${item.toLowerCase()}`}
-                className="font-[family-name:var(--font-util)] text-[11px] tracking-[0.06em] text-ink no-underline transition-colors hover:text-spot"
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <StateToggle />
-      </nav>
+      {/* The home page has no breadcrumb, so the nav takes that slot. */}
+      <TopBar>
+        <nav aria-label="Primary">
+          <ul className="m-0 flex list-none gap-5 p-0">
+            {["Work", "System", "About", "Writing"].map((item) => (
+              <li key={item}>
+                <a
+                  href={`/${item.toLowerCase()}`}
+                  className="font-[family-name:var(--font-util)] text-[11px] tracking-[0.06em] text-ink no-underline transition-colors hover:text-spot"
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </TopBar>
+
+      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
 
       {/* Hero */}
       <section className="pt-12 sm:pt-16">
         <h1 className="m-0 font-[family-name:var(--font-display)] text-[clamp(2.5rem,7.4vw,6rem)] font-bold uppercase leading-[0.9] tracking-[-0.045em] text-balance">
-          Front end
-          <br />
-          engineer.
+          Engineer.
           <br />
           Fluent in <span className="text-spot">designer.</span>
         </h1>
 
         <div className="mt-8 grid gap-6 border-t border-rule pt-6 sm:grid-cols-[1.55fr_1fr] sm:gap-12">
           <p className="m-0 max-w-[48ch] text-[1.0625rem] leading-relaxed">
-            Sixteen years building interfaces, currently as Lead Front End Engineer at{" "}
-            <strong className="font-bold">Revmatics</strong>, before that findhelp, Cart.com, and
-            five and a half years at <strong className="font-bold">IBM</strong>. I came up in
-            graphic design, which is mostly useful now for one thing: design partners know I will
-            speak their language and go to bat for the details worth fighting for.
+            Sixteen years building interfaces, and lately everything behind them: Postgres
+            schemas, cached queries, rate limits, cron jobs, a Discord bot. Currently Lead Front
+            End Engineer at <strong className="font-bold">Revmatics</strong>, before that findhelp,
+            Cart.com, and five and a half years at <strong className="font-bold">IBM</strong>. I
+            came up in graphic design, which is mostly useful now for one thing: design partners
+            know I will speak their language and go to bat for the details worth fighting for.
           </p>
 
           {/* `split` is exactly this shape: term left, value right-aligned and
@@ -239,6 +245,7 @@ export default async function Home() {
         <REyebrow>© 2026 Blake Ball</REyebrow>
         <REyebrow>Set in Archivo, Source Serif &amp; IBM Plex Mono</REyebrow>
       </footer>
+      </div>
     </main>
   );
 }
