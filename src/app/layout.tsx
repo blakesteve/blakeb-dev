@@ -43,13 +43,18 @@ export const metadata: Metadata = {
 };
 
 /* Runs before first paint so the page never flashes the wrong production
-   state. Reads the saved choice, falls back to the OS preference. */
+   state. Reads the saved choice, falls back to the OS preference.
+
+   "blueline" is still accepted alongside "dark": the toggle is Roster's
+   ThemeToggle now and writes "dark"/"light", but anyone who visited before that
+   has the old vocabulary in localStorage, and dropping it would silently reset
+   their choice on the next visit. */
 const themeScript = `
 (function () {
   try {
     var saved = localStorage.getItem("state");
     var dark = saved
-      ? saved === "blueline"
+      ? saved === "dark" || saved === "blueline"
       : window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (dark) document.documentElement.classList.add("dark");
   } catch (e) {}

@@ -106,8 +106,12 @@
   --roster-gray-50: #f4f6fa;
   --roster-gray-100: #e4e8f0;
   --roster-gray-200: #323a4d;
-  --roster-gray-300: #5a6577;
-  --roster-gray-400: #8c97ac;
+  /* 300 and 400 were swapped, which made this ramp non-monotonic exactly where
+     Roster reads it: `faint` is gray-500 on light and gray-400 on dark, so an
+     Eyebrow came out at --ink-soft on the proof instead of --ink-faint. On a
+     dark ramp the lower step is the LIGHTER one, so --ink-soft belongs at 300. */
+  --roster-gray-300: #8c97ac;
+  --roster-gray-400: #5a6577;
   --roster-gray-500: #8c97ac;
   --roster-gray-600: #6b7688;
   --roster-gray-700: #232936;

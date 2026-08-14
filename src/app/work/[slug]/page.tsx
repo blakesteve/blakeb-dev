@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { StateToggle } from "@/components/state-toggle";
+import { RBreadcrumbs } from "@/components/breadcrumbs";
 import {
   RDescriptionList,
   REyebrow,
@@ -60,19 +61,18 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
     >
       <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-rule py-3">
-          {/* Hand-rolled rather than Roster's Breadcrumbs: that component
-              renders plain anchors with no way to swap in next/link, so
-              adopting it would turn this into a full page load. Eyebrow still
-              carries the typography. */}
-          <REyebrow as="nav" aria-label="Breadcrumb" className="flex items-center gap-2">
-            <Link href="/" className="no-underline hover:text-spot">
-              Work
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[var(--world)]" aria-current="page">
-              {project.name}
-            </span>
-          </REyebrow>
+          {/* Roster's Breadcrumbs, routed through next/link by RBreadcrumbs so
+              the hop back stays client-side. The typography comes from the same
+              Eyebrow class list the rest of the folio uses. */}
+          <RBreadcrumbs
+            items={[
+              { label: "Work", href: "/" },
+              { label: project.name },
+            ]}
+            separator={<span aria-hidden="true">/</span>}
+            currentClassName="!text-[var(--world)]"
+            className="items-center [&_*]:!font-mono [&_*]:!text-[0.625rem] [&_*]:!uppercase [&_*]:!tracking-[0.16em] [&_a]:!font-normal [&_a]:!text-ink-faint [&_a:hover]:!text-spot [&_span]:!font-normal"
+          />
           <StateToggle />
         </div>
       </div>
