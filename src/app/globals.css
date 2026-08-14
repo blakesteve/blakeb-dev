@@ -35,7 +35,7 @@
   --panel: #f2f3ef;
   --ink: #14150f;
   --ink-soft: #54564d;
-  --ink-faint: #7e8078;
+  --ink-faint: #666861;
   --rule: #c6c8c0;
   --hair: #d5d7cf;
   --spot: #d6006d;
@@ -53,19 +53,141 @@
      component at once without touching what gray-500 means in this app.
      The neutral ramp is mapped end to end: any step left unset falls back to
      Roster's default stone, which reads visibly warm against this palette. */
-  --roster-primary-400: #e8408f;
-  --roster-primary-500: #d6006d;
-  --roster-primary-600: #ae0059;
-  --roster-gray-50: #f2f3ef;
-  --roster-gray-100: #e7e8e3;
-  --roster-gray-200: #c6c8c0;
+  /* ---- Palette anchors, press sheet ----------------------------------------
+     Roster ships nine color families. This site used to override three steps of
+     one of them, so a success Badge or an info Alert rendered in stock colors
+     that belong to no palette in particular.
+
+     Each family now gets a single anchor, and the 50-950 ramp is derived from
+     it by mixing toward the two poles below. Move an anchor and its whole ramp
+     moves with it, which is the difference between a palette and a list of
+     hexes. /system prints both halves of every step so the remap is visible.
+
+     The anchors are the print shop: process cyan, magenta, and yellow are the
+     inks this whole design is named after, so they take info, primary, and
+     amber rather than being decoration. */
+  --tint-light: #f2f3ef;
+  --tint-dark: #14150f;
+
+  --anchor-primary: #d6006d;  /* process magenta, the spot color */
+  --anchor-info: #0090ce;     /* process cyan */
+  --anchor-amber: #f5d400;    /* process yellow */
+  --anchor-success: #0b7d5d;
+  --anchor-error: #c8102e;
+  --anchor-orange: #e2571f;
+  --anchor-teal: #0f8b8d;
+  --anchor-purple: #6b4bd6;
+
+  /* primary */
+  --roster-primary-50: color-mix(in oklab, var(--anchor-primary) 6%, var(--tint-light));
+  --roster-primary-100: color-mix(in oklab, var(--anchor-primary) 13%, var(--tint-light));
+  --roster-primary-200: color-mix(in oklab, var(--anchor-primary) 25%, var(--tint-light));
+  --roster-primary-300: color-mix(in oklab, var(--anchor-primary) 42%, var(--tint-light));
+  --roster-primary-400: color-mix(in oklab, var(--anchor-primary) 68%, var(--tint-light));
+  --roster-primary-500: var(--anchor-primary);
+  --roster-primary-600: color-mix(in oklab, var(--anchor-primary) 84%, var(--tint-dark));
+  --roster-primary-700: color-mix(in oklab, var(--anchor-primary) 68%, var(--tint-dark));
+  --roster-primary-800: color-mix(in oklab, var(--anchor-primary) 52%, var(--tint-dark));
+  --roster-primary-900: color-mix(in oklab, var(--anchor-primary) 38%, var(--tint-dark));
+  --roster-primary-950: color-mix(in oklab, var(--anchor-primary) 26%, var(--tint-dark));
+  /* info */
+  --roster-info-50: color-mix(in oklab, var(--anchor-info) 6%, var(--tint-light));
+  --roster-info-100: color-mix(in oklab, var(--anchor-info) 13%, var(--tint-light));
+  --roster-info-200: color-mix(in oklab, var(--anchor-info) 25%, var(--tint-light));
+  --roster-info-300: color-mix(in oklab, var(--anchor-info) 42%, var(--tint-light));
+  --roster-info-400: color-mix(in oklab, var(--anchor-info) 68%, var(--tint-light));
+  --roster-info-500: var(--anchor-info);
+  --roster-info-600: color-mix(in oklab, var(--anchor-info) 84%, var(--tint-dark));
+  --roster-info-700: color-mix(in oklab, var(--anchor-info) 68%, var(--tint-dark));
+  --roster-info-800: color-mix(in oklab, var(--anchor-info) 52%, var(--tint-dark));
+  --roster-info-900: color-mix(in oklab, var(--anchor-info) 38%, var(--tint-dark));
+  --roster-info-950: color-mix(in oklab, var(--anchor-info) 26%, var(--tint-dark));
+  /* success */
+  --roster-success-50: color-mix(in oklab, var(--anchor-success) 6%, var(--tint-light));
+  --roster-success-100: color-mix(in oklab, var(--anchor-success) 13%, var(--tint-light));
+  --roster-success-200: color-mix(in oklab, var(--anchor-success) 25%, var(--tint-light));
+  --roster-success-300: color-mix(in oklab, var(--anchor-success) 42%, var(--tint-light));
+  --roster-success-400: color-mix(in oklab, var(--anchor-success) 68%, var(--tint-light));
+  --roster-success-500: var(--anchor-success);
+  --roster-success-600: color-mix(in oklab, var(--anchor-success) 84%, var(--tint-dark));
+  --roster-success-700: color-mix(in oklab, var(--anchor-success) 68%, var(--tint-dark));
+  --roster-success-800: color-mix(in oklab, var(--anchor-success) 52%, var(--tint-dark));
+  --roster-success-900: color-mix(in oklab, var(--anchor-success) 38%, var(--tint-dark));
+  --roster-success-950: color-mix(in oklab, var(--anchor-success) 26%, var(--tint-dark));
+  /* error */
+  --roster-error-50: color-mix(in oklab, var(--anchor-error) 6%, var(--tint-light));
+  --roster-error-100: color-mix(in oklab, var(--anchor-error) 13%, var(--tint-light));
+  --roster-error-200: color-mix(in oklab, var(--anchor-error) 25%, var(--tint-light));
+  --roster-error-300: color-mix(in oklab, var(--anchor-error) 42%, var(--tint-light));
+  --roster-error-400: color-mix(in oklab, var(--anchor-error) 68%, var(--tint-light));
+  --roster-error-500: var(--anchor-error);
+  --roster-error-600: color-mix(in oklab, var(--anchor-error) 84%, var(--tint-dark));
+  --roster-error-700: color-mix(in oklab, var(--anchor-error) 68%, var(--tint-dark));
+  --roster-error-800: color-mix(in oklab, var(--anchor-error) 52%, var(--tint-dark));
+  --roster-error-900: color-mix(in oklab, var(--anchor-error) 38%, var(--tint-dark));
+  --roster-error-950: color-mix(in oklab, var(--anchor-error) 26%, var(--tint-dark));
+  /* amber */
+  --roster-amber-50: color-mix(in oklab, var(--anchor-amber) 6%, var(--tint-light));
+  --roster-amber-100: color-mix(in oklab, var(--anchor-amber) 13%, var(--tint-light));
+  --roster-amber-200: color-mix(in oklab, var(--anchor-amber) 25%, var(--tint-light));
+  --roster-amber-300: color-mix(in oklab, var(--anchor-amber) 42%, var(--tint-light));
+  --roster-amber-400: color-mix(in oklab, var(--anchor-amber) 68%, var(--tint-light));
+  --roster-amber-500: var(--anchor-amber);
+  --roster-amber-600: color-mix(in oklab, var(--anchor-amber) 84%, var(--tint-dark));
+  --roster-amber-700: color-mix(in oklab, var(--anchor-amber) 68%, var(--tint-dark));
+  --roster-amber-800: color-mix(in oklab, var(--anchor-amber) 52%, var(--tint-dark));
+  --roster-amber-900: color-mix(in oklab, var(--anchor-amber) 38%, var(--tint-dark));
+  --roster-amber-950: color-mix(in oklab, var(--anchor-amber) 26%, var(--tint-dark));
+  /* orange */
+  --roster-orange-50: color-mix(in oklab, var(--anchor-orange) 6%, var(--tint-light));
+  --roster-orange-100: color-mix(in oklab, var(--anchor-orange) 13%, var(--tint-light));
+  --roster-orange-200: color-mix(in oklab, var(--anchor-orange) 25%, var(--tint-light));
+  --roster-orange-300: color-mix(in oklab, var(--anchor-orange) 42%, var(--tint-light));
+  --roster-orange-400: color-mix(in oklab, var(--anchor-orange) 68%, var(--tint-light));
+  --roster-orange-500: var(--anchor-orange);
+  --roster-orange-600: color-mix(in oklab, var(--anchor-orange) 84%, var(--tint-dark));
+  --roster-orange-700: color-mix(in oklab, var(--anchor-orange) 68%, var(--tint-dark));
+  --roster-orange-800: color-mix(in oklab, var(--anchor-orange) 52%, var(--tint-dark));
+  --roster-orange-900: color-mix(in oklab, var(--anchor-orange) 38%, var(--tint-dark));
+  --roster-orange-950: color-mix(in oklab, var(--anchor-orange) 26%, var(--tint-dark));
+  /* teal */
+  --roster-teal-50: color-mix(in oklab, var(--anchor-teal) 6%, var(--tint-light));
+  --roster-teal-100: color-mix(in oklab, var(--anchor-teal) 13%, var(--tint-light));
+  --roster-teal-200: color-mix(in oklab, var(--anchor-teal) 25%, var(--tint-light));
+  --roster-teal-300: color-mix(in oklab, var(--anchor-teal) 42%, var(--tint-light));
+  --roster-teal-400: color-mix(in oklab, var(--anchor-teal) 68%, var(--tint-light));
+  --roster-teal-500: var(--anchor-teal);
+  --roster-teal-600: color-mix(in oklab, var(--anchor-teal) 84%, var(--tint-dark));
+  --roster-teal-700: color-mix(in oklab, var(--anchor-teal) 68%, var(--tint-dark));
+  --roster-teal-800: color-mix(in oklab, var(--anchor-teal) 52%, var(--tint-dark));
+  --roster-teal-900: color-mix(in oklab, var(--anchor-teal) 38%, var(--tint-dark));
+  --roster-teal-950: color-mix(in oklab, var(--anchor-teal) 26%, var(--tint-dark));
+  /* purple */
+  --roster-purple-50: color-mix(in oklab, var(--anchor-purple) 6%, var(--tint-light));
+  --roster-purple-100: color-mix(in oklab, var(--anchor-purple) 13%, var(--tint-light));
+  --roster-purple-200: color-mix(in oklab, var(--anchor-purple) 25%, var(--tint-light));
+  --roster-purple-300: color-mix(in oklab, var(--anchor-purple) 42%, var(--tint-light));
+  --roster-purple-400: color-mix(in oklab, var(--anchor-purple) 68%, var(--tint-light));
+  --roster-purple-500: var(--anchor-purple);
+  --roster-purple-600: color-mix(in oklab, var(--anchor-purple) 84%, var(--tint-dark));
+  --roster-purple-700: color-mix(in oklab, var(--anchor-purple) 68%, var(--tint-dark));
+  --roster-purple-800: color-mix(in oklab, var(--anchor-purple) 52%, var(--tint-dark));
+  --roster-purple-900: color-mix(in oklab, var(--anchor-purple) 38%, var(--tint-dark));
+  --roster-purple-950: color-mix(in oklab, var(--anchor-purple) 26%, var(--tint-dark));
+
+  /* Where a step has a semantic equivalent it references the token rather than
+     repeating its hex. Copying the value is how 300 and 400 ended up swapped on
+     the proof: two spellings of one decision, free to drift apart. */
+  --roster-gray-50: var(--panel);
+  --roster-gray-100: var(--paper);
+  --roster-gray-200: var(--rule);
   --roster-gray-300: #b0b2a9;
   --roster-gray-400: #97998f;
-  --roster-gray-500: #7e8078;
-  --roster-gray-600: #54564d;
+  --roster-gray-500: var(--ink-faint);
+  --roster-gray-600: var(--ink-soft);
   --roster-gray-700: #3a3c34;
   --roster-gray-800: #26281f;
-  --roster-gray-900: #14150f;
+  --roster-gray-900: var(--ink);
   --roster-gray-950: #0a0b07;
 
   /* Roster's typographic components (Eyebrow, InlineCode, Stat's source line,
@@ -87,7 +209,7 @@
   --panel: #121620;
   --ink: #e4e8f0;
   --ink-soft: #8c97ac;
-  --ink-faint: #5a6577;
+  --ink-faint: #73839b;
   --rule: #232936;
   --hair: #1b2029;
   --spot: #38d6e8;
@@ -98,26 +220,136 @@
   --process-m: #6d6bf2;
   --process-y: #f5d400;
 
-  /* On the blueline, cyan is too light to carry a filled button, so indigo
-     takes the interactive role and cyan stays on annotation and hairlines. */
-  --roster-primary-400: #8b87f5;
-  --roster-primary-500: #6d6bf2;
-  --roster-primary-600: #5754d8;
+  /* ---- Palette anchors, blueline proof -------------------------------------
+     Same families, repigmented for the proof. Cyan is the spot color here, so
+     primary hands off to indigo and cyan takes info; everything else lifts,
+     because a hue that reads on paper goes muddy on a near-black field. The
+     poles move too: the ramp still runs light to dark, but its light end is the
+     proof's white rather than the sheet's. */
+  --tint-light: #f4f6fa;
+  --tint-dark: #0a0c11;
+
+  --anchor-primary: #6d6bf2;
+  --anchor-info: #38d6e8;
+  --anchor-amber: #f5d400;
+  --anchor-success: #0e8f68;
+  --anchor-error: #d63546;
+  --anchor-orange: #ff8348;
+  --anchor-teal: #2ec4b6;
+  --anchor-purple: #a78bfa;
+
+  /* primary */
+  --roster-primary-50: color-mix(in oklab, var(--anchor-primary) 6%, var(--tint-light));
+  --roster-primary-100: color-mix(in oklab, var(--anchor-primary) 13%, var(--tint-light));
+  --roster-primary-200: color-mix(in oklab, var(--anchor-primary) 25%, var(--tint-light));
+  --roster-primary-300: color-mix(in oklab, var(--anchor-primary) 42%, var(--tint-light));
+  --roster-primary-400: color-mix(in oklab, var(--anchor-primary) 68%, var(--tint-light));
+  --roster-primary-500: var(--anchor-primary);
+  --roster-primary-600: color-mix(in oklab, var(--anchor-primary) 84%, var(--tint-dark));
+  --roster-primary-700: color-mix(in oklab, var(--anchor-primary) 68%, var(--tint-dark));
+  --roster-primary-800: color-mix(in oklab, var(--anchor-primary) 52%, var(--tint-dark));
+  --roster-primary-900: color-mix(in oklab, var(--anchor-primary) 38%, var(--tint-dark));
+  --roster-primary-950: color-mix(in oklab, var(--anchor-primary) 26%, var(--tint-dark));
+  /* info */
+  --roster-info-50: color-mix(in oklab, var(--anchor-info) 6%, var(--tint-light));
+  --roster-info-100: color-mix(in oklab, var(--anchor-info) 13%, var(--tint-light));
+  --roster-info-200: color-mix(in oklab, var(--anchor-info) 25%, var(--tint-light));
+  --roster-info-300: color-mix(in oklab, var(--anchor-info) 42%, var(--tint-light));
+  --roster-info-400: color-mix(in oklab, var(--anchor-info) 68%, var(--tint-light));
+  --roster-info-500: var(--anchor-info);
+  --roster-info-600: color-mix(in oklab, var(--anchor-info) 84%, var(--tint-dark));
+  --roster-info-700: color-mix(in oklab, var(--anchor-info) 68%, var(--tint-dark));
+  --roster-info-800: color-mix(in oklab, var(--anchor-info) 52%, var(--tint-dark));
+  --roster-info-900: color-mix(in oklab, var(--anchor-info) 38%, var(--tint-dark));
+  --roster-info-950: color-mix(in oklab, var(--anchor-info) 26%, var(--tint-dark));
+  /* success */
+  --roster-success-50: color-mix(in oklab, var(--anchor-success) 6%, var(--tint-light));
+  --roster-success-100: color-mix(in oklab, var(--anchor-success) 13%, var(--tint-light));
+  --roster-success-200: color-mix(in oklab, var(--anchor-success) 25%, var(--tint-light));
+  --roster-success-300: color-mix(in oklab, var(--anchor-success) 42%, var(--tint-light));
+  --roster-success-400: color-mix(in oklab, var(--anchor-success) 68%, var(--tint-light));
+  --roster-success-500: var(--anchor-success);
+  --roster-success-600: color-mix(in oklab, var(--anchor-success) 84%, var(--tint-dark));
+  --roster-success-700: color-mix(in oklab, var(--anchor-success) 68%, var(--tint-dark));
+  --roster-success-800: color-mix(in oklab, var(--anchor-success) 52%, var(--tint-dark));
+  --roster-success-900: color-mix(in oklab, var(--anchor-success) 38%, var(--tint-dark));
+  --roster-success-950: color-mix(in oklab, var(--anchor-success) 26%, var(--tint-dark));
+  /* error */
+  --roster-error-50: color-mix(in oklab, var(--anchor-error) 6%, var(--tint-light));
+  --roster-error-100: color-mix(in oklab, var(--anchor-error) 13%, var(--tint-light));
+  --roster-error-200: color-mix(in oklab, var(--anchor-error) 25%, var(--tint-light));
+  --roster-error-300: color-mix(in oklab, var(--anchor-error) 42%, var(--tint-light));
+  --roster-error-400: color-mix(in oklab, var(--anchor-error) 68%, var(--tint-light));
+  --roster-error-500: var(--anchor-error);
+  --roster-error-600: color-mix(in oklab, var(--anchor-error) 84%, var(--tint-dark));
+  --roster-error-700: color-mix(in oklab, var(--anchor-error) 68%, var(--tint-dark));
+  --roster-error-800: color-mix(in oklab, var(--anchor-error) 52%, var(--tint-dark));
+  --roster-error-900: color-mix(in oklab, var(--anchor-error) 38%, var(--tint-dark));
+  --roster-error-950: color-mix(in oklab, var(--anchor-error) 26%, var(--tint-dark));
+  /* amber */
+  --roster-amber-50: color-mix(in oklab, var(--anchor-amber) 6%, var(--tint-light));
+  --roster-amber-100: color-mix(in oklab, var(--anchor-amber) 13%, var(--tint-light));
+  --roster-amber-200: color-mix(in oklab, var(--anchor-amber) 25%, var(--tint-light));
+  --roster-amber-300: color-mix(in oklab, var(--anchor-amber) 42%, var(--tint-light));
+  --roster-amber-400: color-mix(in oklab, var(--anchor-amber) 68%, var(--tint-light));
+  --roster-amber-500: var(--anchor-amber);
+  --roster-amber-600: color-mix(in oklab, var(--anchor-amber) 84%, var(--tint-dark));
+  --roster-amber-700: color-mix(in oklab, var(--anchor-amber) 68%, var(--tint-dark));
+  --roster-amber-800: color-mix(in oklab, var(--anchor-amber) 52%, var(--tint-dark));
+  --roster-amber-900: color-mix(in oklab, var(--anchor-amber) 38%, var(--tint-dark));
+  --roster-amber-950: color-mix(in oklab, var(--anchor-amber) 26%, var(--tint-dark));
+  /* orange */
+  --roster-orange-50: color-mix(in oklab, var(--anchor-orange) 6%, var(--tint-light));
+  --roster-orange-100: color-mix(in oklab, var(--anchor-orange) 13%, var(--tint-light));
+  --roster-orange-200: color-mix(in oklab, var(--anchor-orange) 25%, var(--tint-light));
+  --roster-orange-300: color-mix(in oklab, var(--anchor-orange) 42%, var(--tint-light));
+  --roster-orange-400: color-mix(in oklab, var(--anchor-orange) 68%, var(--tint-light));
+  --roster-orange-500: var(--anchor-orange);
+  --roster-orange-600: color-mix(in oklab, var(--anchor-orange) 84%, var(--tint-dark));
+  --roster-orange-700: color-mix(in oklab, var(--anchor-orange) 68%, var(--tint-dark));
+  --roster-orange-800: color-mix(in oklab, var(--anchor-orange) 52%, var(--tint-dark));
+  --roster-orange-900: color-mix(in oklab, var(--anchor-orange) 38%, var(--tint-dark));
+  --roster-orange-950: color-mix(in oklab, var(--anchor-orange) 26%, var(--tint-dark));
+  /* teal */
+  --roster-teal-50: color-mix(in oklab, var(--anchor-teal) 6%, var(--tint-light));
+  --roster-teal-100: color-mix(in oklab, var(--anchor-teal) 13%, var(--tint-light));
+  --roster-teal-200: color-mix(in oklab, var(--anchor-teal) 25%, var(--tint-light));
+  --roster-teal-300: color-mix(in oklab, var(--anchor-teal) 42%, var(--tint-light));
+  --roster-teal-400: color-mix(in oklab, var(--anchor-teal) 68%, var(--tint-light));
+  --roster-teal-500: var(--anchor-teal);
+  --roster-teal-600: color-mix(in oklab, var(--anchor-teal) 84%, var(--tint-dark));
+  --roster-teal-700: color-mix(in oklab, var(--anchor-teal) 68%, var(--tint-dark));
+  --roster-teal-800: color-mix(in oklab, var(--anchor-teal) 52%, var(--tint-dark));
+  --roster-teal-900: color-mix(in oklab, var(--anchor-teal) 38%, var(--tint-dark));
+  --roster-teal-950: color-mix(in oklab, var(--anchor-teal) 26%, var(--tint-dark));
+  /* purple */
+  --roster-purple-50: color-mix(in oklab, var(--anchor-purple) 6%, var(--tint-light));
+  --roster-purple-100: color-mix(in oklab, var(--anchor-purple) 13%, var(--tint-light));
+  --roster-purple-200: color-mix(in oklab, var(--anchor-purple) 25%, var(--tint-light));
+  --roster-purple-300: color-mix(in oklab, var(--anchor-purple) 42%, var(--tint-light));
+  --roster-purple-400: color-mix(in oklab, var(--anchor-purple) 68%, var(--tint-light));
+  --roster-purple-500: var(--anchor-purple);
+  --roster-purple-600: color-mix(in oklab, var(--anchor-purple) 84%, var(--tint-dark));
+  --roster-purple-700: color-mix(in oklab, var(--anchor-purple) 68%, var(--tint-dark));
+  --roster-purple-800: color-mix(in oklab, var(--anchor-purple) 52%, var(--tint-dark));
+  --roster-purple-900: color-mix(in oklab, var(--anchor-purple) 38%, var(--tint-dark));
+  --roster-purple-950: color-mix(in oklab, var(--anchor-purple) 26%, var(--tint-dark));
+
+  /* A dark ramp still runs light to dark as the number climbs; forgetting that
+     is what put --ink-faint at 300 and --ink-soft at 400 here, which is exactly
+     backwards. Semantic steps now reference their token so the two cannot
+     disagree again. */
   --roster-gray-50: #f4f6fa;
-  --roster-gray-100: #e4e8f0;
+  --roster-gray-100: var(--ink);
   --roster-gray-200: #323a4d;
-  /* 300 and 400 were swapped, which made this ramp non-monotonic exactly where
-     Roster reads it: `faint` is gray-500 on light and gray-400 on dark, so an
-     Eyebrow came out at --ink-soft on the proof instead of --ink-faint. On a
-     dark ramp the lower step is the LIGHTER one, so --ink-soft belongs at 300. */
-  --roster-gray-300: #8c97ac;
-  --roster-gray-400: #5a6577;
-  --roster-gray-500: #8c97ac;
-  --roster-gray-600: #6b7688;
-  --roster-gray-700: #232936;
-  --roster-gray-800: #232936;
-  --roster-gray-900: #121620;
-  --roster-gray-950: #0a0c11;
+  --roster-gray-300: var(--ink-soft);
+  --roster-gray-400: var(--ink-faint);
+  --roster-gray-500: #5f6b80;
+  --roster-gray-600: #4a5468;
+  --roster-gray-700: var(--rule);
+  --roster-gray-800: #1b2029;
+  --roster-gray-900: var(--panel);
+  --roster-gray-950: var(--paper);
 }
 
 @theme inline {

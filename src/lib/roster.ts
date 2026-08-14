@@ -67,3 +67,40 @@ export function getRosterTokens(names: string[]): { name: string; value: string 
     return { name: `--${name}`, value: match ? match[1] : "#000000" };
   });
 }
+
+/**
+ * Every color family the shipped tokens.css declares, in the order Roster
+ * declares them. Read rather than listed, so a new family appears on /system
+ * the next time this site builds.
+ */
+export function getRosterTokenFamilies(): string[] {
+  const css = read("dist", "tokens.css");
+  const families = new Set<string>();
+
+  for (const match of css.matchAll(/--roster-([a-z]+)-\d+\s*:/g)) {
+    families.add(match[1]);
+  }
+
+  return [...families];
+}
+
+/**
+ * One family's full ramp, with the hex Roster ships for each step.
+ *
+ * The shipped value is what matters here: the page renders each swatch twice,
+ * once from this hex and once from `var(--roster-<family>-<step>)`, which this
+ * site has remapped. Side by side, the override is the whole point — the same
+ * component, two palettes, no fork.
+ */
+export function getRosterRamp(family: string): { step: number; shipped: string }[] {
+  const css = read("dist", "tokens.css");
+  const steps: { step: number; shipped: string }[] = [];
+
+  for (const match of css.matchAll(
+    new RegExp(`--roster-${family}-(\\d+)\\s*:\\s*(#[0-9a-fA-F]{3,8})`, "g"),
+  )) {
+    steps.push({ step: Number(match[1]), shipped: match[2] });
+  }
+
+  return steps.sort((a, b) => a.step - b.step);
+}

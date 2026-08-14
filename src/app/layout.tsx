@@ -26,13 +26,13 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://blakeb.dev"),
   title: {
-    default: "Blake Ball — Front End Engineer",
+    default: "Blake Ball — Engineer, fluent in designer",
     template: "%s — Blake Ball",
   },
   description:
     "Front end engineer in Austin, Texas. Sixteen years building interfaces, most recently at Revmatics. I build design systems and the products that run on them.",
   openGraph: {
-    title: "Blake Ball — Front End Engineer",
+    title: "Blake Ball — Engineer, fluent in designer",
     description:
       "Sixteen years building interfaces. I build design systems and the products that run on them.",
     url: "https://blakeb.dev",

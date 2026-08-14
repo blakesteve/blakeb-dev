@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { StateToggle } from "@/components/state-toggle";
+import { TopBar } from "@/components/top-bar";
 import { RBreadcrumbs } from "@/components/breadcrumbs";
 import {
   RDescriptionList,
@@ -85,23 +85,20 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         } as CSSProperties
       }
     >
-      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-rule py-3">
-          {/* Roster's Breadcrumbs, routed through next/link by RBreadcrumbs so
-              the hop back stays client-side. The typography comes from the same
-              Eyebrow class list the rest of the folio uses. */}
-          <RBreadcrumbs
-            items={[
-              { label: "Work", href: "/" },
-              { label: project.name },
-            ]}
-            separator={<span aria-hidden="true">/</span>}
-            currentClassName="!text-[var(--world)]"
-            className="items-center [&_*]:!font-mono [&_*]:!text-[0.625rem] [&_*]:!uppercase [&_*]:!tracking-[0.16em] [&_a]:!font-normal [&_a]:!text-ink-faint [&_a:hover]:!text-spot [&_span]:!font-normal"
-          />
-          <StateToggle />
-        </div>
-      </div>
+      <TopBar>
+        {/* Roster's Breadcrumbs, routed through next/link by RBreadcrumbs so
+            the hop back stays client-side. The typography comes from the same
+            Eyebrow class list the rest of the folio uses. */}
+        <RBreadcrumbs
+          items={[
+            { label: "Work", href: "/" },
+            { label: project.name },
+          ]}
+          separator={<span aria-hidden="true">/</span>}
+          currentClassName="!text-[var(--world)]"
+          className="items-center [&_*]:!font-mono [&_*]:!text-[0.625rem] [&_*]:!uppercase [&_*]:!tracking-[0.16em] [&_a]:!font-normal [&_a]:!text-ink-faint [&_a:hover]:!text-spot [&_span]:!font-normal"
+        />
+      </TopBar>
 
       {/* The project's own world, mixed from its accent so it holds in both
           production states without authoring two gradients. */}

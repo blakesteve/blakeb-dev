@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# blakeb.dev
 
-## Getting Started
+Portfolio for Blake Ball, built with **Next.js 16**, **React 19**, **Tailwind
+CSS v4**, and [`@blakesteve/roster`](https://www.npmjs.com/package/@blakesteve/roster) —
+the component library it also happens to be a case study about.
 
-First, run the development server:
+The organizing rule: **anything the site asserts, it should be able to prove.**
+Component counts, token values, and Game Verdict's figures are read from their
+sources at build time rather than typed. If a number appears without a source,
+that is a bug.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The dev server prefers port 3003. `NEXT_PUBLIC_STORYBOOK_URL` in `.env.local`
+points at the deployed Roster Storybook; without it, component names render as
+plain text instead of links.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Two production states
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The site has one design in two inks, named after the stages of a print job.
 
-## Learn More
+| | Press sheet | Blueline proof |
+|---|---|---|
+| Role | light | dark |
+| Paper | `#e7e8e3` | `#0a0c11` |
+| Spot | process magenta | blueprint cyan |
 
-To learn more about Next.js, take a look at the following resources:
+Dark mode is class-based (`.dark` on `<html>`) rather than tied to the OS, so
+the toggle can be manual. A blocking script in `app/layout.tsx` sets the class
+before first paint; it accepts `"blueline"` alongside `"dark"` so visitors from
+before the toggle became Roster's `ThemeToggle` keep their choice.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## The token layer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`app/globals.css` is the whole design system. Three things happen there, in
+order, and the order matters:
 
-## Deploy on Vercel
+1. **Cascade layers are declared up front** — `theme, base, components, roster,
+   utilities`. Roster must sit above `base` or Tailwind's preflight erases its
+   spacing and borders, and below `utilities` so this app's classes still win.
+2. **Roster's tokens are remapped.** Each of its nine color families gets one
+   `--anchor-*` per state, and the 50–950 ramp is derived from it with
+   `color-mix` toward that state's light and dark poles. Move an anchor and the
+   ramp moves with it. The anchors are the print shop: process cyan, magenta,
+   and yellow take `info`, `primary`, and `amber`.
+3. **Semantic steps reference their token** rather than repeating its hex.
+   `--roster-gray-500: var(--ink-faint)`, not a copy of the value. Copying is
+   how the dark ramp's 300 and 400 ended up swapped, which put every eyebrow one
+   step too bright on the proof.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Some values cannot live in `@theme inline`: Roster imports Tailwind's theme
+inside `@layer roster`, which sits above this app's `theme` layer, so a
+declaration there loses. `--font-mono` and the `--roster-*` overrides are
+declared unlayered, where they beat both.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Live data
+
+| Figure | Source |
+|---|---|
+| Roster version, component count, tier split | the installed package's own `.d.ts` and `package.json` |
+| Token ramps | the shipped `tokens.css` |
+| Game Verdict games and verdicts | `GET https://www.gameverdict.app/api/stats`, hourly |
+
+`lib/roster.ts` reads `node_modules` directly rather than resolving the module,
+because Roster's exports map does not expose `package.json` and Turbopack cannot
+place a CSS file in an ESM chunk.
+
+`lib/game-verdict-stats.ts` degrades rather than throws: an unreachable endpoint
+falls back to the written figure, relabels it as a dated snapshot instead of as
+live, and warns in the build log. A portfolio deploy should not fail because
+another app hiccuped, but it should not quietly stop updating either.
+
+## Pages
+
+- `/` — folio, hero, live system strip, project cards
+- `/work/[slug]` — case studies, statically generated per project
+- `/system` — the library itself: token ramps shown shipped-versus-remapped, the
+  full catalog linked into Storybook, and live component specimens
+
+`/work`, `/about`, and `/writing` are linked from the nav and not yet built.
+
+## X-ray
+
+Press <kbd>⌥X</kbd> on any page to outline and name every Roster component on it.
+
+Roster's compiled classes are not uniquely prefixed, so there is no dependable
+way to detect its components in the DOM. X-ray relies on deliberate annotation
+instead: everything the site renders from Roster goes through `lib/roster-ui.tsx`,
+which stamps `data-roster="<Name>"`. That keeps the marker honest — if something
+is outlined, it really is a Roster component — and keeps the annotation next to
+the usage rather than in a table that will drift.
+
+## Testing
+
+There is no test suite. The site is almost entirely static composition, and the
+parts with real logic — the package reader, the stats fetcher and its fallback —
+are verified by hand against the deployed endpoints. That is a gap rather than a
+position, and the fallback path in particular deserves a unit test.
+
+## Deploying
+
+Vercel, on push. The build fetches gameverdict.app, so it has a network
+dependency; the fallback covers an outage, and the build log says when it fired.
