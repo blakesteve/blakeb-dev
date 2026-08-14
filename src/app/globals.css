@@ -67,6 +67,17 @@
   --roster-gray-800: #26281f;
   --roster-gray-900: #14150f;
   --roster-gray-950: #0a0b07;
+
+  /* Roster's typographic components (Eyebrow, InlineCode, Stat's source line,
+     DescriptionList's terms) reach for `font-mono`, so it has to resolve to
+     Plex Mono or the page sets in two different monospaces.
+
+     This cannot go in `@theme inline` below. Roster imports Tailwind's theme
+     inside `@layer roster`, which sits ABOVE `theme` in the order declared at
+     the top of this file — so Roster's own --font-mono would win. Declared
+     here unlayered, it beats both, which is the same reason the --roster-*
+     overrides above live out here rather than in the theme block. */
+  --font-mono: var(--font-util);
 }
 
 :root.dark {

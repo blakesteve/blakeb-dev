@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { storyHref } from "@/lib/roster-ui";
+import { REyebrow, storyHref } from "@/lib/roster-ui";
 
 type Found = { name: string; count: number };
 
@@ -78,9 +78,9 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
           aria-label="Roster components on this page"
           className="fixed bottom-16 right-4 z-[60] max-h-[60vh] w-[232px] overflow-y-auto rounded-[3px] border border-spot bg-panel p-3 shadow-lg"
         >
-          <p className="u m-0 pb-2 !text-spot">
+          <REyebrow as="p" className="m-0 block pb-2 !text-spot">
             {found.length} components · {total} instances
-          </p>
+          </REyebrow>
 
           <ul className="m-0 flex list-none flex-col gap-[3px] p-0">
             {found.map((item) => {
@@ -109,12 +109,12 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
             })}
           </ul>
 
-          <p className="u m-0 pt-2 !text-[9px] leading-relaxed">
+          <REyebrow as="p" className="m-0 block pt-2 !text-[9px] !leading-relaxed">
             {storyHref("Button", "atoms")
               ? "Names link to Storybook"
               : "Storybook not deployed yet"}
             {" · Esc to close"}
-          </p>
+          </REyebrow>
         </aside>
       ) : null}
     </>

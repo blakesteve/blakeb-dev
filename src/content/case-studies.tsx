@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Shot } from "@/components/shot";
+import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
 
 import ncaamDark from "@/images/megasquad/megasquad-ncaam-dark.png";
 import ncaamLight from "@/images/megasquad/megasquad-ncaam-light.png";
@@ -33,12 +34,12 @@ import gvKonami2p from "@/images/game-verdict/gameverdict-konami-2p.png";
 import gvRain from "@/images/game-verdict/gameverdict-konami-rain.png";
 import gvSettings from "@/images/game-verdict/gameverdict-settings-steamimport-crt.png";
 
-export type Stat = { value: string; label: string; source: string };
+export type CaseStudyStat = { value: string; label: string; source: string };
 export type Row = { k: string; v: string };
 
 export type CaseStudy = {
   lede: string;
-  stats: Stat[];
+  stats: CaseStudyStat[];
   stack: Row[];
   also: Row[];
   body: ReactNode;
@@ -57,7 +58,7 @@ function Section({
 }) {
   return (
     <section className="mb-7">
-      <span className="u block pb-2">{eyebrow}</span>
+      <REyebrow className="block pb-2">{eyebrow}</REyebrow>
       <h2 className="m-0 pb-[10px] font-[family-name:var(--font-display)] text-[1.375rem] font-bold tracking-[-0.028em]">
         {title}
       </h2>
@@ -68,14 +69,18 @@ function Section({
   );
 }
 
+/**
+ * `current` is what lets the project's accent reach the rule without Roster
+ * knowing anything about this site's palette: the wrapper sets the color, the
+ * rule inherits it, and the quote text stays at full contrast.
+ */
 function Pull({ children, cite }: { children: ReactNode; cite: string }) {
   return (
-    <figure className="my-1 border-l-2 border-[var(--world)] py-[2px] pl-4">
-      <blockquote className="m-0 max-w-[48ch] text-[1.03125rem] leading-[1.5] text-ink">
-        {children}
-      </blockquote>
-      <figcaption className="u mt-[7px] !tracking-[0.14em]">{cite}</figcaption>
-    </figure>
+    <span className="block text-[var(--world)]">
+      <RPullquote colorScheme="current" cite={cite}>
+        <span className="text-ink">{children}</span>
+      </RPullquote>
+    </span>
   );
 }
 
@@ -96,8 +101,12 @@ function Tiers() {
       <table className="w-full border-collapse text-left text-sm">
         <thead>
           <tr>
-            <th className="u border-b border-rule pb-2 pr-4 font-medium">State</th>
-            <th className="u border-b border-rule pb-2 font-medium">Queue order</th>
+            <th className="border-b border-rule pb-2 pr-4">
+              <REyebrow weight="medium">State</REyebrow>
+            </th>
+            <th className="border-b border-rule pb-2">
+              <REyebrow weight="medium">Queue order</REyebrow>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -119,9 +128,9 @@ function Tiers() {
 
 function Code({ children }: { children: ReactNode }) {
   return (
-    <code className="font-[family-name:var(--font-util)] text-[0.8125rem] text-[var(--world)]">
+    <RInlineCode colorScheme="current" className="text-[var(--world)]">
       {children}
-    </code>
+    </RInlineCode>
   );
 }
 

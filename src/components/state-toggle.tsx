@@ -49,7 +49,13 @@ export function StateToggle() {
       size="xs"
       onClick={toggle}
       aria-label={`Switch to the ${isBlueline ? "press sheet" : "blueline proof"}`}
-      className="!font-[family-name:var(--font-util)] !text-[10px] !uppercase !tracking-[0.14em]"
+      /* Roster's ghost/neutral hover is `bg-gray-100`, and this site maps
+         --roster-gray-100 to #e7e8e3 — the same value as --paper. On the press
+         sheet that paints the page background onto the page background, so the
+         hover is invisible; the blueline only worked by luck, since gray-800
+         happens to contrast there. --hair is one step off paper in BOTH states
+         (darker on the sheet, lighter on the proof), so it reads either way. */
+      className="!font-[family-name:var(--font-util)] !text-[10px] !uppercase !tracking-[0.14em] hover:!bg-hair"
       startIcon={
         <span aria-hidden="true" className="text-spot">
           ◐
