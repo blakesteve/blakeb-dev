@@ -47,7 +47,7 @@ export const projects: Project[] = [
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games · 822 commits`,
       },
-      { label: "Note", value: "Cut page egress 1.8 MB → 50 KB" },
+      { label: "Note", value: "No login wall; one vote per browser" },
     ],
   },
   {
