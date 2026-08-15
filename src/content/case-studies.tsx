@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Shot } from "@/components/shot";
+import { Clip } from "@/components/clip";
 import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
 import {
   getRosterComponentCount,
@@ -772,6 +773,12 @@ export const caseStudies: Record<string, CaseStudy> = {
             budget at roughly five requests a second, flushes once at the end, and dedupes on read,
             because new scrobbles landing mid-backfill shift the page boundaries underneath you.
           </p>
+          <Clip
+            src="/video/retrospect-loading.mp4"
+            poster="/video/retrospect-loading-poster.jpg"
+            alt="Retrospect's loading screen: planets spawn and orbit a gold sun on a dark field, occasionally colliding and exploding, while a progress bar fills and a scrobble counter climbs beneath the words 'Consulting the ephemeris'."
+            caption="The wait, with something to watch. Planets spawn, orbit, and occasionally collide."
+          />
         </Section>
 
         <Section eyebrow="What it cost" title="Built to cost nothing, on purpose">
