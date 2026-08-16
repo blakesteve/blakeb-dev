@@ -49,8 +49,20 @@ export function RCard(props: ComponentProps<typeof Card>) {
   return <Card data-roster="Card" {...props} />;
 }
 
-export function RButton(props: ComponentProps<typeof Button>) {
-  return <Button data-roster="Button" {...props} />;
+/**
+ * Roster's Button sets no font-family, so it inherits the host's body font.
+ * This site reads in Source Serif, which made every button on the site serif,
+ * including the specimens on /system. Controls are chrome here, so they take
+ * the utility face. Passing a font class through `className` still wins.
+ */
+export function RButton({ className = "", ...props }: ComponentProps<typeof Button>) {
+  return (
+    <Button
+      data-roster="Button"
+      className={`font-[family-name:var(--font-util)] ${className}`}
+      {...props}
+    />
+  );
 }
 
 export function RBadge(props: ComponentProps<typeof Badge>) {
