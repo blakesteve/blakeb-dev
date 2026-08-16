@@ -70,8 +70,9 @@ export default function Image() {
             padding: "0 92px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-            <svg width="62" height="62" viewBox="0 0 24 24">
+          {/* Satori ignores `gap`; spacing has to be explicit margin. */}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <svg width="62" height="62" viewBox="0 0 24 24" style={{ marginRight: 22 }}>
               <circle
                 cx="12.9"
                 cy="11.15"
@@ -104,9 +105,9 @@ export default function Image() {
 
           <div
             style={{
-              fontSize: 118,
+              fontSize: 104,
               fontWeight: 800,
-              letterSpacing: -4,
+              letterSpacing: -3.5,
               lineHeight: 1,
               color: INK,
               textTransform: "uppercase",
@@ -118,18 +119,28 @@ export default function Image() {
           </div>
           <div
             style={{
-              fontSize: 118,
+              fontSize: 104,
               fontWeight: 800,
-              letterSpacing: -4,
+              letterSpacing: -3.5,
               lineHeight: 1,
               textTransform: "uppercase",
               marginTop: 6,
               display: "flex",
-              gap: 26,
             }}
           >
-            <span style={{ color: INK }}>Fluent in</span>
-            <span style={{ color: SPOT }}>designer.</span>
+            {/* The word space is a sized box, and it must not be shrinkable.
+                This line set as "FLUENT INDESIGNER." because at 118px it
+                overflowed the content box, and flexbox took the whole
+                shortfall out of the only child that could give: the space.
+                Satori ignores `gap`, so a box is the mechanism, and the type
+                is sized to fit rather than to be squeezed. */}
+            <div style={{ display: "flex", flexShrink: 0, color: INK }}>
+              Fluent in
+            </div>
+            <div style={{ display: "flex", flexShrink: 0, width: 24, height: 1 }} />
+            <div style={{ display: "flex", flexShrink: 0, color: SPOT }}>
+              designer.
+            </div>
           </div>
 
           <div
