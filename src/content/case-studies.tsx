@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 import { Shot } from "@/components/shot";
 import { Clip } from "@/components/clip";
-import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
+import { BothPalettes } from "@/components/both-palettes";
+import { ReleaseHistory } from "@/components/release-history";
+import { RBadge, RButton, REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
 import {
   getRosterComponentCount,
   getRosterComponents,
@@ -478,14 +480,14 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   roster: {
-    lede: "A production-grade atomic component library — and the thing this site is built out of. Atoms, molecules, and organisms, each documented in Storybook and versioned like the dependency it is.",
+    lede: "The component library this site is built out of, with exactly one real customer: me. Four apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.",
     stats: [
       {
         value: String(getRosterComponentCount()),
         label: "Components",
         source: "live · package exports",
       },
-      { value: "298", label: "Commits", source: "GitHub API, Aug 2026" },
+      { value: "310", label: "Commits", source: "since Feb 2026" },
       { value: "778", label: "Tests", source: `roster @ ${getRosterVersion()}` },
       { value: "5", label: "Apps consuming it", source: "including this one" },
     ],
@@ -493,7 +495,7 @@ export const caseStudies: Record<string, CaseStudy> = {
       { k: "Runtime", v: "React 19" },
       { k: "Language", v: "TypeScript, strict" },
       { k: "Styling", v: "Tailwind CSS v4" },
-      { k: "Build", v: "Vite — ES + UMD + d.ts" },
+      { k: "Build", v: "Vite, ES + UMD + d.ts" },
       { k: "A11y", v: "Headless UI + Radix" },
       { k: "Docs", v: "Storybook" },
       { k: "Tests", v: "Vitest + Playwright" },
@@ -516,8 +518,13 @@ export const caseStudies: Record<string, CaseStudy> = {
             &ldquo;disabled.&rdquo;
           </p>
           <p>
-            Roster is that substrate, published to npm and versioned like the dependency it is. It
-            ships pre-compiled CSS, so a consuming app does not need Tailwind installed to use it.
+            I had just finished building a shared component library at work when it became obvious I
+            could do the same for myself in a fraction of the time. Roster was never a bid for
+            stars. It was a refusal to rebuild the same button on a Saturday.
+          </p>
+          <p>
+            It ships pre-compiled CSS, so a consuming app does not need Tailwind installed to use
+            it, and it is versioned like the dependency it is.
           </p>
         </Section>
 
@@ -525,26 +532,112 @@ export const caseStudies: Record<string, CaseStudy> = {
           <p>
             A component library that hardcodes its palette is a library you can use exactly once.
             Roster&rsquo;s classes compile down to <Code>var(--roster-*)</Code>, so a consuming app
-            can repaint every component at once by overriding custom properties — no forks, no
-            wrapper components, no <Code>!important</Code>.
+            repaints every component at once by overriding custom properties. No forks, no wrapper
+            components, no <Code>!important</Code>.
           </p>
-          <Pull cite="This page, right now">
-            The site you are reading remaps those tokens twice: once for the press sheet, once for
-            the blueline. Same components, two production states.
+          <p>
+            That claim is easy to make and annoying to prove, so here it is running. Both columns
+            below render the same component from the same installed package. The left one is pinned
+            to the tokens npm actually ships, read out of <Code>dist/tokens.css</Code> at build time.
+            The right one inherits this page&rsquo;s. Flip the production state at the top and watch
+            which one moves.
+          </p>
+          <BothPalettes>
+            <RButton size="sm" colorScheme="primary">
+              Primary
+            </RButton>
+            <RButton size="sm" variant="soft" colorScheme="primary">
+              Soft
+            </RButton>
+            <RButton size="sm" variant="outline" colorScheme="primary">
+              Outline
+            </RButton>
+            <RBadge variant="primary">Badge</RBadge>
+          </BothPalettes>
+          <Pull cite="Why it is inline, not imported">
+            The shipped palette is applied as inline styles on a wrapper. Importing tokens.css a
+            second time would have put a competing :root block in the cascade and repainted the
+            whole site.
           </Pull>
           <p>
             Dark mode is class-based rather than tied to the OS preference, which is what makes a
-            manual toggle possible at all.
+            manual toggle possible at all, and is why this page can have two production states
+            instead of one.
           </p>
         </Section>
 
-        <Section eyebrow="Eating the dogfood" title="The count on this page is not typed">
+        <Section eyebrow="Shipping in public" title="Two majors in one day, one of them broken">
           <p>
-            The component number in the system strip on the home page is read at build time from the
-            installed package&rsquo;s own type definitions — every module re-exported as{" "}
-            <Code>components/&lt;tier&gt;/&lt;Name&gt;/&lt;Name&gt;</Code>. The swatches are parsed
-            out of the shipped <Code>tokens.css</Code>. Publish a component, redeploy, and this site
-            counts it without anyone editing a file.
+            Roster is on its fourth major. Three of those went out roughly as planned. One did not:
+            3.0.0 shipped with <Code>DataTable</Code> exported from the main entry while statically
+            importing <Code>@tanstack/react-table</Code>, an optional peer. Every consumer that had
+            not installed TanStack, which was most of them, would fail to build on import.
+          </p>
+          <p>
+            4.0.0 went out the same day with <Code>DataTable</Code> moved to its own entry point, and
+            3.0.0 was deprecated with a note explaining exactly what was wrong with it. That note is
+            still on npm. It seemed more useful there than quietly unpublished.
+          </p>
+          <ReleaseHistory />
+          <Pull cite="The rule I settled on">
+            An optional peer dependency that is statically imported is not optional. It is a
+            required dependency with a misleading label.
+          </Pull>
+        </Section>
+
+        <Section eyebrow="How it grows" title="The library changes when an app hits a wall">
+          <p>
+            Roster does not get planned so much as discovered. Something gets built twice in a
+            consuming app, that is the signal, and it moves into the library. This site alone
+            produced most of a release:
+          </p>
+          <p>
+            <strong>A CSS class used 26 times became a component.</strong> The small tracked-out
+            uppercase label carrying the folio, the prop rows, and the token strip was a hand-rolled{" "}
+            <Code>.u</Code> class before anyone asked what it was. A utility class used that often is
+            a component nobody has named yet. It is <Code>Eyebrow</Code> now.
+          </p>
+          <p>
+            <strong>A bordered call to action written twice became <Code>RCta</Code>.</strong> Once
+            on the contact block, once on a case study sidebar, identical markup both times.
+          </p>
+          <p>
+            <strong>And one gap is still open.</strong> Roster&rsquo;s <Code>Button</Code> is typed
+            to <Code>HTMLButtonElement</Code> with no <Code>as</Code> and no <Code>href</Code>, so
+            the most common control on a portfolio, a button-shaped thing that navigates, cannot be
+            built from it. Every workaround is bad: a button with an <Code>onClick</Code> router push
+            loses middle-click and the right role, and hand-rolling it is how the two above got
+            written twice. It is logged, not fixed.
+          </p>
+        </Section>
+
+        <Section eyebrow="What it costs" title="One customer, no cover">
+          <p>
+            A library with one customer is not a smaller version of a library with many. It is a
+            different job. There is no roadmap, because there is no one to ask for anything. Nothing
+            gets built speculatively, because speculation has no payer. Every feature in Roster
+            exists because something I was building stopped and waited for it.
+          </p>
+          <p>
+            The flip side is that mistakes arrive immediately and personally. A bad major does not
+            generate issues, it breaks four apps I was going to work on that weekend. That is a
+            tighter feedback loop than most libraries get, and it is the only reason a packaging bug
+            that had been quietly wrong for months finally got found.
+          </p>
+          <Pull cite="The part that surprised me">
+            Nobody would have noticed if I had quietly unpublished the broken major. That is exactly
+            why the tombstone is still there.
+          </Pull>
+          <p>
+            Two things this page deliberately does not do: it does not list the components, because{" "}
+            <Code>/system</Code> reads them live from the installed package along with every token
+            ramp and a set of working specimens. And it does not walk through the CSS packaging
+            failure in detail, because that one earned its own post.
+          </p>
+          <p>
+            What it does instead: press <Code>⌥X</Code> and every Roster component on this page
+            outlines itself and says its own name, including the buttons two sections up and the
+            breadcrumb you arrived through. The claim and the evidence are the same object.
           </p>
         </Section>
       </>

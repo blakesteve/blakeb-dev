@@ -104,3 +104,26 @@ export function getRosterRamp(family: string): { step: number; shipped: string }
 
   return steps.sort((a, b) => a.step - b.step);
 }
+
+/**
+ * Every `--roster-*` token exactly as the package ships it.
+ *
+ * Used to render a component under Roster's own palette beside the same
+ * component under this site's, on the same page, in real DOM. Applied as inline
+ * styles on a wrapper rather than by importing `tokens.css` a second time: an
+ * inline style cannot escape its subtree, so there is no way for this to leak
+ * into the rest of the page and repaint the site.
+ *
+ * The shipped file is a single flat `:root` block with no dark variants, which
+ * is what makes that safe.
+ */
+export function getRosterShippedTokens(): Record<string, string> {
+  const css = read("dist", "tokens.css");
+  const tokens: Record<string, string> = {};
+
+  for (const match of css.matchAll(/(--roster-[a-z0-9-]+)\s*:\s*([^;}]+)/g)) {
+    tokens[match[1]] = match[2].trim();
+  }
+
+  return tokens;
+}
