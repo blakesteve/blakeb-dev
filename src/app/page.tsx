@@ -57,7 +57,16 @@ export default async function Home() {
               Blake Ball
             </REyebrow>
           </span>
-          <REyebrow>Austin, Texas · Engineer · Est. 2010</REyebrow>
+          {/* The running head has a 212px budget beside the name on a 375px
+              screen, and the full string measures 274px, so it wrapped and the
+              header stood three rows tall. The two dropped clauses are the
+              ones already on screen: the h1 below says ENGINEER, and the meta
+              list says SINCE 2010. Only the location is not stated elsewhere,
+              so only the location survives the narrow layout. */}
+          <REyebrow>
+            Austin, Texas
+            <span className="hidden sm:inline"> · Engineer · Est. 2010</span>
+          </REyebrow>
         </div>
       </div>
 
