@@ -105,8 +105,11 @@ export const projects: Project[] = [
     slug: "retrospect",
     name: "Retrospect",
     tagline: "Your music taste vs. the actual sky.",
+    /* The lede owns the scrobbles-against-the-sky sentence; this card leads
+       with the standard instead, so the two do not read as one paragraph
+       printed twice. */
     blurb:
-      "Every scrobble you have ever logged, cross-referenced against real retrogrades, full moons, and eclipses computed from planetary positions. Astrology asks; a permutation test answers.",
+      "Astrology makes a claim and never has to be right. Here it gets a permutation test, and most of the time the answer comes back no.",
     status: "MIT",
     host: "retrospect-seven.vercel.app",
     links: [
@@ -128,8 +131,10 @@ export const projects: Project[] = [
     slug: "megasquad",
     name: "MegaSquad",
     tagline: "Pick'ems for your friend group.",
+    /* Leagues and sports are already in the prop row below and in the lede;
+       what only this card says is how it talks back. */
     blurb:
-      "Ten leagues across five sports. Picks auto-lock at tip-off, and every settled pick answers back: “Bullseye!”, “So Fetch!”, “Gross, dude.”",
+      "Every settled pick answers back: “Bullseye!”, “So Fetch!”, or “Gross, dude.” Underneath the jokes, a scoreboard that always adds up.",
     status: "Private",
     host: "megasquad.org",
     /* Private: the front end is mine, the API is my brother's. */

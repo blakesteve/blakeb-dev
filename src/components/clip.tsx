@@ -10,15 +10,15 @@ import { useSyncExternalStore } from "react";
  * still of that is just a diagram of a solar system.
  *
  * Video rather than GIF, and not close: GIF has no interframe compression and
- * caps at 256 colours, so this clip would land somewhere north of 20 MB and
+ * caps at 256 colors, so this clip would land somewhere north of 20 MB and
  * band badly across a dark starfield. The same footage as H.264 at a sensible
  * size is about 100 KB.
  *
- * Reduced motion is honoured properly rather than ignored. If the visitor has
+ * Reduced motion is honored properly rather than ignored. If the visitor has
  * asked for less movement, the loop does not autoplay: they get the poster
  * frame and a play control, and can opt in. `useSyncExternalStore` reads the
  * media query live, so a visitor who changes the setting gets the right
- * behaviour without a reload.
+ * behavior without a reload.
  */
 
 function subscribe(onStoreChange: () => void) {

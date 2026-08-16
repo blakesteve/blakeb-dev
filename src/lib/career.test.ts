@@ -11,6 +11,7 @@ import {
   summary,
   yearsShipping,
   yearsShippingWords,
+  yearsShippingWordsCapitalized,
 } from "./career";
 
 /**
@@ -164,6 +165,20 @@ describe("yearsShipping", () => {
     atMonth("2026-05");
     expect(monthsBetween(ENGINEERING_START, null)).toBe(186);
     expect(yearsShipping()).toBe(16);
+  });
+
+  // Four metadata strings used to hardcode "Sixteen". They call this now, so
+  // it has to stay a capitalized word rather than a numeral or a bare figure.
+  it("capitalizes for the metadata strings that open on the figure", () => {
+    atMonth("2026-08");
+    expect(yearsShippingWordsCapitalized()).toBe("Sixteen");
+  });
+
+  it("capitalizes whatever the count rounds to, not a fixed string", () => {
+    atMonth("2026-02");
+    expect(yearsShippingWordsCapitalized()).toBe("Fifteen");
+    atMonth("2027-11");
+    expect(yearsShippingWordsCapitalized()).toBe("Seventeen");
   });
 
   it("rounds down below the halfway mark", () => {

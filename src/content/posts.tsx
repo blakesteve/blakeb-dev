@@ -60,15 +60,8 @@ export const posts: Post[] = [
     body: (
       <>
         <P>
-          I publish a component library with exactly one real customer: me. I
-          wrote Roster right after finishing a shared component library at work,
-          when it was obvious I could do the same thing for myself in a fraction
-          of the time and stop rebuilding the same button every time I started a
-          side project. It was never about stars. It was about not reinventing
-          the wheel on a Saturday.
-        </P>
-        <P>
-          Four of my own apps install it now, which makes me the author and the
+          I maintain a component library that four of my own apps depend on and
+          nobody else has a stake in. That makes me both the author and the
           person who finds out what shipping it actually costs. For a while,
           what it cost was a slow drip of styling bugs I could not account for.
         </P>
@@ -165,9 +158,8 @@ export const posts: Post[] = [
           <RInlineCode>@theme inline</RInlineCode>, so the library&rsquo;s
           utilities compile to{" "}
           <RInlineCode>var(--roster-primary-500, #0f6498)</RInlineCode> rather
-          than to a hex. Overriding one custom property in the consuming app
-          repaints every component at once, with no forks and no{" "}
-          <RInlineCode>!important</RInlineCode>.
+          than to a hex. A consuming app can then repigment the whole library by
+          redefining custom properties it already controls.
         </P>
 
         <H eyebrow="The part I got wrong twice">

@@ -49,8 +49,8 @@ export default function SystemPage() {
             @blakesteve/roster
           </code>{" "}
           at build time. The component list, the token ramps, and the specimens are
-          the library itself, not a description of it. Publish a change and this
-          page reports it on the next deploy.
+          the library itself, not a description of it. When a new version is
+          published, this page reports it on the next deploy.
         </p>
 
         <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4">
@@ -176,7 +176,7 @@ export default function SystemPage() {
           check that this page is not drawing pictures of buttons.
         </p>
 
-        <Specimens />
+        <Specimens componentCount={components.length} />
       </section>
 
       <SiteFooter

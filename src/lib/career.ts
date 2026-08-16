@@ -200,12 +200,24 @@ export function yearsShipping(): number {
   return Math.round(monthsBetween(ENGINEERING_START, null) / 12);
 }
 
-/** "Sixteen", for prose that should not be numerals. */
+/** "sixteen", for prose that should not be numerals. */
 export function yearsShippingWords(): string {
   const words = ["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen",
                  "seventeen","eighteen","nineteen","twenty"];
   const n = yearsShipping();
   return words[n - 10] ?? String(n);
+}
+
+/**
+ * "Sixteen", for the several places the figure opens a sentence.
+ *
+ * Four metadata strings had it typed out as a literal, which is the same bug
+ * the note above describes, still live in the one place nobody looks at: the
+ * search result and the link preview.
+ */
+export function yearsShippingWordsCapitalized(): string {
+  const words = yearsShippingWords();
+  return words[0].toUpperCase() + words.slice(1);
 }
 
 /**

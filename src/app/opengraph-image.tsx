@@ -5,7 +5,7 @@ import { ImageResponse } from "next/og";
  *
  * Composed rather than typeset: ImageResponse ships no fonts of its own, and
  * pulling Archivo down at build would put a network dependency on the one
- * artifact that has no fallback if the fetch fails. Colour, the process bar,
+ * artifact that has no fallback if the fetch fails. Color, the process bar,
  * crop marks, and the mark carry the identity instead of the typeface, so this
  * reads as the site even in a system sans.
  *

@@ -21,6 +21,11 @@ import { RButton, REyebrow, RStat, RPullquote, RInlineCode } from "@/lib/roster-
  * these are interactive, and a specimen sheet where nothing responds would be
  * a picture of a specimen sheet.
  *
+ * `componentCount` is threaded in rather than read here because this is a
+ * client component. It used to be the literal 40 sitting under the words
+ * "live · package exports", which is the one kind of wrong this page cannot
+ * afford: a specimen sheet that fabricates the thing it is demonstrating.
+ *
  * Deliberately not exhaustive. The catalog above lists all of them; this shows
  * the ones whose behavior is worth seeing, and skips the ones that only make
  * sense inside a page that has something to say (Navbar, Footer, DataTable).
@@ -35,7 +40,7 @@ function Cell({ label, children }: { label: string; children: React.ReactNode })
   );
 }
 
-export function Specimens() {
+export function Specimens({ componentCount }: { componentCount: number }) {
   const [checked, setChecked] = useState(true);
 
   return (
@@ -150,7 +155,12 @@ export function Specimens() {
 
       <Cell label="Stat">
         <dl className="m-0 flex flex-wrap gap-x-8 gap-y-4">
-          <RStat size="sm" value="40" label="Components" source="live · package exports" />
+          <RStat
+            size="sm"
+            value={String(componentCount)}
+            label="Components"
+            source="live · package exports"
+          />
           <RStat size="sm" value="2" label="States" source="press, blueline" />
         </dl>
       </Cell>
@@ -158,8 +168,8 @@ export function Specimens() {
       <Cell label="Pullquote">
         <RPullquote colorScheme="current" cite="The whole idea" className="text-spot">
           <span className="text-ink">
-            A component library that hardcodes its palette is a library you can use
-            exactly once.
+            A token is a promise that the same component can belong to a
+            different product.
           </span>
         </RPullquote>
       </Cell>

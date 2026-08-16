@@ -19,7 +19,7 @@ import type { ComponentProps } from "react";
  * carries the folio. That override is long, and it was going to be pasted at
  * every call site, so it is applied once here and the pages just pass items.
  *
- * `currentClassName` defaults to the spot colour and is overridden on a case
+ * `currentClassName` defaults to the spot color and is overridden on a case
  * study, where the last crumb takes that project's own accent instead.
  */
 
