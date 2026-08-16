@@ -14,7 +14,7 @@ import type React from "react";
  * motion on the site that means something rather than decorating something.
  *
  * The two rings take the two process inks so the misregistration reads as
- * colour fringing rather than as a blurry circle. The crosshair stays in ink,
+ * color fringing rather than as a blurry circle. The crosshair stays in ink,
  * sharp, because on a real sheet the crosshair is the reference the plates are
  * measured against — it is never the thing that moves.
  */

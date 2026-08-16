@@ -51,7 +51,7 @@ export function BothPalettes({
 
       <figcaption className="font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
         {note ??
-          "Same component, same package, same page. Only the colour tokens differ."}
+          "Same component, same package, same page. Only the color tokens differ."}
       </figcaption>
     </figure>
   );

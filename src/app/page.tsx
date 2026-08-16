@@ -95,9 +95,8 @@ export default async function Home() {
             schemas, cached queries, rate limits, cron jobs, a Discord bot. Currently Lead Front
             End Engineer at <strong className="font-bold">Revmatics</strong>, before that findhelp,
             Cart.com, and five and a half years at <strong className="font-bold">IBM</strong>. The
-            design degree pays off in two directions: with no designer on a project I can make
-            the call myself and know it holds up, and with one I can argue in their language and
-            still know where my lane ends.
+            BFA in communication design came before any of it, which is why design review here
+            tends to be a conversation rather than a handoff.
           </p>
 
           {/* `split` is exactly this shape: term left, value right-aligned and

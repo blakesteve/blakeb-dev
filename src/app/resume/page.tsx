@@ -15,12 +15,13 @@ import {
   positions,
   positionSpan,
   summary,
+  yearsShippingWordsCapitalized,
 } from "@/lib/career";
 import { projects } from "@/lib/projects";
 
 export const metadata = {
   title: "Résumé",
-  description: "Blake Ball — engineer, Austin, Texas. Sixteen years of shipping software.",
+  description: `Blake Ball — engineer, Austin, Texas. ${yearsShippingWordsCapitalized()} years of shipping software.`,
 };
 
 /**

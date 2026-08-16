@@ -417,7 +417,10 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The part nobody asked for" title="An easter egg you get to keep">
+        {/* Retrospect already uses "The part nobody asked for"; two case
+            studies reaching for the same bespoke eyebrow makes neither of
+            them sound bespoke. */}
+        <Section eyebrow="Undocumented" title="An easter egg you get to keep">
           <p>
             Type <Code>↑ ↑ ↓ ↓ ← → ← → B A</Code> and hit Enter or Space. Keyboards, mice, and
             controllers rain down the page, which is a nice five seconds and then it&rsquo;s over.

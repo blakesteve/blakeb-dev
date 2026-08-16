@@ -8,7 +8,7 @@ import { RegistrationMark } from "@/components/registration-mark";
  * The mark in the sticky bar, which yields to the one in the folio.
  *
  * The home page prints the mark beside the name at the top of the sheet, so a
- * second one in the bar three centimetres below is just the same logo twice.
+ * second one in the bar three centimeters below is just the same logo twice.
  * This one stays out of the way until the folio's copy has scrolled off, then
  * takes over. Pages without a folio pass nothing and it is simply always there.
  *

@@ -20,13 +20,13 @@ import {
   positions,
   positionSpan,
   yearsShippingWords,
+  yearsShippingWordsCapitalized,
 } from "@/lib/career";
 import pedernales from "@/images/blake/pedernales.jpg";
 
 export const metadata = {
   title: "About",
-  description:
-    "Sixteen years of interfaces, a BFA in communication design, and the colophon for the site you are reading.",
+  description: `${yearsShippingWordsCapitalized()} years of interfaces, a BFA in communication design, and the colophon for the site you are reading.`,
 };
 
 const OFF_THE_CLOCK = [
@@ -83,9 +83,9 @@ export default function AboutPage() {
               It pays off in two directions. On a project with no designer and no
               direction, I can make the call myself and know it holds up. On one
               with a designer, I can argue in their language, go to bat for the
-              details worth fighting for, and still know where my lane ends. The
-              rest of the time I&rsquo;m building the layers underneath, which these
-              days means schemas, caching, and the occasional bot.
+              details worth fighting for, and still know where my lane ends. These
+              days the lane runs deeper than it used to: most weeks the problem
+              worth solving is underneath the interface rather than on it.
             </p>
           </div>
 

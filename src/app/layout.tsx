@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
 import { XRay } from "@/components/xray";
 import { getRosterComponents } from "@/lib/roster";
+import { yearsShippingWordsCapitalized } from "@/lib/career";
 import "./globals.css";
+
+const YEARS = yearsShippingWordsCapitalized();
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -29,12 +32,10 @@ export const metadata: Metadata = {
     default: "Blake Ball — Engineer, fluent in designer",
     template: "%s — Blake Ball",
   },
-  description:
-    "Front end engineer in Austin, Texas. Sixteen years building interfaces, most recently at Revmatics. I build design systems and the products that run on them.",
+  description: `Engineer in Austin, Texas. ${YEARS} years building interfaces, most recently at Revmatics. I build design systems and the products that run on them.`,
   openGraph: {
     title: "Blake Ball — Engineer, fluent in designer",
-    description:
-      "Sixteen years building interfaces. I build design systems and the products that run on them.",
+    description: `${YEARS} years building interfaces. I build design systems and the products that run on them.`,
     url: "https://blakeb.dev",
     siteName: "blakeb.dev",
     locale: "en_US",
