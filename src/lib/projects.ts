@@ -1,4 +1,5 @@
 import { getRosterComponentCount } from "./roster";
+import { STORYBOOK_URL } from "./storybook";
 import type { GameVerdictStats } from "./game-verdict-stats";
 
 /**
@@ -85,7 +86,7 @@ export const projects: Project[] = [
       {
         /* Same deployment /system links component names into. */
         label: "Storybook",
-        href: process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "https://roster-tan.vercel.app",
+        href: STORYBOOK_URL,
         kind: "docs",
       },
       { label: "GitHub", href: "https://github.com/blakesteve/roster", kind: "source" },
