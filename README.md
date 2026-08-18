@@ -16,9 +16,10 @@ npm install
 npm run dev
 ```
 
-The dev server prefers port 3003. `NEXT_PUBLIC_STORYBOOK_URL` in `.env.local`
-points at the deployed Roster Storybook; without it, component names render as
-plain text instead of links.
+The dev server prefers port 3003. `NEXT_PUBLIC_STORYBOOK_URL` overrides where
+Storybook links point; `lib/storybook.ts` falls back to the deployed URL, so
+nothing has to be configured for the links to work. Set it to an empty string to
+switch them off deliberately.
 
 ## Two production states
 
@@ -177,6 +178,11 @@ X-ray's own button and legend are built from Roster too, so they carry
 it the legend annotates itself, over the top of the list you are reading, and
 reports its own Eyebrows as page content.
 
+The panel links each name to its Storybook story. It used to fall back to
+declaring "Storybook not deployed yet" — a claim it has no way to verify, and
+one that was false in production for as long as the URL defaulted to an empty
+string. It now reports only what it can know: whether it was given a link.
+
 ## The CRT easter egg
 
 The Game Verdict case study describes an easter egg you get to keep, so the page
@@ -222,6 +228,7 @@ buys nothing.
 | `lib/roster.ts` | the `.d.ts` parse across both entry points, and the token and ramp readers against the shipped `tokens.css` |
 | `content/posts.ts` | date formatting, lookup, sort order, and the data invariants routing depends on: unique slugs, URL-safe slugs, `YYYY-MM-DD` dates, and a dek short enough to survive as a meta description |
 | `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
+| `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
 
 Three things are worth knowing about how these are written.
 

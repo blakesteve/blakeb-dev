@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import React from "react";
+import { STORYBOOK_URL } from "./storybook";
 import {
   Accordion,
   Badge,
@@ -27,7 +28,7 @@ import {
  * than in a lookup table that will drift.
  */
 
-export const STORYBOOK_URL = process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "";
+export { STORYBOOK_URL } from "./storybook";
 
 /**
  * Storybook derives a story id from its `title` with `sanitize()`, which

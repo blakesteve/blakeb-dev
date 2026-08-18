@@ -120,7 +120,7 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
           <REyebrow as="p" className="m-0 block pt-2 !text-[9px] !leading-relaxed">
             {storyHref("Button", "atoms")
               ? "Names link to Storybook"
-              : "Storybook not deployed yet"}
+              : "Storybook link not configured"}
             {" · Esc to close"}
           </REyebrow>
         </aside>
