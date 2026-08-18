@@ -16,12 +16,25 @@ const UNAVAILABLE = { games: null, verdicts: null };
 
 let warn: ReturnType<typeof vi.spyOn>;
 
-/** A `fetch` that resolves to a response with the given body. */
-function respondWith(body: unknown, init: { ok?: boolean; status?: number } = {}) {
+/**
+ * A `fetch` that resolves to a response with the given body.
+ *
+ * `headers` and `text` are here because the rejection path reads both, and a
+ * stand-in without them is not a Response — it is a shape that happens to pass.
+ * The first version omitted them, so adding a header read to the source threw a
+ * TypeError that the module's own catch swallowed into a generic message, and
+ * the suite reported it as an unrelated assertion failure.
+ */
+function respondWith(
+  body: unknown,
+  init: { ok?: boolean; status?: number; headers?: Record<string, string>; text?: string } = {},
+) {
   const fetchMock = vi.fn().mockResolvedValue({
     ok: init.ok ?? true,
     status: init.status ?? 200,
+    headers: new Headers(init.headers ?? {}),
     json: async () => body,
+    text: async () => init.text ?? JSON.stringify(body),
   });
   vi.stubGlobal("fetch", fetchMock);
   return fetchMock;
@@ -73,6 +86,41 @@ describe("getGameVerdictStats", () => {
 
     await expect(getGameVerdictStats()).resolves.toEqual(UNAVAILABLE);
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("503"));
+  });
+
+  // The failure that actually happened: 200 from a laptop, 403 to Vercel's
+  // functions. A bare status sent us looking at the route, which cannot emit a
+  // 403 at all, so the log has to name whoever really refused.
+  it("names the edge that refused, not just the status", async () => {
+    respondWith(null, {
+      ok: false,
+      status: 403,
+      headers: { server: "cloudflare", "cf-ray": "a2d402dfae80e76d-DEN" },
+      text: "error code: 1010",
+    });
+
+    await expect(getGameVerdictStats()).resolves.toEqual(UNAVAILABLE);
+    const [message] = warn.mock.calls.at(-1) as [string];
+    expect(message).toContain("403");
+    expect(message).toContain("server=cloudflare");
+    expect(message).toContain("cf-ray=a2d402dfae80e76d-DEN");
+    expect(message).toContain("error code: 1010");
+  });
+
+  it("still reports a rejection when the body cannot be read", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 502,
+      headers: new Headers(),
+      json: async () => null,
+      text: async () => {
+        throw new Error("stream already consumed");
+      },
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getGameVerdictStats()).resolves.toEqual(UNAVAILABLE);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("502"));
   });
 
   it("degrades when the body is not an object", async () => {
