@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { XRay } from "@/components/xray";
 import { getRosterComponents } from "@/lib/roster";
 import { yearsShippingWordsCapitalized } from "@/lib/career";
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col">
         {children}
         <XRay tiers={tiers} />
+        <Analytics />
       </body>
     </html>
   );
