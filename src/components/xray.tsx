@@ -9,6 +9,12 @@ type Found = { name: string; count: number };
 function scanDom(): Found[] {
   const counts = new Map<string, number>();
   document.querySelectorAll("[data-roster]").forEach((el) => {
+    /* X-ray's own chrome is built from Roster, so without this the legend
+       counts itself. It happens to be absent at scan time today, since the
+       panel mounts on the render after the scan, but that is a coincidence of
+       ordering rather than a rule, and it would break the first time this ran
+       from an effect. */
+    if (el.closest("[data-xray-ui]")) return;
     const name = el.getAttribute("data-roster");
     if (name) counts.set(name, (counts.get(name) ?? 0) + 1);
   });
@@ -63,6 +69,7 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
       {/* Always available, and the only hint on the page for touch users. */}
       <button
         type="button"
+        data-xray-ui
         onClick={() => setMode(!on)}
         aria-pressed={on}
         className="fixed bottom-4 right-4 z-[60] rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot"
@@ -75,6 +82,7 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
 
       {on ? (
         <aside
+          data-xray-ui
           aria-label="Roster components on this page"
           className="fixed bottom-16 right-4 z-[60] max-h-[60vh] w-[232px] overflow-y-auto rounded-[3px] border border-spot bg-panel p-3 shadow-lg"
         >

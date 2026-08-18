@@ -409,6 +409,42 @@ body {
   pointer-events: none;
 }
 
+/* X-ray's own button and legend are built from Roster too, so the mode was
+   annotating the panel that exists to read the page. It is the one place the
+   annotation is pure noise: you look through the legend, not at it. Overridden
+   rather than excluded with :not(), so the selector above stays legible. */
+.xray [data-xray-ui] [data-roster] {
+  outline: none;
+}
+.xray [data-xray-ui] [data-roster]::after {
+  content: none;
+}
+
+/* The CRT toggle stays hidden until the reader reaches the end of the case
+   study, which means its arrival has to be noticed or the reveal is wasted on
+   someone looking at the last paragraph. Two soft pulses of the spot color,
+   then it settles into an ordinary control and stops asking for attention. */
+@keyframes crt-reveal {
+  0%,
+  100% {
+    border-color: var(--rule);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  40% {
+    border-color: var(--spot);
+    box-shadow: 0 0 13px 3px color-mix(in oklab, var(--spot) 42%, transparent);
+  }
+}
+.crt-reveal {
+  animation: crt-reveal 0.72s ease-out 2;
+}
+/* The control still appears; it just does not pulse to announce itself. */
+@media (prefers-reduced-motion: reduce) {
+  .crt-reveal {
+    animation: none;
+  }
+}
+
 /* Each project carries its own accent, and a color that reads on paper usually
    has to lift on the blueline. The element declares both; the state picks. */
 .world {
