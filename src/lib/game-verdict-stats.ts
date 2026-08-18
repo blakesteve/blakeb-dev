@@ -29,6 +29,34 @@ function unavailable(reason: string): GameVerdictStats {
   return UNAVAILABLE;
 }
 
+/**
+ * A rejection, described well enough to act on from a build log.
+ *
+ * A bare status is not enough. The endpoint answers 200 from a laptop and 403
+ * to Vercel's functions, which took a round of guessing to pin on the edge in
+ * front of it rather than on the route — the route cannot even emit a 403, it
+ * returns 200 with nulls on failure. `server` and `cf-ray` name whoever
+ * actually refused, and the body carries the rule when there is one.
+ */
+async function describeRejection(response: Response): Promise<string> {
+  const via = ["server", "cf-ray", "cf-mitigated"]
+    .map((header) => [header, response.headers.get(header)] as const)
+    .filter(([, value]) => value)
+    .map(([header, value]) => `${header}=${value}`)
+    .join(" ");
+
+  let body = "";
+  try {
+    body = (await response.text()).replace(/\s+/g, " ").trim().slice(0, 160);
+  } catch {
+    /* A body is a bonus here, never the point. */
+  }
+
+  return [`${ENDPOINT} returned ${response.status}`, via, body]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 function asCount(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null;
 }
@@ -36,7 +64,7 @@ function asCount(value: unknown): number | null {
 export async function getGameVerdictStats(): Promise<GameVerdictStats> {
   try {
     const response = await fetch(ENDPOINT, { next: { revalidate: 3600 } });
-    if (!response.ok) return unavailable(`${ENDPOINT} returned ${response.status}`);
+    if (!response.ok) return unavailable(await describeRejection(response));
 
     const body: unknown = await response.json();
     if (typeof body !== "object" || body === null) return unavailable("response was not an object");
