@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { KONAMI_CODE, useKeySequence } from "@blakesteve/roster";
 
 /**
@@ -13,6 +19,13 @@ import { KONAMI_CODE, useKeySequence } from "@blakesteve/roster";
  *
  * ArrowUp ArrowUp ArrowDown ArrowDown ArrowLeft ArrowRight ArrowLeft
  * ArrowRight b a, then Enter or Space.
+ *
+ * There are two ways to get the toggle, because the code alone left it
+ * unreachable on a phone: no arrow keys, no easter egg, on the device the
+ * section is most likely to be read on. Reaching the end of the case study
+ * reveals it as well, which turns finishing the page into the discovery. The
+ * control pulses once on arrival so the reveal is not spent on a reader whose
+ * eyes are on the last paragraph.
  *
  * Only the 1P code is ported. The original also has a 2P variant, where Tab
  * (Select) is tapped after the sequence and before the finalizer, but that one
@@ -106,12 +119,91 @@ function readServer(): string | null {
   return null;
 }
 
+/**
+ * True once the reader has reached the end of the document, and true from then
+ * on.
+ *
+ * Latched on purpose. This gates a reveal, and a control that appeared at the
+ * bottom and disappeared on the way back up would read as a rendering bug
+ * rather than a reward. Once it fires, the listeners come off.
+ *
+ * The first measurement waits for a frame rather than running during the
+ * commit: `scrollHeight` read too early can be short enough to look like the
+ * bottom of the page, which would hand out the secret on arrival.
+ */
+function useReachedBottom(threshold = 96) {
+  const [reached, setReached] = useState(false);
+
+  useEffect(() => {
+    if (reached) return;
+
+    let frame = 0;
+
+    const check = () => {
+      frame = 0;
+      const seen = window.scrollY + window.innerHeight;
+      if (seen >= document.documentElement.scrollHeight - threshold) {
+        setReached(true);
+      }
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(check);
+    };
+
+    /* A page too short to scroll has already shown the reader its end. */
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [reached, threshold]);
+
+  return reached;
+}
+
+/**
+ * A one-shot flag for the frame the control becomes visible, so the CSS pulse
+ * runs once and is then removed from the class list.
+ *
+ * Kept off the first commit deliberately. A returning visitor's stored value
+ * arrives after hydration, which flips visibility from false to true a beat
+ * into the page; without the ref that transition would pulse a toggle they had
+ * already found, on every single visit.
+ */
+function useRevealGlow(visible: boolean, ms = 1500) {
+  const [glow, setGlow] = useState(false);
+  const seen = useRef(false);
+
+  useEffect(() => {
+    if (!visible || seen.current) return;
+    seen.current = true;
+    setGlow(true);
+    const timer = window.setTimeout(() => setGlow(false), ms);
+    return () => window.clearTimeout(timer);
+  }, [visible, ms]);
+
+  return glow;
+}
+
 export function CrtEasterEgg() {
   const [justUnlocked, setJustUnlocked] = useState(false);
   const stored = useSyncExternalStore(subscribe, readStored, readServer);
+  const reachedBottom = useReachedBottom();
 
   const unlocked = stored !== null;
   const on = stored === "on";
+
+  /* Two ways in. Entering the code is the one the page describes, and it is
+     also the one a phone cannot perform — there is no arrow key to press —
+     which left the toggle unreachable on the device where it matters most.
+     Reading to the end of the case study is the other, and it earns the same
+     reward: getting to the bottom is how you find out there was something
+     here. Anyone who already unlocked it keeps the toggle from the top. */
+  const visible = unlocked || reachedBottom;
+  const glow = useRevealGlow(visible);
 
   const activate = useCallback(() => {
     writeStored("on");
@@ -132,13 +224,16 @@ export function CrtEasterEgg() {
     <>
       {on && <CrtLayers />}
 
-      {unlocked && (
+      {visible && (
         <div className="fixed bottom-4 left-4 z-[9999] flex items-center gap-2">
           <button
             type="button"
             onClick={toggle}
             aria-pressed={on}
-            className="rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot"
+            className={
+              "rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot" +
+              (glow ? " crt-reveal" : "")
+            }
           >
             <span aria-hidden="true" className="text-spot">
               ▚
