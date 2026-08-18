@@ -3,11 +3,16 @@
 import {
   useCallback,
   useEffect,
-  useRef,
   useState,
   useSyncExternalStore,
 } from "react";
 import { KONAMI_CODE, useKeySequence } from "@blakesteve/roster";
+import {
+  crtTogglePulses,
+  crtToggleVisible,
+  hasReachedBottom,
+  type CrtStored,
+} from "./crt-reveal";
 
 /**
  * A port of Game Verdict's CRT easter egg onto its own case study page.
@@ -81,8 +86,10 @@ function CrtLayers() {
 
 /**
  * localStorage is the source of truth, so it is read through
- * useSyncExternalStore rather than mirrored into state on mount. Absence of the
- * key means never unlocked; "on"/"off" is the toggle. The listener set exists
+ * useSyncExternalStore rather than mirrored into state on mount. The value is
+ * "on" or "off", and only "on" survives a reload as anything the reader sees:
+ * an "off" written by a previous visit is a record of the effect being
+ * dismissed, not a reason to keep showing the control. The listener set exists
  * because the `storage` event only fires in *other* tabs, so same-tab writes
  * have to announce themselves.
  */
@@ -97,9 +104,13 @@ function subscribe(onStoreChange: () => void) {
   };
 }
 
-function readStored(): string | null {
+/* Narrowed at the boundary rather than cast at the call site: localStorage is
+   shared, editable, and outlives any given version of this component, so a
+   value that is neither "on" nor "off" is treated as never having been set. */
+function readStored(): CrtStored {
   try {
-    return localStorage.getItem(STORAGE_KEY);
+    const value = localStorage.getItem(STORAGE_KEY);
+    return value === "on" || value === "off" ? value : null;
   } catch {
     return null; // Safari private mode; the egg just will not persist.
   }
@@ -115,7 +126,7 @@ function writeStored(value: "on" | "off") {
 }
 
 /* The server cannot know, and neither can the hydration pass. */
-function readServer(): string | null {
+function readServer(): CrtStored {
   return null;
 }
 
@@ -141,10 +152,13 @@ function useReachedBottom(threshold = 96) {
 
     const check = () => {
       frame = 0;
-      const seen = window.scrollY + window.innerHeight;
-      if (seen >= document.documentElement.scrollHeight - threshold) {
-        setReached(true);
-      }
+      const atEnd = hasReachedBottom(
+        window.scrollY,
+        window.innerHeight,
+        document.documentElement.scrollHeight,
+        threshold,
+      );
+      if (atEnd) setReached(true);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(check);
@@ -164,46 +178,19 @@ function useReachedBottom(threshold = 96) {
   return reached;
 }
 
-/**
- * A one-shot flag for the frame the control becomes visible, so the CSS pulse
- * runs once and is then removed from the class list.
- *
- * Kept off the first commit deliberately. A returning visitor's stored value
- * arrives after hydration, which flips visibility from false to true a beat
- * into the page; without the ref that transition would pulse a toggle they had
- * already found, on every single visit.
- */
-function useRevealGlow(visible: boolean, ms = 1500) {
-  const [glow, setGlow] = useState(false);
-  const seen = useRef(false);
-
-  useEffect(() => {
-    if (!visible || seen.current) return;
-    seen.current = true;
-    setGlow(true);
-    const timer = window.setTimeout(() => setGlow(false), ms);
-    return () => window.clearTimeout(timer);
-  }, [visible, ms]);
-
-  return glow;
-}
-
 export function CrtEasterEgg() {
   const [justUnlocked, setJustUnlocked] = useState(false);
+  const [pulsed, setPulsed] = useState(false);
   const stored = useSyncExternalStore(subscribe, readStored, readServer);
   const reachedBottom = useReachedBottom();
 
-  const unlocked = stored !== null;
   const on = stored === "on";
 
-  /* Two ways in. Entering the code is the one the page describes, and it is
-     also the one a phone cannot perform — there is no arrow key to press —
-     which left the toggle unreachable on the device where it matters most.
-     Reading to the end of the case study is the other, and it earns the same
-     reward: getting to the bottom is how you find out there was something
-     here. Anyone who already unlocked it keeps the toggle from the top. */
-  const visible = unlocked || reachedBottom;
-  const glow = useRevealGlow(visible);
+  /* Both predicates live in `crt-reveal.ts`, with the reasoning and the two
+     regressions they encode. Derived rather than stored, so there is no
+     setState in an effect and no second source of truth. */
+  const visible = crtToggleVisible(stored, reachedBottom);
+  const glow = crtTogglePulses(stored, reachedBottom, pulsed);
 
   const activate = useCallback(() => {
     writeStored("on");
@@ -217,6 +204,11 @@ export function CrtEasterEgg() {
   useKeySequence(WITH_SPACE, activate, { preventDefault: true, timeout: 0 });
 
   function toggle() {
+    /* The pulse is also spent when it is interrupted. Clicking mid-animation
+       removes the class before `animationend` can fire, so without this the
+       latch never closed and turning the effect back off replayed the pulse on
+       a control the reader had already used. Either ending counts. */
+    setPulsed(true);
     writeStored(on ? "off" : "on");
   }
 
@@ -229,6 +221,7 @@ export function CrtEasterEgg() {
           <button
             type="button"
             onClick={toggle}
+            onAnimationEnd={() => setPulsed(true)}
             aria-pressed={on}
             className={
               "rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot" +

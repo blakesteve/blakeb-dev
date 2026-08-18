@@ -95,14 +95,19 @@ cannot.
 ## Pages
 
 - `/` — folio, hero, live system strip, project cards
+- `/work` — the contents page: one dense row per project, no preamble
 - `/work/[slug]` — case studies, statically generated per project
 - `/system` — the library itself: token ramps shown shipped-versus-remapped, the
   full catalog linked into Storybook, and live component specimens
 - `/about` — the arc, the two-ink portrait, and the colophon
+- `/writing` and `/writing/[slug]` — posts, as content modules
 - `/resume` — the same career data, print-shaped
+- `not-found` — 404 as a misprint, the whole sheet out of register
 
-`/work` and `/writing` are linked from the nav and not yet built. `/work` may
-end up redundant with the home page, which already lists every project.
+`/work` earns its place beside the home page by answering a different question:
+the home page is a pitch you scroll, this is the direct answer for someone who
+only wants the work. Both read `projects.ts` and `case-studies.tsx`, so the two
+cannot describe a project differently.
 
 ## The résumé
 
@@ -167,6 +172,37 @@ which stamps `data-roster="<Name>"`. That keeps the marker honest — if somethi
 is outlined, it really is a Roster component — and keeps the annotation next to
 the usage rather than in a table that will drift.
 
+X-ray's own button and legend are built from Roster too, so they carry
+`data-xray-ui` and are excluded from both the outlining and the count. Without
+it the legend annotates itself, over the top of the list you are reading, and
+reports its own Eyebrows as page content.
+
+## The CRT easter egg
+
+The Game Verdict case study describes an easter egg you get to keep, so the page
+has one: the Konami code turns the page into a CRT, and the toggle persists in
+`localStorage` under `gv-crt`.
+
+There are two ways to reach the toggle, because the code alone cannot be entered
+on a phone — no arrow keys — which is the device that section is most likely to
+be read on. Reaching the end of the page reveals it as well, which turns
+finishing the case study into the discovery. It pulses once on arrival so the
+reveal is not spent on a reader looking at the last paragraph.
+
+The two predicates behind that live in `components/crt-reveal.ts`, separated
+from the component because both bugs they encode were decision bugs rather than
+rendering bugs, and neither needed a DOM to reproduce:
+
+- **Visibility is `on || reachedBottom`**, not "has this ever been unlocked".
+  Every click writes to storage, turning the effect *off* included, so keying on
+  the presence of the key pinned the control to every later visit and the reveal
+  could never happen again. While the scanlines run the control has to stay, as
+  it is the only way to stop them.
+- **The pulse is keyed on `reachedBottom`**, not on visibility.
+  `useSyncExternalStore` serves the server snapshot during hydration and the
+  stored value straight after, so visibility flips false to true on every load —
+  and the control announced itself each time as though newly found.
+
 ## Testing
 
 ```bash
@@ -185,6 +221,7 @@ buys nothing.
 | `lib/game-verdict-stats.ts` | every degradation path: non-ok response, non-object body, unparseable body, both counts null, fetch throwing |
 | `lib/roster.ts` | the `.d.ts` parse across both entry points, and the token and ramp readers against the shipped `tokens.css` |
 | `content/posts.ts` | date formatting, lookup, sort order, and the data invariants routing depends on: unique slugs, URL-safe slugs, `YYYY-MM-DD` dates, and a dek short enough to survive as a meta description |
+| `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
 
 Three things are worth knowing about how these are written.
 
@@ -206,6 +243,16 @@ exactly that. So they assert shapes and invariants rather than an exact count,
 which every minor bump would break for no reason. One of them checks that
 `DataTable` is found and that `index.d.ts` does not contain it, which is the
 whole argument for reading the second entry point.
+
+The CRT reveal tests are written against extracted predicates rather than the
+component, which is why they run in the node environment with everything else.
+That was not an aesthetic choice: the reveal shipped broken twice, and both
+faults were a wrong predicate rather than anything to do with rendering. Two
+cases are named `regression:` and reproduce the reported bugs exactly — a
+control pinned open by a single click, and one that re-announced itself on every
+load. Each was checked by reintroducing the old expression and confirming the
+suite goes red, because a test that passes against the bug it names is worse
+than no test.
 
 Nothing covers the pages, the layout, or the X-ray overlay. That is still a
 gap, just a smaller and more deliberate one than before.
