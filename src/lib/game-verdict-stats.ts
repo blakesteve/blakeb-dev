@@ -18,7 +18,22 @@
  *   to learn otherwise.
  */
 
-const ENDPOINT = "https://www.gameverdict.app/api/stats";
+/**
+ * Deliberately `api.` and not `www.`, and this must not be "tidied" back.
+ *
+ * `www.gameverdict.app` is proxied by Cloudflare with Bot Fight Mode on, which
+ * serves a managed challenge to automated traffic — the "Just a moment..."
+ * interstitial. A browser solves it silently; `fetch` cannot, so every build
+ * took a 403 and quietly shipped the written fallback instead. Bot Fight Mode
+ * is a zone-wide free-tier feature that cannot be skipped per path, so the
+ * endpoint moved rather than the rule.
+ *
+ * `api.gameverdict.app` is the same Vercel deployment with Cloudflare's proxy
+ * switched off (grey cloud), so this request reaches the origin directly. If
+ * that DNS record is ever proxied again, this silently reverts to fallback
+ * figures and the build log says so.
+ */
+const ENDPOINT = "https://api.gameverdict.app/api/stats";
 
 export type GameVerdictStats = { games: number | null; verdicts: number | null };
 

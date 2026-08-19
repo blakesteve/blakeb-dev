@@ -63,7 +63,7 @@ describe("getGameVerdictStats", () => {
     await getGameVerdictStats();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://www.gameverdict.app/api/stats",
+      "https://api.gameverdict.app/api/stats",
       { next: { revalidate: 3600 } },
     );
   });
