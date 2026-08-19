@@ -66,7 +66,7 @@ declared unlayered, where they beat both.
 | Roster version, component count, tier split | the installed package's own `.d.ts` and `package.json` |
 | Employment durations, years shipping | computed from dates in `lib/career.ts`, never written down |
 | Token ramps | the shipped `tokens.css` |
-| Game Verdict games and verdicts | `GET https://www.gameverdict.app/api/stats`, hourly |
+| Game Verdict games and verdicts | `GET https://api.gameverdict.app/api/stats`, hourly |
 
 `lib/roster.ts` reads `node_modules` directly rather than resolving the module,
 because Roster's exports map does not expose `package.json` and Turbopack cannot
