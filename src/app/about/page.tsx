@@ -10,7 +10,11 @@ import {
   RLabeledDivider,
   RPullquote,
 } from "@/lib/roster-ui";
-import { getRosterComponentCount, getRosterVersion } from "@/lib/roster";
+import {
+  getRosterComponentCount,
+  getRosterTokenFamilies,
+  getRosterVersion,
+} from "@/lib/roster";
 import {
   CAREER_START,
   EDUCATION,
@@ -286,7 +290,13 @@ export default function AboutPage() {
               items={[
                 { term: "Press sheet", description: "Cool stock, ink black, process magenta" },
                 { term: "Blueline", description: "The proof stage, printed in blue" },
-                { term: "Palette", description: "Nine families, derived from one anchor each" },
+                /* Counted rather than spelled out: "Nine" was correct only for as long
+                   as Roster shipped nine, and /system has been reading the real number
+                   next door the whole time. */
+                {
+                  term: "Palette",
+                  description: `${getRosterTokenFamilies().length} families, derived from one anchor each`,
+                },
                 { term: "Proof it", description: "Press ⌥X to outline every component" },
               ]}
             />

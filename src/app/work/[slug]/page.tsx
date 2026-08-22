@@ -14,6 +14,7 @@ import { CrtEasterEgg } from "@/components/crt-easter-egg";
 import { caseStudies } from "@/content/case-studies";
 import { getProject, projects } from "@/lib/projects";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
+import { getCommitCount } from "@/lib/github";
 import type { CaseStudyStat } from "@/content/case-studies";
 
 /**
@@ -23,12 +24,30 @@ import type { CaseStudyStat } from "@/content/case-studies";
  * its own dated source, so an unreachable API degrades to an honest snapshot.
  */
 async function resolveStats(stats: CaseStudyStat[]): Promise<CaseStudyStat[]> {
-  if (!stats.some((stat) => stat.live)) return stats;
+  const wantsStats = stats.some((stat) => stat.live);
+  const repos = [...new Set(stats.map((s) => s.commitsFrom).filter(Boolean))] as string[];
+  if (!wantsStats && repos.length === 0) return stats;
 
-  const live = await getGameVerdictStats();
+  /* One round trip each, in parallel: a stat row should not serialise the
+     build behind two independent APIs. */
+  const [live, counts] = await Promise.all([
+    wantsStats ? getGameVerdictStats() : Promise.resolve(null),
+    Promise.all(repos.map(async (repo) => [repo, await getCommitCount(repo)] as const)),
+  ]);
+  const commits = new Map(counts);
 
   return stats.map((stat) => {
-    const value = stat.live ? live[stat.live] : null;
+    if (stat.commitsFrom) {
+      const count = commits.get(stat.commitsFrom);
+      if (count == null) return stat; // private, rate-limited, or offline
+      return {
+        ...stat,
+        value: count.toLocaleString("en-US"),
+        source: `live · github.com/${stat.commitsFrom}`,
+      };
+    }
+
+    const value = stat.live && live ? live[stat.live] : null;
     if (value === null) return stat;
 
     return {

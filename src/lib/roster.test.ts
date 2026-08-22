@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   getRosterComponentCount,
@@ -36,6 +36,36 @@ describe("getRosterVersion", () => {
       readFileSync(join(process.cwd(), "node_modules", "@blakesteve", "roster", "package.json"), "utf8"),
     ) as { version: string };
     expect(getRosterVersion()).toBe(pkg.version);
+  });
+});
+
+/**
+ * The failure this guards shipped to production and went unnoticed.
+ *
+ * Next strips `.d.ts` files from the serverless bundle — nothing imports them,
+ * so the tracer cannot see that `readFileSync` needs them. The count was right
+ * at build time and threw on every later ISR render, where the old `catch`
+ * swallowed it into an empty list. The home page read
+ * "0 components · tokens read live" until someone looked.
+ *
+ * `outputFileTracingIncludes` in next.config.ts is the actual fix. This is the
+ * backstop, so a zero can never be printed as though it were measured.
+ */
+describe("getRosterComponents when the package is unreadable", () => {
+  it("throws rather than silently reporting zero components", async () => {
+    vi.doMock("node:fs", () => ({
+      readFileSync: () => {
+        throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+      },
+    }));
+    vi.resetModules();
+
+    const fresh = await import("./roster");
+    expect(() => fresh.getRosterComponents()).toThrow(/parsed 0 components/);
+    expect(() => fresh.getRosterComponentCount()).toThrow();
+
+    vi.doUnmock("node:fs");
+    vi.resetModules();
   });
 });
 

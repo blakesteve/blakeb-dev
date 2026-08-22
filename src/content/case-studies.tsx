@@ -4,11 +4,7 @@ import { Clip } from "@/components/clip";
 import { BothPalettes } from "@/components/both-palettes";
 import { ReleaseHistory } from "@/components/release-history";
 import { RBadge, RButton, REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
-import {
-  getRosterComponentCount,
-  getRosterComponents,
-  getRosterVersion,
-} from "@/lib/roster";
+import { getRosterComponentCount, getRosterComponents } from "@/lib/roster";
 
 /* Counted from the installed package's own type definitions, so the tier
    breakdown in the Roster sidebar cannot drift from the count in its stat row.
@@ -86,6 +82,13 @@ export type CaseStudyStat = {
    * to an honest snapshot rather than a blank or a stale "live" claim.
    */
   live?: "games" | "verdicts";
+  /**
+   * A public GitHub repository whose commit count replaces `value` at build
+   * time. Only set it where the repository is actually public: Game Verdict's
+   * is private and answers 404, so its count stays a written snapshot and says
+   * so, rather than printing a stale number under the words "GitHub API".
+   */
+  commitsFrom?: string;
 };
 export type Row = { k: string; v: string };
 
@@ -195,7 +198,7 @@ export const caseStudies: Record<string, CaseStudy> = {
          premise. Both are live; the values here are only the fallback. */
       { value: "2,334", label: "Verdicts cast", source: "Aug 2026 snapshot", live: "verdicts" },
       { value: "1,580", label: "Games tracked", source: "Aug 2026 snapshot", live: "games" },
-      { value: "822", label: "Commits", source: "GitHub API, Aug 2026" },
+      { value: "833", label: "Commits", source: "Aug 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -490,8 +493,13 @@ export const caseStudies: Record<string, CaseStudy> = {
         label: "Components",
         source: "live · package exports",
       },
-      { value: "310", label: "Commits", source: "since Feb 2026" },
-      { value: "778", label: "Tests", source: `roster @ ${getRosterVersion()}` },
+      {
+        value: "313",
+        label: "Commits",
+        source: "since Feb 2026",
+        commitsFrom: "blakesteve/roster",
+      },
+      { value: "789", label: "Tests", source: "roster @ 4.3.1" },
       { value: "5", label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
