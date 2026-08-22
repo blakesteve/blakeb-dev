@@ -51,6 +51,27 @@ export function getRosterComponents(): { tier: string; name: string }[] {
     }
   }
 
+  /*
+   * An empty result is never a real answer: the library has never shipped zero
+   * components, so reaching this means the `.d.ts` files were not on disk. That
+   * is exactly what happened in production — Next's tracer strips declaration
+   * files from the serverless bundle, so the read succeeded at build time and
+   * threw on every later ISR render, and the home page advertised
+   * "0 components · tokens read live" for as long as nobody looked.
+   *
+   * `next.config.ts` now forces those files into the trace. This throw is the
+   * backstop: a build fails loudly, and a revalidation that would print a zero
+   * fails instead, leaving Next to serve the last good render. Stale and true
+   * beats fresh and wrong on a site whose entire argument is that its numbers
+   * come from somewhere.
+   */
+  if (found.size === 0) {
+    throw new Error(
+      `[roster] parsed 0 components from ${ROSTER_DIR}/dist. The .d.ts entry ` +
+        `points are missing — check outputFileTracingIncludes in next.config.ts.`,
+    );
+  }
+
   return [...found].map(([name, tier]) => ({ name, tier }));
 }
 

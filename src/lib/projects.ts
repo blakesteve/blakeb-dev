@@ -60,11 +60,14 @@ export const projects: Project[] = [
     world: { press: "#4b45c7", blueline: "#6d6bf2" },
     props: [
       { label: "Stack", value: "Next 16 · Supabase · Upstash" },
+      /* Commit counts live in the case study stat row, which reads them from
+         GitHub. Repeating one here is how Roster's ended up as 298 on the card
+         and 310 in its case study while the repository said 313. */
       {
         label: "Scale",
-        value: "1,580 games · 822 commits",
+        value: "1,580 games tracked",
         accent: true,
-        live: (stats) => `${stats.games?.toLocaleString("en-US")} games · 822 commits`,
+        live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
       { label: "Note", value: "No login wall; one vote per browser" },
     ],
@@ -96,7 +99,7 @@ export const projects: Project[] = [
       { label: "Stack", value: "React 19 · TS · Tailwind v4" },
       {
         label: "Scale",
-        value: `${getRosterComponentCount()} components · 298 commits`,
+        value: `${getRosterComponentCount()} components, read live`,
         accent: true,
       },
       { label: "Note", value: "Press ⌥X to see it on this page" },
