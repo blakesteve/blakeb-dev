@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { REyebrow } from "@/lib/roster-ui";
-import { getRosterShippedTokens } from "@/lib/roster";
+import { getRosterShippedFontUi, getRosterShippedTokens } from "@/lib/roster";
 
 /**
  * The same component, twice, under two palettes, live on the page.
@@ -30,7 +30,18 @@ export function BothPalettes({
   children: ReactNode;
   note?: string;
 }) {
-  const shipped = getRosterShippedTokens() as CSSProperties;
+  /*
+   * Type is pinned alongside the palette. This site maps `--roster-font-ui` to
+   * Archivo and sets its own mono face on controls, so without these two the
+   * left column would render this site's type under the label "as Roster ships
+   * it" — the one thing this figure exists to disprove.
+   */
+  const shippedFont = getRosterShippedFontUi();
+  const shipped = {
+    ...getRosterShippedTokens(),
+    "--roster-font-ui": shippedFont,
+    "--control-face": shippedFont,
+  } as CSSProperties;
 
   return (
     <figure className="my-5 flex w-full flex-col gap-[7px]">
@@ -51,7 +62,7 @@ export function BothPalettes({
 
       <figcaption className="font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
         {note ??
-          "Same component, same package, same page. Only the color tokens differ."}
+          "Same component, same package, same page. Only the tokens differ."}
       </figcaption>
     </figure>
   );

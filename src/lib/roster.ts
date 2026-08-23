@@ -148,3 +148,28 @@ export function getRosterShippedTokens(): Record<string, string> {
 
   return tokens;
 }
+
+/**
+ * The UI font stack Roster falls back to when a consumer sets nothing.
+ *
+ * Not in `tokens.css`, because `--roster-font-ui` is a hook rather than a token:
+ * the library never defines it, it only reads it. The real default lives in the
+ * compiled `font-family` declaration as the `var()` fallback, so that is where
+ * this reads it from — the shipped value, not a copy of it kept in sync by hand.
+ *
+ * Used to pin the "as Roster ships it" column to the library's own type, the
+ * same way the palette is pinned to the library's own colors.
+ */
+export function getRosterShippedFontUi(): string {
+  const css = read("dist", "roster.css");
+  const match = css.match(/--roster-font-ui\s*,\s*([^)]+)\)/);
+
+  if (!match) {
+    throw new Error(
+      "Could not find the --roster-font-ui fallback in the installed " +
+        "dist/roster.css. Roster 4.5.0 or newer is required.",
+    );
+  }
+
+  return match[1].trim();
+}

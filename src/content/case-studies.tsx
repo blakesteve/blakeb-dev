@@ -3,7 +3,14 @@ import { Shot } from "@/components/shot";
 import { Clip } from "@/components/clip";
 import { BothPalettes } from "@/components/both-palettes";
 import { ReleaseHistory } from "@/components/release-history";
-import { RBadge, RButton, REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
+import { Dek } from "@/components/dek";
+import {
+  RBadge,
+  RButton,
+  REyebrow,
+  RInlineCode,
+  RPullquote,
+} from "@/lib/roster-ui";
 import { getRosterComponentCount, getRosterComponents } from "@/lib/roster";
 
 /* Counted from the installed package's own type definitions, so the tier
@@ -102,13 +109,25 @@ export type CaseStudy = {
 
 /* Shared prose primitives. Kept here so every case study reads in one voice. */
 
+/**
+ * `dek` is required, not optional, so a section cannot ship without one. The
+ * alternative was a test that greps this file for sections missing a summary,
+ * which finds the gap a commit later; the type finds it before the build.
+ *
+ * The dek is one plain sentence, written for a reader who does not know what a
+ * cascade layer or a permutation test is. It is not a second version of the
+ * prose — it is the answer to "so what", which the prose does not always give
+ * up in its first line.
+ */
 function Section({
   eyebrow,
   title,
+  dek,
   children,
 }: {
   eyebrow: string;
   title: string;
+  dek: string;
   children: ReactNode;
 }) {
   return (
@@ -117,6 +136,24 @@ function Section({
       <h2 className="m-0 pb-[10px] font-[family-name:var(--font-display)] text-[1.375rem] font-bold tracking-[-0.028em]">
         {title}
       </h2>
+      {/* Always rendered; the `.tldr` class on <html> decides if it is shown.
+
+          An Alert rather than a bare left rule: the rule *was* the pullquote's
+          own signature — `border-l-2` in the accent — so a summary and a quote
+          pulled from the prose looked identical while meaning opposite things.
+          The label is what separates them, and a labeled accent panel is what
+          Alert already is.
+
+          The wrapper carries the color so `colorScheme="current"` can inherit
+          it; the body drops back to ink, because a whole paragraph in the
+          project accent is harder to read than the thing it is summarizing. */}
+      <div className="dek">
+        <div>
+          <div className="pb-3 text-[var(--world,var(--spot))]">
+            <Dek>{dek}</Dek>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col gap-3 text-[0.96875rem] leading-[1.62] text-ink-soft [&_strong]:font-semibold [&_strong]:text-ink">
         {children}
       </div>
@@ -219,7 +256,11 @@ export const caseStudies: Record<string, CaseStudy> = {
     ],
     body: (
       <>
-        <Section eyebrow="The problem" title="Everyone has an opinion, nobody has data">
+        <Section
+          eyebrow="The problem"
+          title="Everyone has an opinion, nobody has data"
+          dek="Game Verdict is a community-built database where PC players cast verdicts on the best way to play their favorite games. Every data point is a real opinion from a real player, with no algorithms, no review farming, and no editorial bias."
+        >
           <p>
             Steam will tell you a game has “full controller support.” It won&rsquo;t tell you whether
             anyone actually <strong>prefers</strong> playing it that way. Game Verdict asks players
@@ -239,7 +280,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The core loop" title="Free to vote, hard to fake">
+        <Section
+          eyebrow="The core loop"
+          title="Free to vote, hard to fake"
+          dek="Voting takes one click and no account, but each browser only counts once; easy to vote, but hard to spam."
+        >
           <p>
             The whole thing only works if voting is nearly free, and it only means anything if the votes
             can be trusted. Those pull against each other, and almost every decision in the app is an
@@ -286,7 +331,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="A small thing I like" title="The queue knows what you have played">
+        <Section
+          eyebrow="A small thing I like"
+          title="The queue knows what you have played"
+          dek="It offers you games you have probably played, and stops offering ones you already answered, even if you never signed up."
+        >
           <p>
             Asking someone to judge a control scheme only works if they have actually played the
             game, so the queue is ordered by <strong>Steam review count</strong> rather than by how
@@ -311,7 +360,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="One sentence, two audiences" title="Prose generated from data, not from a model">
+        <Section
+          eyebrow="One sentence, two audiences"
+          title="Prose generated from data, not from a model"
+          dek="The plain-English verdict on each game page is assembled from the actual vote counts, not written by AI, so it can never invent a number."
+        >
           <p>
             Every game page ends with a plain-language verdict: how many people voted, which way they
             leaned, and which controller they tend to use. It&rsquo;s written by a{" "}
@@ -337,7 +390,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </Pull>
         </Section>
 
-        <Section eyebrow="Then scale arrived" title="The bug that froze the front page">
+        <Section
+          eyebrow="Then scale arrived"
+          title="The bug that froze the front page"
+          dek="The homepage counts quietly stopped rising after a thousand votes. Nothing broke or errored, but the number just lingered at 1,000 while it stopped being true. Believable at first, but quickly stood out as time passed."
+        >
           <p>
             Home page stats stopped moving. Not wrong — <strong>frozen</strong>, at a number that
             looked perfectly plausible. The cause was that <Code>getAllGames()</Code> ran an
@@ -356,7 +413,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
         </Section>
 
-        <Section eyebrow="What it cost" title="1.8 MB → 50 KB per pageview">
+        <Section
+          eyebrow="What it cost"
+          title="1.8 MB → 50 KB per pageview"
+          dek="The browse page used to download the entire game list on every single visit. Now it loads only the games you can actually see and fetches more as you scroll, which costs about a thirtieth as much."
+        >
           <p>
             Browse was slicing a full table read. It became a <Code>games_browse</Code> Postgres view
             with filtering, sorting, and counting pushed into SQL behind <Code>LIMIT/OFFSET</Code>,
@@ -371,7 +432,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="Beyond the vote" title="Reasons to come back, and somewhere else to be">
+        <Section
+          eyebrow="Beyond the vote"
+          title="Reasons to come back, and somewhere else to be"
+          dek="Twenty badges to earn, public profiles, and comment threads on every game where the best replies get voted to the top. A Discord bot covers the rest, so an argument in a group chat gets settled without anyone opening the site."
+        >
           <p>
             Twenty badges across six categories are evaluated after every verdict, reaction, and
             library change, with the first unlock arriving as a toast. Profiles are public, with a
@@ -423,7 +488,11 @@ export const caseStudies: Record<string, CaseStudy> = {
         {/* Retrospect already uses "The part nobody asked for"; two case
             studies reaching for the same bespoke eyebrow makes neither of
             them sound bespoke. */}
-        <Section eyebrow="Undocumented" title="An easter egg you get to keep">
+        <Section
+          eyebrow="Undocumented"
+          title="An easter egg you get to keep"
+          dek="Type the old Konami cheat code and controllers rain down the page. It also unlocks a retro CRT screen effect that’s yours to keep, to turn on whenever you want it."
+        >
           <p>
             Type <Code>↑ ↑ ↓ ↓ ← → ← → B A</Code> and hit Enter or Space. Keyboards, mice, and
             controllers rain down the page, which is a nice five seconds and then it&rsquo;s over.
@@ -520,7 +589,11 @@ export const caseStudies: Record<string, CaseStudy> = {
     ],
     body: (
       <>
-        <Section eyebrow="The problem" title="Four apps, four sets of the same button">
+        <Section
+          eyebrow="The problem"
+          title="Four apps, four sets of the same button"
+          dek="Four of my own apps kept needing the same button, the same input, the same dialog. Building each one four times is how you end up with four slightly different versions of the same thing."
+        >
           <p>
             Game Verdict, Retrospect, MegaSquad, and BB&rsquo;s Grove are unrelated products with
             unrelated palettes. What they share is the substrate: a button that handles its own
@@ -539,7 +612,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
         </Section>
 
-        <Section eyebrow="The hard thing" title="Theme-aware without being theme-locked">
+        <Section
+          eyebrow="The hard thing"
+          title="Theme-aware without being theme-locked"
+          dek="The components had to look at home in four apps with four different color schemes, without keeping a separate copy of the code for each one."
+        >
           <p>
             A component library that hardcodes its palette is a library you can use exactly once.
             Roster&rsquo;s classes compile down to <Code>var(--roster-*)</Code>, so a consuming app
@@ -577,7 +654,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
         </Section>
 
-        <Section eyebrow="Shipping in public" title="Two majors in one day, one of them broken">
+        <Section
+          eyebrow="Shipping in public"
+          title="Two majors in one day, one of them broken"
+          dek="I published a release that broke every app that installed it, replaced it hours later, and left the public warning up rather than quietly deleting the evidence."
+        >
           <p>
             Roster is on its fourth major. Three of those went out roughly as planned. One did not:
             3.0.0 shipped with <Code>DataTable</Code> exported from the main entry while statically
@@ -596,7 +677,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </Pull>
         </Section>
 
-        <Section eyebrow="How it grows" title="The library changes when an app hits a wall">
+        <Section
+          eyebrow="How it grows"
+          title="The library changes when an app hits a wall"
+          dek="Necessity breeds innovation. Nothing gets added on a hunch. When one of my apps needs the same piece twice, that’s my signal to move it into the library."
+        >
           <p>
             Roster does not get planned so much as discovered. Something gets built twice in a
             consuming app, that is the signal, and it moves into the library. This site alone
@@ -622,12 +707,24 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
         </Section>
 
-        <Section eyebrow="What it costs" title="One customer, no cover">
+        <Section
+          eyebrow="What it costs"
+          title="One customer, no cover"
+          dek="Roster has exactly one real user right now, and it is me. It is still built like something strangers will depend on: open source, released in numbered versions, and every change has to pass its tests before it can be merged."
+        >
           <p>
             A library with one customer is not a smaller version of a library with many. It is a
             different job. There is no roadmap, because there is no one to ask for anything. Nothing
             gets built speculatively, because speculation has no payer. Every feature in Roster
             exists because something I was building stopped and waited for it.
+          </p>
+          <p>
+            One customer <em>for now</em>, though, and it is built as though that will not hold. It
+            is MIT licensed and developed in the open, with <Code>CODEOWNERS</Code> on the
+            repository, a pull request template nobody gets to skip, and CI that runs the unit
+            suite, the Storybook interaction tests and a full build before anything merges. None of
+            that is necessary for an audience of one. It is the difference between a library that
+            could take a second contributor and one that would have to be rebuilt first.
           </p>
           <p>
             The flip side is that mistakes arrive immediately and personally. A bad major does not
@@ -679,7 +776,11 @@ export const caseStudies: Record<string, CaseStudy> = {
     ],
     body: (
       <>
-        <Section eyebrow="The problem" title="Astrology never has to be right">
+        <Section
+          eyebrow="The problem"
+          title="Astrology never has to be right"
+          dek="The familiar astrology claims are never actually checked against anything. Retrospect makes them measurable, by testing each one against a real almanac of the sky and the music you actually played."
+        >
           <p>
             &ldquo;Mercury retrograde makes you revisit the past&rdquo; is unfalsifiable as usually
             stated. It is not unfalsifiable in principle, though. You need two things: a record of
@@ -712,7 +813,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The hard thing" title="What if the answer is no?">
+        <Section
+          eyebrow="The hard thing"
+          title="What if the answer is no?"
+          dek="Often the honest answer is that the cosmos did not move your listening in any meaningful way, which is a hard thing to hand someone who just waited for half a million songs to load."
+        >
           <p>
             The honest version of this app returns a null result most of the time. That is the whole
             premise, and it is also a product problem, because &ldquo;we checked, nothing happened&rdquo;
@@ -746,7 +851,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The math" title="Rotate the calendar, do not reshuffle it">
+        <Section
+          eyebrow="The math"
+          title="Rotate the calendar, do not reshuffle it"
+          dek="Your result is re-run against two thousand fake skies, each made by sliding the real calendar of events to a random date. Sliding rather than shuffling keeps your weekly and seasonal habits intact, so an effect has to beat plain chance to count."
+        >
           <p>
             Any large listening history shows <em>some</em> difference during retrograde, because
             any two arbitrary buckets of days differ. The question is whether the difference beats
@@ -778,7 +887,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The payoff" title="Mercury is innocent. The full moon is not.">
+        <Section
+          eyebrow="The payoff"
+          title="Mercury is innocent. The full moon is not."
+          dek="Within my own listening trends, Mercury retrograde was a negligible bump, not high enough to consider an impact. Full moons, it turns out, really do keep me up past midnight."
+        >
           <p>
             Mercury retrograde is the famous claim, and the one the whole app is framed around. On
             my library it comes back at 1.02×, which is nothing.
@@ -826,7 +939,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
         </Section>
 
-        <Section eyebrow="When the sky is innocent" title="Your habits leave fingerprints anyway">
+        <Section
+          eyebrow="When the sky is innocent"
+          title="Your habits leave fingerprints anyway"
+          dek="Even when the planets did nothing, your listening still says plenty: the hour you play most, your longest unbroken streak, your single most nostalgic day."
+        >
           <p>
             The listening profile needs no astronomy at all. Archetypes, golden hour, best streak,
             loudest month: all computed from the same timestamps, all there whether or not the
@@ -865,7 +982,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The part nobody asked for" title="A loading screen worth waiting through">
+        <Section
+          eyebrow="The part nobody asked for"
+          title="A loading screen worth waiting through"
+          dek="The first load can take quite some time, especially for Last.fm accounts that have many years of listening history, because the music service only hands over so much at a time. That wait got a small solar system to watch instead of a spinner."
+        >
           <p>
             The first sync of a large library takes minutes, because Last.fm is rate limited and the
             history is pulled page by page. That wait was not going away, so it got a planetary
@@ -885,7 +1006,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="What it cost" title="Built to cost nothing, on purpose">
+        <Section
+          eyebrow="What it cost"
+          title="Built to cost nothing, on purpose"
+          dek="It runs entirely on free tiers, and the storage was chosen so that a sudden rush of visitors cannot produce a surprise bill."
+        >
           <p>
             Retrospect runs on Vercel&rsquo;s free tier with Cloudflare R2 for storage. R2 was chosen
             specifically because it has <strong>zero egress fees</strong>, so a read-heavy access
@@ -934,12 +1059,17 @@ export const caseStudies: Record<string, CaseStudy> = {
     ],
     body: (
       <>
-        <Section eyebrow="The problem" title="The group chat is a bad database">
+        <Section
+          eyebrow="The problem"
+          title="The group chat is a bad database"
+          dek="My brother and I got tired of running our pick’em on a spreadsheet and chasing everyone in the group chat before kickoff. MegaSquad is that job handed to software: picks lock themselves and standings settle themselves."
+        >
           <p>
-            Every friend group already runs a pick&rsquo;em. It lives in a group chat, the scoring is
-            done from memory, and someone always claims they had the upset. MegaSquad is that, with a
-            source of truth — squads, leagues, weekly picks that lock the moment a game starts, and
-            standings nobody can argue with.
+            Run by hand, a pick&rsquo;em is mostly admin. Somebody has to collect everyone&rsquo;s
+            picks before kickoff, score them afterwards, and settle it when two people remember the
+            same result differently. MegaSquad is that arrangement with a source of truth: squads,
+            leagues, weekly picks that lock the moment a game starts, and standings nobody can argue
+            with.
           </p>
           <Shot
             press={collapsedLight}
@@ -950,7 +1080,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="The hard thing" title="Showing you how your bracket fell apart">
+        <Section
+          eyebrow="The hard thing"
+          title="Showing you how your bracket fell apart"
+          dek="A win-loss record tells you nothing about where it went wrong, so every row opens into the rounds, with each team you picked badged green for a win and red for a loss."
+        >
           <p>
             A record of 48&ndash;15 tells you almost nothing. The interesting question is{" "}
             <em>where</em> it went wrong. So standings expand into a per-round breakdown, and each
@@ -973,7 +1107,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
         </Section>
 
-        <Section eyebrow="The delight" title="Every settled pick answers back">
+        <Section
+          eyebrow="The delight"
+          title="Every settled pick answers back"
+          dek="Settled picks talk back, pulling from a set of phrases for a hit and another for a miss, so the same outcome never reads quite the same way twice."
+        >
           <p>
             Getting a pick right returns <strong>&ldquo;Bullseye!&rdquo;</strong>, or
             &ldquo;Nailed It!&rdquo;, or &ldquo;A Prophet!&rdquo; Getting one wrong returns
@@ -1010,7 +1148,11 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
         </Section>
 
-        <Section eyebrow="Working to someone else's contract" title="Two languages, one product">
+        <Section
+          eyebrow="Working to someone else's contract"
+          title="Two languages, one product"
+          dek="Half of this app is my brother’s and I cannot change it. Building on someone else’s system means behaving like a guest: ask for only what you need, and stop asking once nobody is looking."
+        >
           <p>
             The API is my brother&rsquo;s, in Python. That makes the front end a consumer of a
             contract it does not control, which is its own discipline: the app polls invitations

@@ -3,6 +3,7 @@ import React from "react";
 import { STORYBOOK_URL } from "./storybook";
 import {
   Accordion,
+  Alert,
   Badge,
   Button,
   Card,
@@ -51,16 +52,29 @@ export function RCard(props: ComponentProps<typeof Card>) {
 }
 
 /**
- * Roster's Button sets no font-family, so it inherits the host's body font.
- * This site reads in Source Serif, which made every button on the site serif,
- * including the specimens on /system. Controls are chrome here, so they take
- * the utility face. Passing a font class through `className` still wins.
+ * Every control on this site is mono caps — the breadcrumb trail, the state
+ * toggle, the X-ray and CRT toggles, the CTAs. That is the press-sheet
+ * vocabulary, so a Button in the site's own sans would be the odd one out, and
+ * the specimens on /system would be advertising a button this site never
+ * actually renders.
+ *
+ * This is a design decision, not the workaround it replaces. That one existed
+ * because Roster set no font at all and inherited this site's Source Serif, so
+ * forcing mono here fixed buttons while leaving badges and inputs serif. Roster
+ * 4.5.0 ships `--roster-font-ui`, which this site maps to Archivo, so the
+ * library now has a working sans default and this override is a deliberate step
+ * away from it for one component.
+ *
+ * It reads `--control-face` rather than `--font-util` directly so a subtree can
+ * opt back out. `BothPalettes` does exactly that: its "as Roster ships it"
+ * column has to show the untouched library, and a site-wide font override would
+ * have quietly made that column a lie.
  */
 export function RButton({ className = "", ...props }: ComponentProps<typeof Button>) {
   return (
     <Button
       data-roster="Button"
-      className={`font-[family-name:var(--font-util)] ${className}`}
+      className={`font-[family-name:var(--control-face,var(--font-util))] ${className}`}
       {...props}
     />
   );
@@ -150,6 +164,10 @@ export function RLabeledDivider(props: ComponentProps<typeof LabeledDivider>) {
 
 export function RDescriptionList(props: ComponentProps<typeof DescriptionList>) {
   return <DescriptionList data-roster="DescriptionList" {...props} />;
+}
+
+export function RAlert(props: ComponentProps<typeof Alert>) {
+  return <Alert data-roster="Alert" {...props} />;
 }
 
 export function RPullquote(props: ComponentProps<typeof Pullquote>) {

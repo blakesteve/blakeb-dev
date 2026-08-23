@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { StateToggle } from "@/components/state-toggle";
 import { TopBarMark } from "@/components/top-bar-mark";
+import { TopBarTldr } from "@/components/top-bar-tldr";
 
 /**
  * The bar that carries wayfinding and the state toggle, on every page.
@@ -23,10 +24,17 @@ import { TopBarMark } from "@/components/top-bar-mark";
 export function TopBar({
   children,
   yieldsToFolio = false,
+  tldr = false,
 }: {
   children: ReactNode;
   /** Set on any page that already prints the mark above this bar. */
   yieldsToFolio?: boolean;
+  /**
+   * Set on the pages that carry section deks — case studies and posts. Every
+   * other route has nothing for the lens to reveal, so the control would sit
+   * there inert.
+   */
+  tldr?: boolean;
 }) {
   return (
     <div className="sticky top-0 z-40 border-b border-rule bg-paper/85 backdrop-blur-[6px]">
@@ -37,7 +45,8 @@ export function TopBar({
       <div className="mx-auto flex w-full max-w-[1180px] items-center gap-x-3 px-6 py-3 sm:gap-x-4 sm:px-8">
         <TopBarMark yieldsToFolio={yieldsToFolio} />
         <div className="min-w-0 flex-1">{children}</div>
-        <div className="shrink-0">
+        <div className="flex shrink-0 items-center">
+          {tldr && <TopBarTldr />}
           <StateToggle />
         </div>
       </div>
