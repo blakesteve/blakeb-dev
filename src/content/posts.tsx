@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
+import { Dek } from "@/components/dek";
 
 /**
  * Posts, as content modules rather than MDX.
@@ -31,13 +32,34 @@ function P({ children }: { children: ReactNode }) {
   );
 }
 
-function H({ eyebrow, children }: { eyebrow: string; children: ReactNode }) {
+/**
+ * `dek` is required here for the same reason it is on a case study Section: a
+ * heading without a plain-language summary is a hole in the TL;DR lens, and the
+ * type finds it before the build rather than a reader finding it after.
+ */
+function H({
+  eyebrow,
+  dek,
+  children,
+}: {
+  eyebrow: string;
+  dek: string;
+  children: ReactNode;
+}) {
   return (
     <div className="pb-3 pt-7">
       <REyebrow tone="primary">{eyebrow}</REyebrow>
       <h2 className="m-0 pt-2 font-[family-name:var(--font-display)] text-[1.5rem] font-bold leading-[1.15] tracking-[-0.02em] text-ink">
         {children}
       </h2>
+      <div className="dek">
+        <div>
+          {/* No `--world` on a post, so this falls back to the site spot. */}
+          <div className="pt-3 text-[var(--world,var(--spot))]">
+            <Dek>{dek}</Dek>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -73,7 +95,12 @@ export const posts: Post[] = [
           Roster.
         </P>
 
-        <H eyebrow="The root cause">The default path ships everything</H>
+        <H
+          eyebrow="The root cause"
+          dek="The standard way to package a component library quietly bundles the entire styling framework inside it, so every app that installs it gets a second, competing copy."
+        >
+          The default path ships everything
+        </H>
         <P>
           The compiled stylesheet was 100KB, which is a lot for forty
           components. Inside it was an entire Tailwind build: preflight, the
@@ -129,7 +156,12 @@ export const posts: Post[] = [
           had decided anything.
         </RPullquote>
 
-        <H eyebrow="The fix">Three changes, none of them clever</H>
+        <H
+          eyebrow="The fix"
+          dek="Stop shipping a reset that rewrites the host app’s page, put the library’s styles in a labeled bucket the browser knows how to rank, and let colors be swapped from outside instead of baked in."
+        >
+          Three changes, none of them clever
+        </H>
         <P>
           <strong className="font-semibold text-ink">Preflight became opt-in.</strong>{" "}
           It ships from its own entry point now. If your app runs Tailwind you
@@ -162,7 +194,10 @@ export const posts: Post[] = [
           redefining custom properties it already controls.
         </P>
 
-        <H eyebrow="The part I got wrong twice">
+        <H
+          eyebrow="The part I got wrong twice"
+          dek="Every automated test passed while the site was visibly broken in a browser, twice — the tests were checking the wrong layer, and I shipped on their word."
+        >
           Green tests are not the same as a working page
         </H>
         <P>
@@ -190,7 +225,12 @@ export const posts: Post[] = [
           caught.
         </P>
 
-        <H eyebrow="What I would tell you">If you publish CSS</H>
+        <H
+          eyebrow="What I would tell you"
+          dek="The short version for anyone shipping styles other people install: do not redecorate their page, make the ordering explicit, leave the colors swappable, and check the result with your eyes."
+        >
+          If you publish CSS
+        </H>
         <P>
           Ship no reset. Wrap everything you emit in a named layer and declare
           the order in your own stylesheet, so a consumer inherits a working

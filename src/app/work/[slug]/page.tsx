@@ -11,6 +11,7 @@ import {
   RStat,
 } from "@/lib/roster-ui";
 import { CrtEasterEgg } from "@/components/crt-easter-egg";
+import { TldrToggle } from "@/components/tldr-toggle";
 import { caseStudies } from "@/content/case-studies";
 import { getProject, projects } from "@/lib/projects";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
@@ -106,7 +107,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         } as CSSProperties
       }
     >
-      <TopBar>
+      <TopBar tldr>
         {/* Roster's Breadcrumbs, routed through next/link by RBreadcrumbs so
             the hop back stays client-side. The typography comes from the same
             Eyebrow class list the rest of the folio uses. */}
@@ -133,9 +134,15 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         }}
       >
         <div className="mx-auto w-full max-w-[1180px] px-6 py-11 sm:px-8">
-          <h1 className="m-0 pb-[14px] font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">
-            {project.name}
-          </h1>
+          {/* Beside the title, and marked as the anchor the sticky bar watches:
+              once this scrolls away the bar reveals its own copy, so the lens
+              stays reachable without a second source of truth. */}
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 pb-[14px]">
+            <h1 className="m-0 font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">
+              {project.name}
+            </h1>
+            <TldrToggle anchor />
+          </div>
           <p className="m-0 max-w-[52ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
             {study.lede}
           </p>

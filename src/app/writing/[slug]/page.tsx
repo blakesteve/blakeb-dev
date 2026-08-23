@@ -3,6 +3,7 @@ import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { RBreadcrumbs } from "@/components/breadcrumbs";
+import { TldrToggle } from "@/components/tldr-toggle";
 import { REyebrow } from "@/lib/roster-ui";
 import { getPost, posts, postsByDate, formatPostDate } from "@/content/posts";
 
@@ -32,7 +33,7 @@ export default async function PostPage(props: PageProps<"/writing/[slug]">) {
 
   return (
     <main className="flex min-h-full flex-col">
-      <TopBar>
+      <TopBar tldr>
         <RBreadcrumbs
           items={[
             { label: "Blake Ball", href: "/" },
@@ -58,9 +59,12 @@ export default async function PostPage(props: PageProps<"/writing/[slug]">) {
             ))}
           </div>
 
-          <h1 className="m-0 font-[family-name:var(--font-display)] text-[clamp(1.875rem,5vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.03em]">
-            {post.title}
-          </h1>
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+            <h1 className="m-0 max-w-[26ch] font-[family-name:var(--font-display)] text-[clamp(1.875rem,5vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.03em]">
+              {post.title}
+            </h1>
+            <TldrToggle anchor />
+          </div>
           <p className="m-0 max-w-[52ch] pt-4 text-[1.125rem] leading-[1.55] text-ink-faint">
             {post.dek}
           </p>

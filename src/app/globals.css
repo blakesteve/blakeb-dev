@@ -375,11 +375,60 @@
   --font-util: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
+/*
+ * Roster's chrome — buttons, badges, inputs, table cells — asks for this face.
+ * Without it those components inherit `body`, which here is Source Serif, and
+ * the whole component library renders in a reading face. Archivo is this site's
+ * only sans, so the controls speak the same language as the headings.
+ *
+ * Set outside `@theme` on purpose: `--roster-*` variables are read by Roster's
+ * compiled CSS at runtime, not compiled by this app's Tailwind.
+ */
+:root {
+  --roster-font-ui: var(--font-archivo), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-read);
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ── TL;DR: the plain-language lens ──────────────────────────────────────────
+   Each section carries a dek — one sentence saying what it means without the
+   jargon. They are always in the markup, so they are readable by a crawler and
+   by anyone who never finds the toggle; this only decides whether they are
+   shown.
+
+   Collapsed with a 0fr→1fr grid row rather than max-height, because a height
+   guess either clips a two-line dek on a phone or leaves a gap under a short
+   one. The grid animates to the real height, whatever it turns out to be. */
+.dek {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.28s ease,
+    opacity 0.2s ease,
+    margin 0.28s ease;
+  margin-bottom: 0;
+}
+.dek > * {
+  overflow: hidden;
+  min-height: 0;
+}
+.tldr .dek {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-bottom: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dek {
+    transition: none;
+  }
 }
 
 /* X-ray mode: outlines every annotated Roster component and names it. */

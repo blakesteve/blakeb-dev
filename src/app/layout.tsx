@@ -59,6 +59,12 @@ const themeScript = `
       ? saved === "dark" || saved === "blueline"
       : window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (dark) document.documentElement.classList.add("dark");
+    /* The TL;DR lens, set before paint for the same reason as the theme: the
+       deks are in the markup on every page, so a reader who left it on would
+       otherwise watch them appear a beat after the text they summarize. */
+    if (localStorage.getItem("tldr") === "on") {
+      document.documentElement.classList.add("tldr");
+    }
   } catch (e) {}
 })();
 `;

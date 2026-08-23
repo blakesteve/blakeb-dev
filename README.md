@@ -59,6 +59,14 @@ inside `@layer roster`, which sits above this app's `theme` layer, so a
 declaration there loses. `--font-mono` and the `--roster-*` overrides are
 declared unlayered, where they beat both.
 
+`--roster-font-ui` is one of those overrides and is mapped to Archivo. Roster
+4.5.0 added it because its components previously set no `font-family` at all
+and inherited `body`, which here is Source Serif — so buttons, badges, inputs
+and table cells all rendered in a reading face. Two components opt back out on
+purpose: `RButton` takes the mono control face through `--control-face`, and
+`BothPalettes` rebinds both variables in its "as Roster ships it" column so that
+column shows the untouched library rather than this site's type.
+
 ## Live data
 
 | Figure | Source |
@@ -92,6 +100,32 @@ Hand-authored data that routing depends on gets checked rather than trusted: a
 duplicated slug or a date typed `2026-8-14` fails quietly as a 404 or a
 malformed byline, so `posts.test.ts` asserts the invariants the type system
 cannot.
+
+## The TL;DR lens
+
+Case studies and posts are written for someone who knows what a cascade layer
+is. The lens is for everyone else: every section carries a `dek`, one plain
+sentence saying what the section actually means, and the TL;DR toggle reveals
+them all.
+
+`dek` is a required prop on `Section` and on a post's `H`, so a section cannot
+ship without one. The alternative was a test that greps for missing summaries,
+which finds the gap a commit later; the type finds it before the build.
+
+The deks are always in the markup. `.dek` collapses them with a `0fr` → `1fr`
+grid row, so the lens only decides whether they are shown — which means they are
+there for a crawler, and for a reader who never finds the button. The state is a
+class on `<html>`, set before paint by the same blocking script that sets the
+theme, and read through `useSyncExternalStore` rather than mirrored into React
+state.
+
+`components/dek.tsx` renders one. It is a Roster `Alert` at
+`colorScheme="current"`, so it inherits the project accent from its wrapper, and
+it overrides Alert's UI face in both halves: the label takes the folio mono that
+eyebrows and figcaptions use, and the summary itself takes the reading face,
+because it is prose sitting among paragraphs rather than a notice. Those
+overrides need no `!important` — the `utilities` layer already outranks
+`roster`.
 
 ## Pages
 
@@ -228,6 +262,7 @@ buys nothing.
 | `lib/roster.ts` | the `.d.ts` parse across both entry points, and the token and ramp readers against the shipped `tokens.css` |
 | `content/posts.ts` | date formatting, lookup, sort order, and the data invariants routing depends on: unique slugs, URL-safe slugs, `YYYY-MM-DD` dates, and a dek short enough to survive as a meta description |
 | `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
+| `content/deks.test.ts` | that every section in both content files has a dek, that each is long enough to say something and short enough to read, that none repeats another, and that none smuggles in the jargon the lens exists to avoid |
 | `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
 
 Three things are worth knowing about how these are written.
