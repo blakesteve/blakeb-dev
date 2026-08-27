@@ -11,7 +11,7 @@ import {
   RInlineCode,
   RPullquote,
 } from "@/lib/roster-ui";
-import { getRosterComponentCount, getRosterComponents } from "@/lib/roster";
+import { getRosterComponentCount, getRosterComponents, getRosterMeta } from "@/lib/roster";
 
 /* Counted from the installed package's own type definitions, so the tier
    breakdown in the Roster sidebar cannot drift from the count in its stat row.
@@ -568,7 +568,20 @@ export const caseStudies: Record<string, CaseStudy> = {
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
       },
-      { value: "995", label: "Tests", source: "roster @ 4.6.0" },
+      /* Live once the installed Roster carries `dist/meta.json`, which it
+         writes from a real `vitest run` at publish. The literal below is the
+         fallback for a version published before that existed, and it is dated
+         so a stale number cannot pass itself off as a live one. */
+      ((meta) =>
+        meta
+          ? {
+              value: meta.tests.toLocaleString("en-US"),
+              label: "Tests",
+              source: `live · roster @ ${meta.version}`,
+            }
+          : { value: "1,000", label: "Tests", source: "roster @ 4.6.1" })(
+        getRosterMeta(),
+      ),
       { value: "5", label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
