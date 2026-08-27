@@ -79,6 +79,42 @@ export function getRosterComponentCount(): number {
   return getRosterComponents().length;
 }
 
+/**
+ * The test count, published by Roster rather than derived from what it ships.
+ *
+ * Everything else here is read out of the package itself — the version from
+ * `package.json`, the components by parsing the exports out of `dist/*.d.ts`.
+ * The suite is not that kind of fact: Roster's `files` is `["dist"]`, so the
+ * tests never leave that repo, and a static count on this page drifted two
+ * minor versions behind while sitting next to a live one.
+ *
+ * Roster now writes `dist/meta.json` from a real `vitest run` in
+ * `prepublishOnly`. A static count of `it(` would not do, because `it.each`
+ * expands at runtime.
+ *
+ * Returns `null` rather than throwing when the file is absent, which is the
+ * opposite of `getRosterComponents`. Zero components means something broke;
+ * a missing `meta.json` just means the installed version predates the writer,
+ * and the caller has a written fallback for exactly that.
+ */
+export function getRosterMeta(): { tests: number; testFiles: number; version: string } | null {
+  try {
+    const meta = JSON.parse(read("dist", "meta.json")) as {
+      tests?: number;
+      testFiles?: number;
+      version?: string;
+    };
+    if (!meta.tests || !meta.version) return null;
+    return {
+      tests: meta.tests,
+      testFiles: meta.testFiles ?? 0,
+      version: meta.version,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** Pulls specific `--roster-*` declarations out of the shipped tokens.css. */
 export function getRosterTokens(names: string[]): { name: string; value: string }[] {
   const css = read("dist", "tokens.css");

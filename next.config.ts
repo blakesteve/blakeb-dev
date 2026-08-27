@@ -21,7 +21,15 @@ const nextConfig: NextConfig = {
    * only ones read that the tracer cannot infer.
    */
   outputFileTracingIncludes: {
-    "/**/*": ["./node_modules/@blakesteve/roster/dist/*.d.ts"],
+    /* `meta.json` alongside the declaration files: both are read from the
+       installed package at request time, and both are the kind of file the
+       tracer drops unless told otherwise. Leaving it out is the bug that
+       printed "0 components" in production — it succeeds at build and throws on
+       every later revalidation. */
+    "/**/*": [
+      "./node_modules/@blakesteve/roster/dist/*.d.ts",
+      "./node_modules/@blakesteve/roster/dist/meta.json",
+    ],
   },
 };
 
