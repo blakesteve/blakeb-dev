@@ -235,7 +235,7 @@ export const caseStudies: Record<string, CaseStudy> = {
          premise. Both are live; the values here are only the fallback. */
       { value: "2,334", label: "Verdicts cast", source: "Aug 2026 snapshot", live: "verdicts" },
       { value: "1,580", label: "Games tracked", source: "Aug 2026 snapshot", live: "games" },
-      { value: "833", label: "Commits", source: "Aug 2026 snapshot · private repo" },
+      { value: "902", label: "Commits", source: "Aug 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -568,7 +568,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
       },
-      { value: "789", label: "Tests", source: "roster @ 4.3.1" },
+      { value: "995", label: "Tests", source: "roster @ 4.6.0" },
       { value: "5", label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
