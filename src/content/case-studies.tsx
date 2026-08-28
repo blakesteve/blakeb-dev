@@ -50,6 +50,10 @@ import expandedLight from "@/images/megasquad/megasquad-standings-expanded-light
 
 import gvBrowse from "@/images/game-verdict/gameverdict-browsegames-filtered.png";
 import gvCompare from "@/images/game-verdict/gameverdict-compare.png";
+import gvCommunityBoards from "@/images/game-verdict/gameverdict-community-boards.png";
+import gvCommunityComposer from "@/images/game-verdict/gameverdict-community-composer.png";
+import gvCommunityTeaser from "@/images/game-verdict/gameverdict-community-teaser.png";
+import gvCommunityThread from "@/images/game-verdict/gameverdict-community-thread.png";
 import gvDiscordCompare from "@/images/game-verdict/gameverdict-discord-compare.png";
 import gvDiscordVerdict from "@/images/game-verdict/gameverdict-discord-verdict.png";
 import gvDetail from "@/images/game-verdict/gameverdict-gamedetail-herocrop.png";
@@ -483,6 +487,74 @@ export const caseStudies: Record<string, CaseStudy> = {
             alt="Game Verdict's compare view: Counter-Strike 2 against ELDEN RING, with mirrored bars showing 97 percent keyboard and mouse against 80 percent controller."
             caption="Compare: Counter-Strike 2 against ELDEN RING"
           />
+        </Section>
+
+        <Section
+          eyebrow="The empty room"
+          title="Invite-only, on purpose"
+          dek="A forum with boards, markdown posts, direct messages, reporting and a moderation queue, opened to a handful of people first so it would have something in it before anyone was invited to look."
+        >
+          <p>
+            Comment threads on game pages were the small version of this. The community hub is the
+            large one: four boards, markdown posts with a real formatting toolbar, threaded replies,
+            reactions on both, emoji with shortcode typeahead, GIFs, friend requests, and direct
+            messages. Replies are voted Reddit-style, so the best answer to &ldquo;is this one
+            better on a pad?&rdquo; rises to the top of the game it is about instead of sitting
+            wherever it landed chronologically.
+          </p>
+          <Shot
+            press={gvCommunityBoards}
+            alt="The Game Verdict community index: four boards down the left with unread badges, and a 'Hot right now' feed showing a pinned welcome post and a thread with an embedded game verdict."
+            caption="Four boards, with unread counts and whatever is busiest on the right"
+          />
+          <p>
+            A post can attach a game, which embeds its cover and its live verdict split into the
+            thread. That is what makes this the site&rsquo;s forum rather than a forum bolted onto
+            it. An argument about Oblivion carries the current breakdown for Oblivion, moving as
+            people vote, so the discussion and the data it is arguing about cannot drift apart.
+            Author names carry the badges you earned voting, so the identity you build casting
+            verdicts is the one you turn up with.
+          </p>
+          <Shot
+            press={gvCommunityThread}
+            alt="A Game Verdict community thread titled 'Oblivion remastered is such a nostalgia vibe', with the game's cover art and a live KBM verdict bar embedded under the title, moderator actions reading Delete, Pin, Lock and Report, and two replies below, one of them an animated GIF."
+            caption="A thread carries the live verdict for the game it is arguing about"
+          />
+          <p>
+            It is invite-only, and that was the plan rather than a limitation. A forum nobody has
+            posted in is worse than no forum, so early access went to the most active voters to seed
+            real threads before the doors opened. Everyone else gets a warming-up animation and an
+            honest note about what it is. Making something feel worth getting into is a nicer
+            problem to have than making an empty room look busy.
+          </p>
+          <Shot
+            press={gvCommunityTeaser}
+            alt="Game Verdict's community teaser: a chat icon inside a slowly rotating tricolor ring, headed 'The community hub is warming up', with buttons to cast verdicts or sign in, and a note that early access invites go to top voters."
+            caption="What everyone else sees, until an invite arrives"
+          />
+          <p>
+            Every post and comment carries a report button with four reasons, alerting mods and
+            admins into a queue that gets worked by hand. Moderators pin and lock inline. Deletes
+            are soft, so a removed post is still there to look at when someone asks why it went.
+            Blocking is mutual and filters the feed rather than just hiding replies. None of that
+            was asked for by the fifteen or so accounts currently in there. It exists because the
+            first person who needs reporting shows up before the first moderator does, and that is
+            not something you can add in a hurry.
+          </p>
+          <Shot
+            press={gvCommunityComposer}
+            alt="Writing a post in Game Verdict: a title field, Write and Preview tabs, a markdown formatting toolbar, a body field, and an attached game showing that its live verdict breakdown will be embedded."
+            caption="Markdown, a formatting toolbar, and a game attached to the post"
+          />
+          <p>
+            The GIF picker got a harder problem than it deserved. Google shut off the Tenor API on
+            30 June 2026, taking GIF support out of Discord, X, WhatsApp and Bluesky with it, and
+            Giphy had already moved off free access. GIFs landed here two weeks later on Klipy,
+            built by ex-Tenor engineers as a deliberate near-clone of the thing everyone had just
+            lost. Rendering is restricted to an allowlist of CDN hosts rather than trusting whatever
+            URL ends up in a post, and Tenor&rsquo;s CDN stayed on that list, because its servers
+            outlived its API.
+          </p>
         </Section>
 
         {/* Retrospect already uses "The part nobody asked for"; two case

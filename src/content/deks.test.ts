@@ -42,7 +42,7 @@ const JARGON = [
 
 describe("section deks", () => {
   it("exist in both content files", () => {
-    expect(deksIn("case-studies.tsx").length).toBe(24);
+    expect(deksIn("case-studies.tsx").length).toBe(25);
     expect(deksIn("posts.tsx").length).toBe(4);
   });
 
