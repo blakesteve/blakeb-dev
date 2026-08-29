@@ -62,6 +62,13 @@ describe("postsByDate", () => {
 });
 
 describe("post data", () => {
+  /* `it.each([])` passes. Every per-post check below is generated from this
+     array, so an empty or accidentally-filtered `posts` would turn this file
+     green while asserting nothing at all. */
+  it("actually has posts to check", () => {
+    expect(posts.length).toBeGreaterThan(0);
+  });
+
   it("has no duplicate slugs", () => {
     const slugs = posts.map((post) => post.slug);
     expect(new Set(slugs).size).toBe(slugs.length);

@@ -43,7 +43,7 @@ const JARGON = [
 describe("section deks", () => {
   it("exist in both content files", () => {
     expect(deksIn("case-studies.tsx").length).toBe(25);
-    expect(deksIn("posts.tsx").length).toBe(4);
+    expect(deksIn("posts.tsx").length).toBe(11);
   });
 
   it.each(ALL.map((d) => [d.dek.slice(0, 45), d.dek] as const))(
