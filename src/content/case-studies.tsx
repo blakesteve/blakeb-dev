@@ -237,9 +237,9 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,334", label: "Verdicts cast", source: "Aug 2026 snapshot", live: "verdicts" },
-      { value: "1,580", label: "Games tracked", source: "Aug 2026 snapshot", live: "games" },
-      { value: "902", label: "Commits", source: "Aug 2026 snapshot · private repo" },
+      { value: "2,492", label: "Verdicts cast", source: "29 Aug 2026 snapshot", live: "verdicts" },
+      { value: "1,667", label: "Games tracked", source: "29 Aug 2026 snapshot", live: "games" },
+      { value: "936", label: "Commits", source: "29 Aug 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -1122,7 +1122,7 @@ export const caseStudies: Record<string, CaseStudy> = {
     lede: "Multi-sport pick’ems for your friend group. Ten leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
     stats: [
       { value: "10", label: "Leagues supported", source: "five sports" },
-      { value: "18", label: "Roster components", source: "across 40 files" },
+      { value: "19", label: "Roster components", source: "across 39 files" },
       { value: "76.19%", label: "Best bracket", source: "48–15, NCAAM" },
       { value: "30 s", label: "Poll interval", source: "idle after 5 min" },
     ],
