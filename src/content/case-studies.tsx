@@ -237,9 +237,13 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,492", label: "Verdicts cast", source: "29 Aug 2026 snapshot", live: "verdicts" },
-      { value: "1,667", label: "Games tracked", source: "29 Aug 2026 snapshot", live: "games" },
-      { value: "936", label: "Commits", source: "29 Aug 2026 snapshot · private repo" },
+      { value: "2,515", label: "Verdicts cast", source: "6 Sept 2026 snapshot", live: "verdicts" },
+      { value: "1,718", label: "Games tracked", source: "6 Sept 2026 snapshot", live: "games" },
+      /* Counted off `origin/main`, the repo's default branch, so it matches
+         how the Roster card counts and is not skewed by whatever `dev` is
+         carrying at the time. No live path for this one: the repo is private,
+         so there is nothing for the GitHub reader to reach. */
+      { value: "962", label: "Commits", source: "6 Sept 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -635,7 +639,11 @@ export const caseStudies: Record<string, CaseStudy> = {
         source: "live · package exports",
       },
       {
-        value: "313",
+        /* 323 is what the GitHub API reports, which is what the live path
+           above it renders. A local `git rev-list --count main` says a few
+           more; the fallback should agree with the source it is standing in
+           for, not with a working copy. */
+        value: "323",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -1122,7 +1130,7 @@ export const caseStudies: Record<string, CaseStudy> = {
     lede: "Multi-sport pick’ems for your friend group. Ten leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
     stats: [
       { value: "10", label: "Leagues supported", source: "five sports" },
-      { value: "19", label: "Roster components", source: "across 39 files" },
+      { value: "18", label: "Roster components", source: "across 40 files" },
       { value: "76.19%", label: "Best bracket", source: "48–15, NCAAM" },
       { value: "30 s", label: "Poll interval", source: "idle after 5 min" },
     ],

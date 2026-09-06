@@ -65,7 +65,7 @@ export const projects: Project[] = [
          and 310 in its case study while the repository said 313. */
       {
         label: "Scale",
-        value: "1,667 games tracked",
+        value: "1,718 games tracked",
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
@@ -148,7 +148,7 @@ export const projects: Project[] = [
     world: { press: "#c62828", blueline: "#e23b3b" },
     props: [
       { label: "Stack", value: "Vite · React 19 · Zustand" },
-      { label: "Scale", value: "10 leagues · 19 Roster components", accent: true },
+      { label: "Scale", value: "10 leagues · 18 Roster components", accent: true },
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },
