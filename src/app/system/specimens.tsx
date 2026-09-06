@@ -75,7 +75,7 @@ export function Specimens({ componentCount }: { componentCount: number }) {
       <Cell label="Pill">
         <span data-roster="Pill">
           <Pill dot colorScheme="success">
-            2,334 verdicts
+            2,515 verdicts
           </Pill>
         </span>
         <span data-roster="Pill">
