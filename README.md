@@ -248,7 +248,19 @@ rendering bugs, and neither needed a DOM to reproduce:
 ```bash
 npm test          # vitest run
 npm run test:watch
+npm run typecheck # tsc --noEmit
 ```
+
+`.github/workflows/ci.yml` runs tests, lint, type check and build on every pull
+request. It was added late: for most of this repo's life the only thing running
+automatically was `prebuild`, which fires the ramp check on every Vercel deploy.
+So a non-monotonic color ramp blocked a release and a red test suite did not,
+which is a strange place to have drawn the line.
+
+`tsc --noEmit` is meaningful here, verified by injecting a type error and
+watching it fail. Do not carry that command to mega-squad, whose root config is
+solution-style: there the same invocation resolves to an empty program and
+passes on anything.
 
 Vitest, node environment, no jsdom. The suite covers the modules that have
 behavior rather than markup, and stops there. The site is almost entirely static
