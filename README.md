@@ -257,10 +257,18 @@ automatically was `prebuild`, which fires the ramp check on every Vercel deploy.
 So a non-monotonic color ramp blocked a release and a red test suite did not,
 which is a strange place to have drawn the line.
 
-`tsc --noEmit` is meaningful here, verified by injecting a type error and
-watching it fail. Do not carry that command to mega-squad, whose root config is
-solution-style: there the same invocation resolves to an empty program and
-passes on anything.
+`typecheck` is `next typegen && tsc --noEmit`, and the typegen half is not
+decoration. `next-env.d.ts` and `.next/types/` are both generated and both
+gitignored, so a fresh checkout has neither, and `tsc` alone fails with 61
+errors: 56 image imports with no module declaration, and five uses of the global
+`PageProps` and `LayoutProps`. None of that is visible on a machine with
+`next dev` running, because the dev server rewrites both files the moment they
+go missing.
+
+Once typegen has run, `tsc --noEmit` is meaningful here, verified by injecting a
+type error and watching it fail. Do not carry that command to mega-squad, whose
+root config is solution-style: there the same invocation resolves to an empty
+program and passes on anything.
 
 Vitest, node environment, no jsdom. The suite covers the modules that have
 behavior rather than markup, and stops there. The site is almost entirely static

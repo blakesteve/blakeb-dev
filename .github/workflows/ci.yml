@@ -50,10 +50,18 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # This tsconfig is a real program, so --noEmit checks something. Verified
-      # by injecting a type error and watching it fail. The sibling mega-squad
-      # repo has a solution-style root config where the same command resolves to
-      # an empty program and passes on anything, so do not copy this line there.
+      # `npm run typecheck` is `next typegen && tsc --noEmit`, and the typegen
+      # half is load-bearing. `next-env.d.ts` and `.next/types/` are both
+      # gitignored and both generated, so a fresh checkout has neither: the PNG
+      # module declarations go missing (56 errors) and so do the global
+      # PageProps and LayoutProps (5 more). This passed on the dev machine only
+      # because a running `next dev` regenerates both files the moment they are
+      # removed, which is a dependency no runner has.
+      #
+      # The tsc half is meaningful once typegen has run, verified by injecting a
+      # type error and watching it fail. Do not copy that command to mega-squad,
+      # whose solution-style root config makes it resolve to an empty program
+      # and pass on anything.
       - name: Type check
         run: npm run typecheck
 
