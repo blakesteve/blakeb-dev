@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Node 22 rather than the 24 on the dev machine: Vercel builds this app on 22,
+# and the build job below only earns its keep if it fails the way production
+# would.
+env:
+  NODE_VERSION: 22
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Already a single run, not watch mode. Do not "fix" this to test:run.
+      - name: Run tests
+        run: npm test
+
+  lint:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # `npm run typecheck` is `next typegen && tsc --noEmit`, and the typegen
+      # half is load-bearing. `next-env.d.ts` and `.next/types/` are both
+      # gitignored and both generated, so a fresh checkout has neither: the PNG
+      # module declarations go missing (56 errors) and so do the global
+      # PageProps and LayoutProps (5 more). This passed on the dev machine only
+      # because a running `next dev` regenerates both files the moment they are
+      # removed, which is a dependency no runner has.
+      #
+      # The tsc half is meaningful once typegen has run, verified by injecting a
+      # type error and watching it fail. Do not copy that command to mega-squad,
+      # whose solution-style root config makes it resolve to an empty program
+      # and pass on anything.
+      - name: Type check
+        run: npm run typecheck
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Runs the prebuild ramp check first, then the real Next build. Two things
+      # this deliberately does not receive: NEXT_PUBLIC_STORYBOOK_URL, which has
+      # a real deployment as its fallback and a test pinning that fallback, and
+      # any network access to Game Verdict, whose stats are fetched at build
+      # time and resolve to nulls with a warning on every failure path. If this
+      # job ever fails for want of an env var, the degradation path is the bug.
+      - name: Build
+        run: npm run build

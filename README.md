@@ -248,7 +248,27 @@ rendering bugs, and neither needed a DOM to reproduce:
 ```bash
 npm test          # vitest run
 npm run test:watch
+npm run typecheck # tsc --noEmit
 ```
+
+`.github/workflows/ci.yml` runs tests, lint, type check and build on every pull
+request. It was added late: for most of this repo's life the only thing running
+automatically was `prebuild`, which fires the ramp check on every Vercel deploy.
+So a non-monotonic color ramp blocked a release and a red test suite did not,
+which is a strange place to have drawn the line.
+
+`typecheck` is `next typegen && tsc --noEmit`, and the typegen half is not
+decoration. `next-env.d.ts` and `.next/types/` are both generated and both
+gitignored, so a fresh checkout has neither, and `tsc` alone fails with 61
+errors: 56 image imports with no module declaration, and five uses of the global
+`PageProps` and `LayoutProps`. None of that is visible on a machine with
+`next dev` running, because the dev server rewrites both files the moment they
+go missing.
+
+Once typegen has run, `tsc --noEmit` is meaningful here, verified by injecting a
+type error and watching it fail. Do not carry that command to mega-squad, whose
+root config is solution-style: there the same invocation resolves to an empty
+program and passes on anything.
 
 Vitest, node environment, no jsdom. The suite covers the modules that have
 behavior rather than markup, and stops there. The site is almost entirely static
@@ -264,8 +284,9 @@ buys nothing.
 | `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
 | `content/deks.test.ts` | that every section in both content files has a dek, that each is long enough to say something and short enough to read, that none repeats another, and that none smuggles in the jargon the lens exists to avoid |
 | `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
+| `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
 
-Three things are worth knowing about how these are written.
+Five things are worth knowing about how these are written.
 
 The career tests pin the clock. `monthsBetween(start, null)` reads the wall
 clock in UTC, so anything asserting a duration to the present sets a fixed
@@ -295,6 +316,24 @@ control pinned open by a single click, and one that re-announced itself on every
 load. Each was checked by reintroducing the old expression and confirming the
 suite goes red, because a test that passes against the bug it names is worse
 than no test.
+
+The case-study image test exists because of a real paste. A section written for
+the MegaSquad study landed in Roster's, carrying its screenshots with it, and
+nothing caught it: the types were fine, the build was fine, and the dek count
+was fine, because every one of those checks is blind to which study a section
+belongs to. The test slices `case-studies.tsx` by study key, resolves each image
+identifier back to the folder it was imported from, and fails if a study renders
+another study's folder.
+
+Its own first draft had the hole the tests above exist to shame. A slice whose
+key it did not recognize returned early, so any change that split the file
+differently would have switched the check off for a whole study and stayed
+green — verified by reformatting a nested key to two-space indent, which
+truncated the MegaSquad slice to nothing and passed. Two assertions close it:
+an unrecognized key now fails, and each study that ships screenshots has to
+render at least one of its own. What the test still cannot see is a paste that
+carries no image, which is a narrower gap than the one it was written for but
+not no gap.
 
 Nothing covers the pages, the layout, or the X-ray overlay. That is still a
 gap, just a smaller and more deliberate one than before.

@@ -42,7 +42,8 @@ const JARGON = [
 
 describe("section deks", () => {
   it("exist in both content files", () => {
-    expect(deksIn("case-studies.tsx").length).toBe(25);
+    /* 26 since the MegaSquad case study gained a section on picking. */
+    expect(deksIn("case-studies.tsx").length).toBe(26);
     expect(deksIn("posts.tsx").length).toBe(11);
   });
 
