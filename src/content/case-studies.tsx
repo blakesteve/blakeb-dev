@@ -37,16 +37,20 @@ import rsAnthem from "@/images/retrospect/retrospect-anthem-nostalgic-day.png";
 import rsYearChart from "@/images/retrospect/retrospect-year-chart.png";
 import rsBirthChart from "@/images/retrospect/retrospect-birthchart-panel.png";
 
-import ncaamDark from "@/images/megasquad/megasquad-ncaam-dark.png";
-import ncaamLight from "@/images/megasquad/megasquad-ncaam-light.png";
-import squidDark from "@/images/megasquad/megasquad-sad-squid-dark.png";
-import squidLight from "@/images/megasquad/megasquad-sad-squid-light.png";
-import mobileDark from "@/images/megasquad/megasquad-schedule-dark-mobile.png";
-import mobileLight from "@/images/megasquad/megasquad-schedule-light-mobile.png";
-import collapsedDark from "@/images/megasquad/megasquad-standings-collapsed-dark.png";
-import collapsedLight from "@/images/megasquad/megasquad-standings-collapsed-light.png";
-import expandedDark from "@/images/megasquad/megasquad-standings-expanded-dark.png";
-import expandedLight from "@/images/megasquad/megasquad-standings-expanded-light.png";
+import ncaamDark from "@/images/megasquad/megasquad-2.0-ncaam-dark.png";
+import ncaamLight from "@/images/megasquad/megasquad-2.0-ncaam-light.png";
+import squidDark from "@/images/megasquad/megasquad-2.0-sad-squid-dark.png";
+import squidLight from "@/images/megasquad/megasquad-2.0-sad-squid-light.png";
+import mobileDark from "@/images/megasquad/megasquad-2.0-schedule-mobile-dark.png";
+import mobileLight from "@/images/megasquad/megasquad-2.0-schedule-mobile-light.png";
+import pickingDark from "@/images/megasquad/megasquad-2.0-picking-dark.png";
+import pickingLight from "@/images/megasquad/megasquad-2.0-picking-light.png";
+import pickingMobileDark from "@/images/megasquad/megasquad-2.0-picking-mobile-dark.png";
+import pickingMobileLight from "@/images/megasquad/megasquad-2.0-picking-mobile-light.png";
+import collapsedDark from "@/images/megasquad/megasquad-2.0-standings-collapsed-dark.png";
+import collapsedLight from "@/images/megasquad/megasquad-2.0-standings-collapsed-light.png";
+import expandedDark from "@/images/megasquad/megasquad-2.0-standings-expanded-dark.png";
+import expandedLight from "@/images/megasquad/megasquad-2.0-standings-expanded-light.png";
 
 import gvBrowse from "@/images/game-verdict/gameverdict-browsegames-filtered.png";
 import gvCompare from "@/images/game-verdict/gameverdict-compare.png";
@@ -237,13 +241,13 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,515", label: "Verdicts cast", source: "6 Sept 2026 snapshot", live: "verdicts" },
-      { value: "1,718", label: "Games tracked", source: "6 Sept 2026 snapshot", live: "games" },
+      { value: "2,563", label: "Verdicts cast", source: "12 Sept 2026 snapshot", live: "verdicts" },
+      { value: "1,751", label: "Games tracked", source: "12 Sept 2026 snapshot", live: "games" },
       /* Counted off `origin/main`, the repo's default branch, so it matches
          how the Roster card counts and is not skewed by whatever `dev` is
          carrying at the time. No live path for this one: the repo is private,
          so there is nothing for the GitHub reader to reach. */
-      { value: "962", label: "Commits", source: "6 Sept 2026 snapshot · private repo" },
+      { value: "962", label: "Commits", source: "12 Sept 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -639,11 +643,11 @@ export const caseStudies: Record<string, CaseStudy> = {
         source: "live · package exports",
       },
       {
-        /* 323 is what the GitHub API reports, which is what the live path
-           above it renders. A local `git rev-list --count main` says a few
-           more; the fallback should agree with the source it is standing in
-           for, not with a working copy. */
-        value: "323",
+        /* Matches `git rev-list --count origin/main` after a fetch, which is
+           the same count the GitHub API reports and the same thing the live
+           path above renders. Not a local working copy, which drifts ahead.
+           Last checked 12 Sept 2026. */
+        value: "343",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -1127,11 +1131,11 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   megasquad: {
-    lede: "Multi-sport pick’ems for your friend group. Ten leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
+    lede: "Multi-sport pick’ems for your friend group. Thirteen leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
     stats: [
-      { value: "10", label: "Leagues supported", source: "five sports" },
-      { value: "18", label: "Roster components", source: "across 40 files" },
-      { value: "76.19%", label: "Best bracket", source: "48–15, NCAAM" },
+      { value: "13", label: "Leagues supported", source: "five sports, 21 competitions" },
+      { value: "284", label: "Games in one season", source: "scored, reconciled, settled" },
+      { value: "32", label: "Ways it answers back", source: "13 hits, 12 misses, 7 scoldings" },
       { value: "30 s", label: "Poll interval", source: "idle after 5 min" },
     ],
     stack: [
@@ -1139,13 +1143,13 @@ export const caseStudies: Record<string, CaseStudy> = {
       { k: "Runtime", v: "React 19" },
       { k: "State", v: "Zustand, slice pattern" },
       { k: "Forms", v: "React Hook Form" },
-      { k: "Tables", v: "TanStack Table" },
+      { k: "Routing", v: "React Router 7" },
       { k: "UI", v: "@blakesteve/roster" },
-      { k: "API", v: "Python — my brother's" },
+      { k: "API", v: "Python, my brother's" },
       { k: "Deploy", v: "Vercel" },
     ],
     also: [
-      { k: "Leagues", v: "NFL, NBA, MLB, NCAAM/W/F, WNBA, WBC, World Cup" },
+      { k: "Leagues", v: "NFL, NBA, MLB, NHL, NCAAM/W/F, WNBA, World Cup" },
       { k: "Squads", v: "Private groups, invites, admin roles" },
       { k: "InnerSquad", v: "The internal ops tool, also mine" },
       { k: "Themes", v: "Full light and dark" },
@@ -1167,36 +1171,75 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={collapsedLight}
             blueline={collapsedDark}
-            alt="A MegaSquad league leaderboard: six members ranked by record, the leader at 48-15 with a gold trophy and an Admin badge."
-            caption="A league, settled — six members, 63 games, no arguing"
+            alt="A MegaSquad league page: nine members ranked by record with the viewer first at 1-0, beside a This Week panel showing two settled games and a won pick."
+            caption="Week one, live. Nine members, nothing to argue about"
             priority
           />
         </Section>
 
         <Section
-          eyebrow="The hard thing"
-          title="Showing you how your bracket fell apart"
-          dek="A win-loss record tells you nothing about where it went wrong, so every row opens into the rounds, with each team you picked badged green for a win and red for a loss."
+          eyebrow="The craft"
+          title="Cards become tickets"
+          dek="Making picks isn’t a separate screen. The schedule you were reading turns into the thing you fill in. The cards tear along a perforation and stay exactly where they were."
         >
           <p>
-            A record of 48&ndash;15 tells you almost nothing. The interesting question is{" "}
-            <em>where</em> it went wrong. So standings expand into a per-round breakdown, and each
-            round shows the actual team logos you picked, badged correct or incorrect.
+            The obvious build is a picking page: leave the schedule, go somewhere else, come back.
+            That loses your place and makes choosing feel like paperwork. So picking happens in
+            place: the same cards, transformed. A dashed tear line opens down the middle, notches
+            punch through both edges, and the card you were reading becomes the ticket you hand in.
           </p>
-          <Pull cite="One bracket, read at a glance">
-            Round 1 at 26&ndash;6. Round 2 at 11&ndash;5. Then the Sweet 16 goes 4&ndash;4, and you
-            can see exactly which four teams did it.
+          <p>
+            It only reads as a transformation because nothing moves. An earlier attempt put the
+            controls in a right-hand rail, which reserved its width the moment picking started and
+            shoved every card sideways, 602px to 422px. The tickets stopped looking like the
+            cards becoming something and started looking like a re-render.
+          </p>
+          <Shot
+            press={pickingLight}
+            blueline={pickingDark}
+            alt="MegaSquad in picking mode: a sticky bar reading 5 of 14 with Cancel and Save Picks, a segmented progress strip above a row of team crests, and schedule cards rendered as perforated tickets with dashed tear lines and punched notches."
+            caption="Picking: the schedule, torn into tickets"
+          />
+          <p>
+            The bar above tracks the week without you counting: a segment per game, a crest for every
+            team you&rsquo;ve taken, a question mark for the ones you haven&rsquo;t, and a padlock for the games
+            that already locked. It scrolls horizontally on a phone rather than wrapping, so the
+            week stays one line you can read at a glance.
+          </p>
+          <Shot
+            press={pickingMobileLight}
+            blueline={pickingMobileDark}
+            alt="Picking mode on a phone: the sticky bar and its scrolling crest row above a single column of perforated ticket cards."
+            caption="390 pt"
+            frame="phone"
+          />
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Showing you where the season got away from you"
+          dek="A win-loss record tells you nothing about where it went wrong, so every row opens into the weeks, with each team you picked badged green for a win and red for a loss."
+        >
+          <p>
+            A record of 182&ndash;102 tells you almost nothing. The interesting question is{" "}
+            <em>where</em> it went wrong. So standings expand into a per-week breakdown, and each
+            week shows the actual team logos you picked, badged correct or incorrect.
+          </p>
+          <Pull cite="One season, read at a glance">
+            64.1% across 284 games. The playoffs alone go 11 of 13: Wild Card 5 of 6,
+            Divisional 3 of 4, Conference 2 of 2, the Super Bowl called. Divisional is the round
+            that slipped, and now it has a name.
           </Pull>
           <Shot
             press={expandedLight}
             blueline={expandedDark}
-            alt="An expanded MegaSquad standings row showing 76.19% win percentage and a per-round breakdown; the Sweet 16 row displays eight team logos, each badged with a green check or a red X."
-            caption="The round breakdown — logos badged correct or incorrect"
+            alt="An expanded MegaSquad standings row at 182-102 and 64.1% correct, opening into per-week results (Super Bowl 1 of 1, Conference 2 of 2, Divisional 3 of 4, Wild Card 5 of 6) with Week 18 open below them, showing sixteen team crests each outlined green for a correct pick or red for a wrong one."
+            caption="A season, opened week by week"
           />
           <p>
-            None of those numbers are stored twice. The record, the win percentage, the per-round
-            tallies, and the completed-game count all derive from the same picks — which is why they
-            reconcile exactly, and why they cannot drift apart.
+            None of those numbers are stored twice. The record, the win percentage, the per-week
+            tallies, and the completed-game count all derive from the same picks, which is why they
+            reconcile exactly, and why they can&rsquo;t drift apart.
           </p>
         </Section>
 
@@ -1209,34 +1252,34 @@ export const caseStudies: Record<string, CaseStudy> = {
             Getting a pick right returns <strong>&ldquo;Bullseye!&rdquo;</strong>, or
             &ldquo;Nailed It!&rdquo;, or &ldquo;A Prophet!&rdquo; Getting one wrong returns
             &ldquo;Narp.&rdquo;, &ldquo;Whiff.&rdquo;, or &ldquo;Gross, dude.&rdquo; State is encoded
-            three ways at once — border color, a result pill, and the score — so an entire week reads
+            three ways at once (border color, a result pill, and the score), so an entire week reads
             without parsing anything.
           </p>
           <Shot
             press={ncaamLight}
             blueline={ncaamDark}
-            alt="MegaSquad's NCAA tournament Round 1 schedule: matchup cards with team logos, seeds, and final scores, each outlined red or green with a result pill reading “Gross, dude.” or “Incredible!”"
+            alt="MegaSquad's NCAA tournament Round 1 schedule: matchup cards with team logos, seeds, and final scores, each outlined red or green and topped with a result pill: a short phrase of praise for a hit, of commiseration for a miss."
             caption="Round 1, settled"
           />
           <p>
             All three signals survive the narrow layout. The schedule has exactly one breakpoint, so
-            every phone width takes the same path — the card stacks, and the pill keeps its place.
+            every phone width takes the same path: the card stacks, and the pill keeps its place.
           </p>
           <Shot
             press={mobileLight}
             blueline={mobileDark}
             alt="The same NCAA tournament schedule on a phone: matchup cards stacked vertically with the result pill centered above each pair of teams."
-            caption="430 pt"
+            caption="390 pt"
             frame="phone"
           />
           <p>
-            When no league is in season, a dejected squid offers sports trivia instead. It is the
+            When no league is in season, a sleeping squid offers sports trivia instead. It&rsquo;s the
             kind of thing nobody asks for in a spec.
           </p>
           <Shot
             press={squidLight}
             blueline={squidDark}
-            alt="MegaSquad's empty state: a cartoon squid with a tear, the message “No games found for Week 1, Season 2026,” and a sports trivia card with a Get Another Fact button."
+            alt="MegaSquad's empty state: a cartoon squid asleep, the message “No games found for Week 1, Season 2026,” and a sports trivia card with a Get Another Fact button."
             caption="No league in season"
           />
         </Section>
@@ -1244,13 +1287,13 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section
           eyebrow="Working to someone else's contract"
           title="Two languages, one product"
-          dek="Half of this app is my brother’s and I cannot change it. Building on someone else’s system means behaving like a guest: ask for only what you need, and stop asking once nobody is looking."
+          dek="Half of this app is my brother’s and I can&rsquo;t change it. Building on someone else’s system means behaving like a guest: ask for only what you need, and stop asking once nobody is looking."
         >
           <p>
             The API is my brother&rsquo;s, in Python. That makes the front end a consumer of a
-            contract it does not control, which is its own discipline: the app polls invitations
+            contract it doesn&rsquo;t control, which is its own discipline: the app polls invitations
             every 30 seconds but stops after five minutes of inactivity, so a tab left open for three
-            days is not quietly hammering his server.
+            days isn&rsquo;t quietly hammering his server.
           </p>
         </Section>
       </>
