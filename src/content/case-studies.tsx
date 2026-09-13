@@ -477,7 +477,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
           <p>
             And the home page keeps the most contested games up front, because a game the community
-            cannot agree on is a better invitation to vote than one that is already settled.
+            can&rsquo;t agree on is a better invitation to vote than one that is already settled.
           </p>
           <Shot
             press={gvContestedDesktop}
@@ -519,7 +519,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             A post can attach a game, which embeds its cover and its live verdict split into the
             thread. That is what makes this the site&rsquo;s forum rather than a forum bolted onto
             it. An argument about Oblivion carries the current breakdown for Oblivion, moving as
-            people vote, so the discussion and the data it is arguing about cannot drift apart.
+            people vote, so the discussion and the data it is arguing about can&rsquo;t drift apart.
             Author names carry the badges you earned voting, so the identity you build casting
             verdicts is the one you turn up with.
           </p>
@@ -704,7 +704,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             stars. It was a refusal to rebuild the same button on a Saturday.
           </p>
           <p>
-            It ships pre-compiled CSS, so a consuming app does not need Tailwind installed to use
+            It ships pre-compiled CSS, so a consuming app doesn&rsquo;t need Tailwind installed to use
             it, and it is versioned like the dependency it is.
           </p>
         </Section>
@@ -780,7 +780,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           dek="Necessity breeds innovation. Nothing gets added on a hunch. When one of my apps needs the same piece twice, that’s my signal to move it into the library."
         >
           <p>
-            Roster does not get planned so much as discovered. Something gets built twice in a
+            Roster doesn&rsquo;t get planned so much as discovered. Something gets built twice in a
             consuming app, that is the signal, and it moves into the library. This site alone
             produced most of a release:
           </p>
@@ -797,7 +797,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <p>
             <strong>And one gap is still open.</strong> Roster&rsquo;s <Code>Button</Code> is typed
             to <Code>HTMLButtonElement</Code> with no <Code>as</Code> and no <Code>href</Code>, so
-            the most common control on a portfolio, a button-shaped thing that navigates, cannot be
+            the most common control on a portfolio, a button-shaped thing that navigates, can&rsquo;t be
             built from it. Every workaround is bad: a button with an <Code>onClick</Code> router push
             loses middle-click and the right role, and hand-rolling it is how the two above got
             written twice. It is logged, not fixed.
@@ -816,7 +816,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             exists because something I was building stopped and waited for it.
           </p>
           <p>
-            One customer <em>for now</em>, though, and it is built as though that will not hold. It
+            One customer <em>for now</em>, though, and it is built as though that won&rsquo;t hold. It
             is MIT licensed and developed in the open, with <Code>CODEOWNERS</Code> on the
             repository, a pull request template nobody gets to skip, and CI that runs the unit
             suite, the Storybook interaction tests and a full build before anything merges. None of
@@ -824,7 +824,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             could take a second contributor and one that would have to be rebuilt first.
           </p>
           <p>
-            The flip side is that mistakes arrive immediately and personally. A bad major does not
+            The flip side is that mistakes arrive immediately and personally. A bad major doesn&rsquo;t
             generate issues, it breaks four apps I was going to work on that weekend. That is a
             tighter feedback loop than most libraries get, and it is the only reason a packaging bug
             that had been quietly wrong for months finally got found.
@@ -834,9 +834,9 @@ export const caseStudies: Record<string, CaseStudy> = {
             why the tombstone is still there.
           </Pull>
           <p>
-            Two things this page deliberately does not do: it does not list the components, because{" "}
+            Two things this page deliberately doesn&rsquo;t do: it doesn&rsquo;t list the components, because{" "}
             <Code>/system</Code> reads them live from the installed package along with every token
-            ramp and a set of working specimens. And it does not walk through the CSS packaging
+            ramp and a set of working specimens. And it doesn&rsquo;t walk through the CSS packaging
             failure in detail, because that one earned its own post.
           </p>
           <p>
@@ -913,7 +913,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section
           eyebrow="The hard thing"
           title="What if the answer is no?"
-          dek="Often the honest answer is that the cosmos did not move your listening in any meaningful way, which is a hard thing to hand someone who just waited for half a million songs to load."
+          dek="Often the honest answer is that the cosmos didn’t move your listening in any meaningful way, which is a hard thing to hand someone who just waited for half a million songs to load."
         >
           <p>
             The honest version of this app returns a null result most of the time. That is the whole
@@ -969,7 +969,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <p>
             The seed is fixed, so the same library returns the same p-value every time. A verdict
-            that changed on refresh would not be a verdict.
+            that changed on refresh wouldn&rsquo;t be a verdict.
           </p>
           <Shot
             press={rsSkeptic}
@@ -1028,7 +1028,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
           <p>
             Running 25 tests at p&nbsp;&lt;&nbsp;0.05 means roughly one false positive is expected
-            from chance alone, and exactly one conviction came back. Retrospect does not correct the
+            from chance alone, and exactly one conviction came back. Retrospect doesn&rsquo;t correct the
             threshold for that. It labels instead: a conviction survived its scramble test, a lead
             is large but unconfirmed and says so on its face. For a tool whose tagline is
             entertainment with error bars, saying which tier a result lives in seemed more honest
@@ -1086,7 +1086,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         >
           <p>
             The first sync of a large library takes minutes, because Last.fm is rate limited and the
-            history is pulled page by page. That wait was not going away, so it got a planetary
+            history is pulled page by page. That wait wasn&rsquo;t going away, so it got a planetary
             system instead of a spinner: planets spawn, orbit, occasionally collide, and explode,
             while the scrobble counter climbs behind them.
           </p>
@@ -1106,12 +1106,12 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section
           eyebrow="What it cost"
           title="Built to cost nothing, on purpose"
-          dek="It runs entirely on free tiers, and the storage was chosen so that a sudden rush of visitors cannot produce a surprise bill."
+          dek="It runs entirely on free tiers, and the storage was chosen so that a sudden rush of visitors can’t produce a surprise bill."
         >
           <p>
             Retrospect runs on Vercel&rsquo;s free tier with Cloudflare R2 for storage. R2 was chosen
             specifically because it has <strong>zero egress fees</strong>, so a read-heavy access
-            pattern cannot generate a surprise bill, and Vercel Hobby pauses rather than charges when
+            pattern can&rsquo;t generate a surprise bill, and Vercel Hobby pauses rather than charges when
             limits are hit. Histories are stored as gzipped blobs, so a 500,000-scrobble library is
             about 7 MB and the free tier holds roughly a thousand of them.
           </p>

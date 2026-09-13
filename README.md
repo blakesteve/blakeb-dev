@@ -54,7 +54,7 @@ order, and the order matters:
    how the dark ramp's 300 and 400 ended up swapped, which put every eyebrow one
    step too bright on the proof.
 
-Some values cannot live in `@theme inline`: Roster imports Tailwind's theme
+Some values can't live in `@theme inline`: Roster imports Tailwind's theme
 inside `@layer roster`, which sits above this app's `theme` layer, so a
 declaration there loses. `--font-mono` and the `--roster-*` overrides are
 declared unlayered, where they beat both.
@@ -77,7 +77,7 @@ column shows the untouched library rather than this site's type.
 | Game Verdict games and verdicts | `GET https://api.gameverdict.app/api/stats`, hourly |
 
 `lib/roster.ts` reads `node_modules` directly rather than resolving the module,
-because Roster's exports map does not expose `package.json` and Turbopack cannot
+because Roster's exports map does not expose `package.json` and Turbopack can't
 place a CSS file in an ESM chunk.
 
 `lib/game-verdict-stats.ts` degrades rather than throws: an unreachable endpoint
@@ -99,7 +99,7 @@ number this site refuses to print.
 Hand-authored data that routing depends on gets checked rather than trusted: a
 duplicated slug or a date typed `2026-8-14` fails quietly as a 404 or a
 malformed byline, so `posts.test.ts` asserts the invariants the type system
-cannot.
+can not.
 
 ## The TL;DR lens
 
@@ -108,7 +108,7 @@ is. The lens is for everyone else: every section carries a `dek`, one plain
 sentence saying what the section actually means, and the TL;DR toggle reveals
 them all.
 
-`dek` is a required prop on `Section` and on a post's `H`, so a section cannot
+`dek` is a required prop on `Section` and on a post's `H`, so a section can't
 ship without one. The alternative was a test that greps for missing summaries,
 which finds the gap a commit later; the type finds it before the build.
 
@@ -142,7 +142,7 @@ overrides need no `!important` — the `utilities` layer already outranks
 `/work` earns its place beside the home page by answering a different question:
 the home page is a pitch you scroll, this is the direct answer for someone who
 only wants the work. Both read `projects.ts` and `case-studies.tsx`, so the two
-cannot describe a project differently.
+can't describe a project differently.
 
 ## The résumé
 
@@ -151,7 +151,7 @@ résumé that disagrees with the about page is worse than having neither. Every
 duration is computed from its dates.
 
 The browser's print dialog is the PDF export, so the page and the downloadable
-file cannot drift apart. `@media print` forces the press sheet regardless of
+file can't drift apart. `@media print` forces the press sheet regardless of
 which state the visitor is in — printing a near-black page wastes a cartridge —
 and drops the nav, the footer, and the print button itself.
 
@@ -190,7 +190,7 @@ the snap discoverable: nobody hovers a decorative glyph, everybody hovers the
 thing in the top-left corner.
 
 `src/app/icon.svg` carries its own colors and its own `prefers-color-scheme`
-swap, because a favicon is a separate document and cannot see the page's
+swap, because a favicon is a separate document and can't see the page's
 tokens. `src/app/opengraph-image.tsx` generates the share card at build time
 from color, crop marks, and the process bar rather than a typeface — loading a
 font would put a network dependency on the one artifact with no fallback if the
@@ -223,7 +223,7 @@ The Game Verdict case study describes an easter egg you get to keep, so the page
 has one: the Konami code turns the page into a CRT, and the toggle persists in
 `localStorage` under `gv-crt`.
 
-There are two ways to reach the toggle, because the code alone cannot be entered
+There are two ways to reach the toggle, because the code alone can't be entered
 on a phone — no arrow keys — which is the device that section is most likely to
 be read on. Reaching the end of the page reveals it as well, which turns
 finishing the case study into the discovery. It pulses once on arrival so the
@@ -285,8 +285,9 @@ buys nothing.
 | `content/deks.test.ts` | that every section in both content files has a dek, that each is long enough to say something and short enough to read, that none repeats another, and that none smuggles in the jargon the lens exists to avoid |
 | `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
+| `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", and that the extractor feeding both checks is still reading all of it |
 
-Five things are worth knowing about how these are written.
+Six things are worth knowing about how these are written.
 
 The career tests pin the clock. `monthsBetween(start, null)` reads the wall
 clock in UTC, so anything asserting a duration to the present sets a fixed
@@ -331,9 +332,27 @@ differently would have switched the check off for a whole study and stayed
 green — verified by reformatting a nested key to two-space indent, which
 truncated the MegaSquad slice to nothing and passed. Two assertions close it:
 an unrecognized key now fails, and each study that ships screenshots has to
-render at least one of its own. What the test still cannot see is a paste that
+render at least one of its own. What the test still can't see is a paste that
 carries no image, which is a narrower gap than the one it was written for but
 not no gap.
+
+The voice test checks the writing, not the code. Two preferences kept slipping
+into published copy: British spellings, and the closed form "cannot" where
+"can't" or "can not" belongs. Neither is visible to anything else here:
+both are valid TypeScript, both render without complaint, and both read as
+correct to anyone who does not already know the preference. It scans the prose
+with the comments stripped out, because working notes are not published writing.
+
+Its scope is `content/case-studies.tsx` and `content/posts.tsx`, which is where
+the writing lives. Copy that renders from `app/` or `components/` is not
+scanned; if prose starts accumulating there, widen `FILES` rather than assuming
+it is covered.
+
+Its third assertion is aimed at itself. A guard that reads its input wrongly
+reports success just as loudly as one that passes honestly, so the extraction
+has to prove it still contains a known sentence from each file and has still
+dropped a known comment. Without that, a one-character change to the stripper
+would turn both real checks into `[] === []` and they would stay green forever.
 
 Nothing covers the pages, the layout, or the X-ray overlay. That is still a
 gap, just a smaller and more deliberate one than before.
