@@ -44,7 +44,8 @@ describe("section deks", () => {
   it("exist in both content files", () => {
     /* 26 since the MegaSquad case study gained a section on picking. */
     expect(deksIn("case-studies.tsx").length).toBe(26);
-    expect(deksIn("posts.tsx").length).toBe(11);
+    /* 17 since the post on dead Tailwind classes, which carries six. */
+    expect(deksIn("posts.tsx").length).toBe(17);
   });
 
   it.each(ALL.map((d) => [d.dek.slice(0, 45), d.dek] as const))(

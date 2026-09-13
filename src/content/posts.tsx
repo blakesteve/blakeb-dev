@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
 import { Dek } from "@/components/dek";
 import { Shot } from "@/components/shot";
+import { FocusRingDemo } from "@/components/focus-ring-demo";
 import gvEgressJune from "@/images/game-verdict/gameverdict-egress-june-2026.png";
 import gvEgressAugust from "@/images/game-verdict/gameverdict-egress-august-2026.png";
 
@@ -85,7 +87,7 @@ export const posts: Post[] = [
     body: (
       <>
         <P>
-          I maintain a component library that four of my own apps depend on and
+          I maintain a component library that five of my own apps depend on and
           nobody else has a stake in. That makes me both the author and the
           person who finds out what shipping it actually costs. For a while,
           what it cost was a slow drip of styling bugs I could not account for.
@@ -111,7 +113,7 @@ export const posts: Post[] = [
           landing in the consuming app at whatever specificity they felt like.
         </P>
         <P>
-          That was not a decision so much as a default. Point Vite&rsquo;s
+          That wasn&rsquo;t a decision so much as a default. Point Vite&rsquo;s
           library mode at a CSS entry containing{" "}
           <RInlineCode>@import &quot;tailwindcss&quot;</RInlineCode> and it
           compiles the framework into your <RInlineCode>dist</RInlineCode>. The
@@ -168,7 +170,7 @@ export const posts: Post[] = [
         <P>
           <strong className="font-semibold text-ink">Preflight became opt-in.</strong>{" "}
           It ships from its own entry point now. If your app runs Tailwind you
-          already have a reset and you import nothing; if it does not, you ask
+          already have a reset and you import nothing; if it doesn&rsquo;t, you ask
           for one explicitly.
         </P>
         <P>
@@ -183,7 +185,7 @@ export const posts: Post[] = [
         <P>
           Layers are ranked by first declaration, not by specificity, so this
           one line settles every fight in advance. The library sits above{" "}
-          <RInlineCode>base</RInlineCode>, so a host preflight cannot erase its
+          <RInlineCode>base</RInlineCode>, so a host preflight can&rsquo;t erase its
           spacing. It sits below <RInlineCode>utilities</RInlineCode>, so the
           app&rsquo;s own classes still win. Import order stopped mattering,
           which is the actual goal.
@@ -215,7 +217,7 @@ export const posts: Post[] = [
           Neither regression touched either one.
         </P>
         <RPullquote cite="The part worth keeping" colorScheme="amber">
-          A test suite that cannot see the page will happily certify a page
+          A test suite that can&rsquo;t see the page will happily certify a page
           nobody can read.
         </RPullquote>
         <P>
@@ -265,19 +267,19 @@ export const posts: Post[] = [
 
         <H
           eyebrow="The warning"
-          dek="Databases charge for data leaving them, not just for storing it. That charge is called egress, and it is the one line on a hosting bill that does not track how popular you are, because it counts automated traffic exactly the same as people."
+          dek="Databases charge for data leaving them, not just for storing it. That charge is called egress, and it is the one line on a hosting bill that doesn’t track how popular you are, because it counts automated traffic exactly the same as people."
         >
-          A bill for traffic I did not have
+          A bill for traffic I didn&rsquo;t have
         </H>
         <P>
           Egress is what it costs to move data out. Store a million rows and
           read none of them and you pay almost nothing; store ten and read them
           on every request and you pay for every copy that leaves. It is billed
-          by the byte, it does not care who asked, and that last part is where
+          by the byte, it doesn&rsquo;t care who asked, and that last part is where
           this went wrong.
         </P>
         <P>
-          The traffic was not people. Search engine crawlers were walking every
+          The traffic wasn&rsquo;t people. Search engine crawlers were walking every
           game page and every social preview image, and each preview render was
           making five separate database calls. Multiply that by a catalog in the
           thousands and by every crawler that has ever found a sitemap, and a
@@ -297,7 +299,7 @@ export const posts: Post[] = [
 
         <H
           eyebrow="Three weeks"
-          dek="Caching means keeping a copy of an answer so the next person who asks gets the copy instead of a fresh database query. Prefetching is a browser quietly loading pages you have not clicked yet, in case you do. One of those was helping and one was not."
+          dek="Caching means keeping a copy of an answer so the next person who asks gets the copy instead of a fresh database query. Prefetching is a browser quietly loading pages you haven’t clicked yet, in case you do. One of those was helping and one was not."
         >
           Eight pull requests, and the names tell the story
         </H>
@@ -426,12 +428,12 @@ bytes actually on wire  : 10,161`}</Code>
 
         <H
           eyebrow="Why it survived"
-          dek="The uncomfortable part is not that I got a number wrong. It is that the reason I did not question it was the same experience that had made me good at this problem two months earlier."
+          dek="The uncomfortable part isn’t that I got a number wrong. It is that the reason I didn’t question it was the same experience that had made me good at this problem two months earlier."
         >
           The number agreed with me
         </H>
         <P>
-          A claim that this database was hemorrhaging gigabytes was not
+          A claim that this database was hemorrhaging gigabytes wasn&rsquo;t
           surprising to me in August. It was familiar. I had just spent three
           weeks proving that exact sentence true, and I had the branch names and
           the graphs and the deadline to show for it.
@@ -473,6 +475,267 @@ bytes actually on wire  : 10,161`}</Code>
           not have. If I had gone looking for one to prove the work mattered, I
           would have found nothing, and I would have been measuring the wrong
           thing for the third time in one project.
+        </P>
+      </>
+    ),
+  },
+  {
+    slug: "classes-that-compile-ship-and-do-nothing",
+    title: "Classes that compile, ship, and do nothing",
+    dek: "The focus ring on my most-used component was invisible on six of eight color schemes for months, and every check I had reported success the whole time.",
+    date: "2026-09-12",
+    tags: ["CSS", "Tailwind", "Testing"],
+    body: (
+      <>
+        <P>
+          Tailwind v4 generates utilities from theme tokens. If you write a
+          class naming a token that doesn&rsquo;t exist, that is not an error. It is
+          not a warning. The build succeeds, the class sits in your{" "}
+          <RInlineCode>className</RInlineCode> looking exactly like the ones on
+          either side of it, and it produces no CSS at all.
+        </P>
+        <P>
+          Twelve of those had shipped in{" "}
+          <Link
+            href="/system"
+            className="text-ink underline decoration-rule underline-offset-2 transition-colors hover:decoration-spot"
+          >
+            Roster
+          </Link>
+          , the component library I maintain and five of my own apps depend on.
+          Two were the focus ring, on three different controls.
+        </P>
+
+        <H
+          eyebrow="The bug"
+          dek="A button’s focus outline was set to a color that was never defined, so the browser fell back to using the text color instead: white on white."
+        >
+          A focus ring the color of the text it surrounds
+        </H>
+        <P>
+          <RInlineCode>Button</RInlineCode> asked for{" "}
+          <RInlineCode>focus-visible:ring-ring</RInlineCode> and{" "}
+          <RInlineCode>ring-offset-background</RInlineCode>; Badge and Input
+          each carried one of the two. Reasonable-looking class names. Neither <RInlineCode>--color-ring</RInlineCode> nor{" "}
+          <RInlineCode>--color-background</RInlineCode> was ever defined in the
+          theme, so both utilities emitted zero rules.
+        </P>
+        <P>
+          A ring with no color doesn&rsquo;t disappear. Tailwind&rsquo;s ring is
+          drawn from <RInlineCode>var(--tw-ring-color, currentcolor)</RInlineCode>
+          , and with nothing setting the first half, the fallback wins. The
+          focus ring became the text color.
+        </P>
+        <P>
+          On a solid button, the text is white. So the focus ring was white,
+          drawn on a white page, around a control that had just received
+          keyboard focus. The library ships eight color schemes; the solid teal
+          and amber fills carry dark text, so their rings came out near-black
+          and were merely wrong rather than absent. The other six vanished on
+          any light background, which is where every app that installs Roster
+          puts them.
+        </P>
+        <RPullquote cite="What the keyboard user saw">
+          Focus moved. Nothing indicated where.
+        </RPullquote>
+        <P>
+          This site runs on Roster, so that isn&rsquo;t a description. Both of these
+          are the real component, drawn with the focus ring showing. The ring
+          color is the only thing that differs between them:
+        </P>
+        <FocusRingDemo />
+
+        <H
+          eyebrow="Why nothing caught it"
+          dek="Each of the three checks I rely on is structurally incapable of seeing this particular kind of mistake."
+        >
+          Three green checks, all blind in the same direction
+        </H>
+        <P>
+          <strong>TypeScript can&rsquo;t read a class name.</strong> To the compiler
+          a <RInlineCode>className</RInlineCode> is a string, and{" "}
+          <RInlineCode>&quot;ring-ring&quot;</RInlineCode> is exactly as valid
+          as <RInlineCode>&quot;ring-primary-500&quot;</RInlineCode>. There is
+          nothing for it to check.
+        </P>
+        <P>
+          <strong>The unit tests asserted presence, not effect.</strong> They
+          checked that the button rendered with the class applied. It did. That
+          assertion stays true for a class that does nothing, which is the
+          entire problem. The test and the bug are compatible.
+        </P>
+        <P>
+          <strong>Storybook looked fine,</strong> because a missing focus ring
+          is not a visible defect. It is a missing one. Nothing is drawn in the
+          wrong place, nothing overlaps, no color is off. You have to know to
+          press Tab, and then you have to notice the absence of a thing you were
+          not looking for.
+        </P>
+        <P>
+          That last one generalizes past this bug. Visual review catches things
+          that are drawn wrong. It is structurally poor at things that aren&rsquo;t
+          drawn at all, and no amount of looking harder changes that.
+        </P>
+
+        <H
+          eyebrow="The fix that wasn’t the fix"
+          dek="Defining the missing colors was the small half of the job; the useful half was writing something that would catch the next one automatically."
+        >
+          Check the artifact, not the source
+        </H>
+        <P>
+          Defining <RInlineCode>--color-ring</RInlineCode> was the easy half and
+          worth almost nothing on its own, because the mistake isn&rsquo;t one I had
+          made once. It is one the tooling permits, silently, every time.
+        </P>
+        <P>
+          So the check has to compare what the components ask for against what
+          the build actually produced. The class names come out of the component
+          source; the rules come out of the compiled stylesheet. Anything
+          referenced and not emitted fails the build.
+        </P>
+        <Code>{`# roster/package.json
+"build": "tsc -b && vite build
+  && node scripts/check-prefix.mjs
+  && node scripts/check-classes-emit.mjs
+  && node scripts/check-tokens.mjs"`}</Code>
+        <P>
+          It runs after <RInlineCode>vite build</RInlineCode> rather than
+          instead of it, because the bug only exists in the artifact. Reading
+          the source tells you what was requested. Only the stylesheet knows
+          what was granted.
+        </P>
+        <P>
+          Three classes are exempt, and the exemption list is where the check
+          nearly went wrong. <RInlineCode>group</RInlineCode>,{" "}
+          <RInlineCode>peer</RInlineCode> and <RInlineCode>dark</RInlineCode>{" "}
+          are markers read by other selectors and legitimately emit nothing. I
+          nearly added <RInlineCode>sr-only</RInlineCode> to it, which would
+          have been wrong: it emits a real rule, so exempting it would have
+          blinded the check to a regression in the one utility whose whole job
+          is serving people who can&rsquo;t see the screen. An allowlist is where a
+          guard goes quietly blind, so it is the one part of a check like this
+          worth re-reading every time you add to it.
+        </P>
+
+        <H
+          eyebrow="What it found"
+          dek="Run for the first time, the check immediately turned up ten more dead classes in parts of the library I had no suspicions about."
+        >
+          The ring wasn&rsquo;t special
+        </H>
+        <P>
+          I expected the check to sit there and earn its keep slowly. Its first
+          run named ten more, across three files I had no reason to suspect.
+        </P>
+        <P>
+          Seven were the tooltip&rsquo;s entire entrance animation:{" "}
+          <RInlineCode>animate-in</RInlineCode>,{" "}
+          <RInlineCode>fade-in-0</RInlineCode>,{" "}
+          <RInlineCode>zoom-in-95</RInlineCode> and four directional slides. The
+          tooltip had never animated. It appeared instantly, which reads as a
+          deliberate choice rather than a broken one, and so had never been
+          reported by anyone including me.
+        </P>
+        <P>
+          Two were gradient stops on the countdown component, naming an{" "}
+          <RInlineCode>accent</RInlineCode> color family that didn&rsquo;t exist. One
+          was a scrollbar style on the textarea. Every one of them had shipped,
+          in a published package, to every app that installs it.
+        </P>
+        <P>
+          Twelve shipped classes, then, between the two rounds. Not one of them
+          broke anything loudly enough to be noticed.
+        </P>
+        <P>
+          There were two more, and they are the part worth keeping.{" "}
+          <RInlineCode>fade-in</RInlineCode> and{" "}
+          <RInlineCode>zoom-in</RInlineCode> were sitting in a stories file, and
+          the check never saw them, because it skips{" "}
+          <RInlineCode>*.stories.*</RInlineCode> and{" "}
+          <RInlineCode>*.test.*</RInlineCode> on purpose, because documentation
+          blurbs are full of CSS in code fences and scanning them produces
+          nothing but false alarms. A deliberate exclusion, made for a good reason, and it
+          is a hole. I found those two by hand.
+        </P>
+        <P>
+          Which is the rule applying to itself. A check is a decision about what
+          to look at, and every such decision draws a boundary somewhere. This
+          one draws it at stories files, for a good reason, and the boundary is
+          exactly where the next two were sitting. Knowing where your checks
+          stop looking is the useful thing to know about them.
+        </P>
+
+        <H
+          eyebrow="The shape"
+          dek="Since writing that check I have hit the same kind of false green three more times, in tools with nothing to do with CSS."
+        >
+          A green check is a claim about what it can see
+        </H>
+        <P>
+          This is not a Tailwind problem, which is what took me a while to
+          understand. Tailwind is where I happened to meet it.
+        </P>
+        <P>
+          <strong>A type check that passed because of a background process.</strong>{" "}
+          My site&rsquo;s type check passed every time I ran it locally. On its
+          first run in CI it produced sixty-one errors. Next generates the
+          type declarations for routes and image imports into files that are
+          also gitignored, and my development server had been quietly
+          regenerating them the entire time. The check was real. Its
+          prerequisites were being supplied by something nobody would think to
+          list as a dependency.
+        </P>
+        <P>
+          <strong>A test with an early return.</strong> I wrote a guard to stop
+          one case study rendering another one&rsquo;s screenshots, after doing
+          exactly that. It parsed the file into sections keyed by study, and for
+          a key it didn&rsquo;t recognize it returned early rather than failing. A
+          reformat that indented one nested key two spaces too few would have
+          cut a study&rsquo;s section short and handed the remainder to a name
+          the check didn&rsquo;t know, so most of that study would have gone
+          unexamined with the suite still green. It came out in review before it
+          shipped, which is the stage at which this class of fault is cheap to
+          find. Once a check like that is green in CI, nothing downstream ever
+          questions it again.
+        </P>
+        <P>
+          <strong>A comment that argued its way out of a necessary clause.</strong>{" "}
+          A comparator in another app was missing a rule. The comment where the
+          rule should have been explained that it{" "}
+          <em>could never change an answer the remaining rules did not already
+          give</em>. That was wrong, and it made the comparator inconsistent:
+          for two particular rows it claimed each should sort after the other,
+          so the winner depended on the order the API happened to send them in.
+          Every test written to prove that comparator was order-independent
+          missed it, because all of them set one field that made the broken
+          branch unreachable.
+        </P>
+
+        <H
+          eyebrow="What I actually changed my mind about"
+          dek="I used to read a passing check as evidence the code was right; it is only evidence about the specific thing the check looks at."
+        >
+          The question to ask a green check
+        </H>
+        <P>
+          I had been treating my checks as a set that collectively covered the
+          work. They do not collectively cover anything. Each one answers one
+          narrow question, and the gaps between them aren&rsquo;t visible from
+          inside any of them.
+        </P>
+        <P>
+          The question worth asking is not whether a check passes. It is what
+          would have to be true for this check to pass while the thing is
+          broken. For the type checker, a wrong string. For the unit test, a
+          class that exists and does nothing. For Storybook, an absence. Each
+          answer is a specific, writable check.
+        </P>
+        <P>
+          Defining the missing color was the smaller half of that day&rsquo;s
+          work and the less useful one. The check is what found the other ten,
+          within a minute of existing, in three files I would never have
+          thought to open.
         </P>
       </>
     ),
