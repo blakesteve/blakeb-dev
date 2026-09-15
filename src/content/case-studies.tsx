@@ -241,13 +241,15 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,563", label: "Verdicts cast", source: "12 Sept 2026 snapshot", live: "verdicts" },
-      { value: "1,751", label: "Games tracked", source: "12 Sept 2026 snapshot", live: "games" },
-      /* Counted off `origin/main`, the repo's default branch, so it matches
-         how the Roster card counts and is not skewed by whatever `dev` is
-         carrying at the time. No live path for this one: the repo is private,
-         so there is nothing for the GitHub reader to reach. */
-      { value: "962", label: "Commits", source: "12 Sept 2026 snapshot · private repo" },
+      { value: "2,590", label: "Verdicts cast", source: "14 Sept 2026 snapshot", live: "verdicts" },
+      { value: "1,757", label: "Games tracked", source: "14 Sept 2026 snapshot", live: "games" },
+      /* Counted off `origin/main`. That is NOT this repo's default branch -
+         game-verdict releases from `dev` - but `main` is its release line, so
+         this counts shipped work rather than whatever `dev` is carrying, and it
+         matches how the Roster card counts. No live path for this one: the repo
+         is private, so there is nothing for the GitHub reader to reach, which
+         makes it the only number on this card that can go stale silently. */
+      { value: "974", label: "Commits", source: "14 Sept 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -635,7 +637,7 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   roster: {
-    lede: "The component library this site is built out of, with exactly one real customer: me. Four apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.",
+    lede: "The component library this site is built out of, with exactly one real customer: me. Six apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.",
     stats: [
       {
         value: String(getRosterComponentCount()),
@@ -646,8 +648,8 @@ export const caseStudies: Record<string, CaseStudy> = {
         /* Matches `git rev-list --count origin/main` after a fetch, which is
            the same count the GitHub API reports and the same thing the live
            path above renders. Not a local working copy, which drifts ahead.
-           Last checked 12 Sept 2026. */
-        value: "343",
+           Last checked 14 Sept 2026. */
+        value: "344",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -663,10 +665,10 @@ export const caseStudies: Record<string, CaseStudy> = {
               label: "Tests",
               source: `live · roster @ ${meta.version}`,
             }
-          : { value: "1,000", label: "Tests", source: "roster @ 4.6.1" })(
+          : { value: "1,332", label: "Tests", source: "roster @ 4.11.0" })(
         getRosterMeta(),
       ),
-      { value: "5", label: "Apps consuming it", source: "including this one" },
+      { value: "6", label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
       { k: "Runtime", v: "React 19" },
@@ -1171,8 +1173,8 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={collapsedLight}
             blueline={collapsedDark}
-            alt="A MegaSquad league page: nine members ranked by record with the viewer first at 1-0, beside a This Week panel showing two settled games and a won pick."
-            caption="Week one, live. Nine members, nothing to argue about"
+            alt="A MegaSquad league page: nine members ranked by record with the viewer first at 7-3, beside a This Week panel showing five settled games and four won picks."
+            caption="Ten games in. Nine members, and a leader"
             priority
           />
         </Section>
@@ -1197,13 +1199,13 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={pickingLight}
             blueline={pickingDark}
-            alt="MegaSquad in picking mode: a sticky bar reading 5 of 14 with Cancel and Save Picks, a segmented progress strip above a row of team crests, and schedule cards rendered as perforated tickets with dashed tear lines and punched notches."
+            alt="MegaSquad in picking mode: a sticky bar reading 5 of 16 with Cancel and Save Picks, a segmented progress strip showing five team crests, an active slot and ten question marks, and schedule cards rendered as perforated tickets with dashed tear lines, punched notches and lock-in countdowns."
             caption="Picking: the schedule, torn into tickets"
           />
           <p>
             The bar above tracks the week without you counting: a segment per game, a crest for every
-            team you&rsquo;ve taken, a question mark for the ones you haven&rsquo;t, and a padlock for the games
-            that already locked. It scrolls horizontally on a phone rather than wrapping, so the
+            team you&rsquo;ve taken, a question mark for the ones you haven&rsquo;t, and a padlock once a game
+            locks. It scrolls horizontally on a phone rather than wrapping, so the
             week stays one line you can read at a glance.
           </p>
           <Shot
@@ -1221,19 +1223,19 @@ export const caseStudies: Record<string, CaseStudy> = {
           dek="A win-loss record tells you nothing about where it went wrong, so every row opens into the weeks, with each team you picked badged green for a win and red for a loss."
         >
           <p>
-            A record of 182&ndash;102 tells you almost nothing. The interesting question is{" "}
+            A record of 181&ndash;103 tells you almost nothing. The interesting question is{" "}
             <em>where</em> it went wrong. So standings expand into a per-week breakdown, and each
             week shows the actual team logos you picked, badged correct or incorrect.
           </p>
           <Pull cite="One season, read at a glance">
-            64.1% across 284 games. The playoffs alone go 11 of 13: Wild Card 5 of 6,
+            63.7% across 284 games. The playoffs alone go 11 of 13: Wild Card 5 of 6,
             Divisional 3 of 4, Conference 2 of 2, the Super Bowl called. Divisional is the round
             that slipped, and now it has a name.
           </Pull>
           <Shot
             press={expandedLight}
             blueline={expandedDark}
-            alt="An expanded MegaSquad standings row at 182-102 and 64.1% correct, opening into per-week results (Super Bowl 1 of 1, Conference 2 of 2, Divisional 3 of 4, Wild Card 5 of 6) with Week 18 open below them, showing sixteen team crests each outlined green for a correct pick or red for a wrong one."
+            alt="An expanded MegaSquad standings row at 181-103 and 63.7% correct, opening into per-week results (Super Bowl 1 of 1, Conference 2 of 2, Divisional 3 of 4, Wild Card 5 of 6) with Week 18 open below them, showing sixteen team crests each outlined green for a correct pick or red for a wrong one."
             caption="A season, opened week by week"
           />
           <p>

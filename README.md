@@ -75,6 +75,15 @@ column shows the untouched library rather than this site's type.
 | Employment durations, years shipping | computed from dates in `lib/career.ts`, never written down |
 | Token ramps | the shipped `tokens.css` |
 | Game Verdict games and verdicts | `GET https://api.gameverdict.app/api/stats`, hourly |
+| Roster commits | the GitHub API, via `commitsFrom` on the stat |
+
+**Game Verdict's commit count is the one figure here that can not be live**,
+because that repo is private and there is nothing for the GitHub reader to
+reach. It is therefore the only number on these cards that goes stale silently,
+and it had drifted twelve commits before anyone looked. It is counted off
+`origin/main` rather than the repo's actual default branch, `dev`, so it counts
+shipped work rather than whatever is in flight. Re-check it whenever you touch
+that card.
 
 `lib/roster.ts` reads `node_modules` directly rather than resolving the module,
 because Roster's exports map does not expose `package.json` and Turbopack can't
@@ -84,6 +93,23 @@ place a CSS file in an ESM chunk.
 falls back to the written figure, relabels it as a dated snapshot instead of as
 live, and warns in the build log. A portfolio deploy should not fail because
 another app hiccuped, but it should not quietly stop updating either.
+
+## Where the case-study screenshots come from
+
+`src/images/<app>/` holds 75 frames across three apps, and until 14 Sept 2026
+exactly one app had a repeatable way to refresh them.
+
+MegaSquad's are captured by `scripts/capture-case-study.mjs` **in the mega-squad
+repo**, not here. It drives a real browser over that app's dev server and writes
+straight into `src/images/megasquad`. It does not seed demo data: it captures
+real dev-API records and aliases the people in them, which is why the case study
+shows a league nobody has heard of. Two guards refuse to write a file rather
+than warn, and both exist because an earlier version shipped a frame that broke
+them. That repo's README has the invocation.
+
+game-verdict's 26 frames and retrospect's 15 have no such script yet. They will
+go stale the same way MegaSquad's did, which is to say silently, two days after
+somebody changes a color. Generalizing that script is on the portfolio roadmap.
 
 ## Writing
 
