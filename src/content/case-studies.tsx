@@ -1136,7 +1136,7 @@ export const caseStudies: Record<string, CaseStudy> = {
     lede: "Multi-sport pick’ems for your friend group. Thirteen leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
     stats: [
       { value: "13", label: "Leagues supported", source: "five sports, 21 competitions" },
-      { value: "284", label: "Games in one season", source: "scored, reconciled, settled" },
+      { value: "285", label: "Games in one season", source: "scored, reconciled, settled" },
       { value: "32", label: "Ways it answers back", source: "13 hits, 12 misses, 7 scoldings" },
       { value: "30 s", label: "Poll interval", source: "idle after 5 min" },
     ],
@@ -1223,19 +1223,19 @@ export const caseStudies: Record<string, CaseStudy> = {
           dek="A win-loss record tells you nothing about where it went wrong, so every row opens into the weeks, with each team you picked badged green for a win and red for a loss."
         >
           <p>
-            A record of 181&ndash;103 tells you almost nothing. The interesting question is{" "}
+            A record of 182&ndash;103 tells you almost nothing. The interesting question is{" "}
             <em>where</em> it went wrong. So standings expand into a per-week breakdown, and each
             week shows the actual team logos you picked, badged correct or incorrect.
           </p>
           <Pull cite="One season, read at a glance">
-            63.7% across 284 games. The playoffs alone go 11 of 13: Wild Card 5 of 6,
+            63.9% across 285 games. The playoffs alone go 11 of 13: Wild Card 5 of 6,
             Divisional 3 of 4, Conference 2 of 2, the Super Bowl called. Divisional is the round
             that slipped, and now it has a name.
           </Pull>
           <Shot
             press={expandedLight}
             blueline={expandedDark}
-            alt="An expanded MegaSquad standings row at 181-103 and 63.7% correct, opening into per-week results (Super Bowl 1 of 1, Conference 2 of 2, Divisional 3 of 4, Wild Card 5 of 6) with Week 18 open below them, showing sixteen team crests each outlined green for a correct pick or red for a wrong one."
+            alt="An expanded MegaSquad standings row at 182-103 and 63.9% correct, opening into per-week results (Super Bowl 1 of 1, Conference 2 of 2, Divisional 3 of 4, Wild Card 5 of 6) with Week 18 open below them, showing sixteen team crests each outlined green for a correct pick or red for a wrong one."
             caption="A season, opened week by week"
           />
           <p>

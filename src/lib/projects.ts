@@ -151,7 +151,10 @@ export const projects: Project[] = [
     world: { press: "#c62828", blueline: "#e23b3b" },
     props: [
       { label: "Stack", value: "Vite · React 19 · Zustand" },
-      { label: "Scale", value: "10 leagues · 18 Roster components", accent: true },
+      /* Thirteen, not ten. This card repeated a figure the case study owns and
+         drifted a month behind it, which is the exact failure the comment two
+         entries above describes. Verified against the live API, 15 Sept 2026. */
+      { label: "Scale", value: "13 leagues · 18 Roster components", accent: true },
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },
