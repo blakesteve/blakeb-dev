@@ -65,7 +65,10 @@ export const projects: Project[] = [
          and 310 in its case study while the repository said 313. */
       {
         label: "Scale",
-        value: "1,718 games tracked",
+        /* Re-check this whenever the case study twin is re-checked. It is the
+           fallback for the same live figure, and unlike that one it carries no
+           date, so a stale value here asserts itself as present tense. */
+        value: "1,761 games tracked",
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
