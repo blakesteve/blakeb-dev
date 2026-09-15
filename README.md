@@ -103,9 +103,17 @@ MegaSquad's are captured by `scripts/capture-case-study.mjs` **in the mega-squad
 repo**, not here. It drives a real browser over that app's dev server and writes
 straight into `src/images/megasquad`. It does not seed demo data: it captures
 real dev-API records and aliases the people in them, which is why the case study
-shows a league nobody has heard of. Two guards refuse to write a file rather
-than warn, and both exist because an earlier version shipped a frame that broke
-them. That repo's README has the invocation.
+shows a league nobody has heard of. Six checks refuse to write a file rather
+than warn, and a blocked frame exits non-zero rather than leaving the previous
+run's file here, where this repo imports it. That repo's README has the
+invocation and the list.
+
+**Frames in here are evidence, so check them by opening them.** A run reported
+"No failures" on twenty-four frames that carried a navbar avatar hardcoded to
+the string `"AR"` above a row reading "Blake Ball", a display name sitting in a
+handle slot, and a real employer's name in a squad description. All three had
+already shipped. None of them is a name the guards look for, which is the whole
+reason they passed.
 
 game-verdict's 26 frames and retrospect's 15 have no such script yet. They will
 go stale the same way MegaSquad's did, which is to say silently, two days after
