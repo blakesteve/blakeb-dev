@@ -68,7 +68,7 @@ export const projects: Project[] = [
         /* Re-check this whenever the case study twin is re-checked. It is the
            fallback for the same live figure, and unlike that one it carries no
            date, so a stale value here asserts itself as present tense. */
-        value: "1,761 games tracked",
+        value: "1,773 games tracked",
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
@@ -154,7 +154,7 @@ export const projects: Project[] = [
       /* Thirteen, not ten. This card repeated a figure the case study owns and
          drifted a month behind it, which is the exact failure the comment two
          entries above describes. Verified against the live API, 15 Sept 2026. */
-      { label: "Scale", value: "13 leagues · 18 Roster components", accent: true },
+      { label: "Scale", value: "13 leagues · 21 Roster components", accent: true },
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },

@@ -241,15 +241,15 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,590", label: "Verdicts cast", source: "14 Sept 2026 snapshot", live: "verdicts" },
-      { value: "1,757", label: "Games tracked", source: "14 Sept 2026 snapshot", live: "games" },
+      { value: "2,595", label: "Verdicts cast", source: "16 Sept 2026 snapshot", live: "verdicts" },
+      { value: "1,773", label: "Games tracked", source: "16 Sept 2026 snapshot", live: "games" },
       /* Counted off `origin/main`. That is NOT this repo's default branch -
          game-verdict releases from `dev` - but `main` is its release line, so
          this counts shipped work rather than whatever `dev` is carrying, and it
          matches how the Roster card counts. No live path for this one: the repo
          is private, so there is nothing for the GitHub reader to reach, which
          makes it the only number on this card that can go stale silently. */
-      { value: "974", label: "Commits", source: "14 Sept 2026 snapshot · private repo" },
+      { value: "974", label: "Commits", source: "16 Sept 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -648,8 +648,8 @@ export const caseStudies: Record<string, CaseStudy> = {
         /* Matches `git rev-list --count origin/main` after a fetch, which is
            the same count the GitHub API reports and the same thing the live
            path above renders. Not a local working copy, which drifts ahead.
-           Last checked 14 Sept 2026. */
-        value: "344",
+           Last checked 16 Sept 2026. */
+        value: "348",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -665,7 +665,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               label: "Tests",
               source: `live · roster @ ${meta.version}`,
             }
-          : { value: "1,332", label: "Tests", source: "roster @ 4.11.0" })(
+          : { value: "1,420", label: "Tests", source: "roster @ 4.12.1" })(
         getRosterMeta(),
       ),
       { value: "6", label: "Apps consuming it", source: "including this one" },
