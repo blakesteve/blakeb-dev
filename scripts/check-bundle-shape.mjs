@@ -39,9 +39,9 @@
  * This reads build output, so it runs as `postbuild`, after `next build`.
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, statSync, lstatSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join, relative } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { createContext, runInContext } from "node:vm";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -92,8 +92,18 @@ function fail(message) {
  * and it ships in their build image rather than in `node_modules`, so what it
  * sets `distDir` to can not be read from here.
  *
- * So each candidate is confirmed by the `BUILD_ID` file Next writes into the
- * dist directory, rather than assumed from the directory name.
+ * Next exposes no environment variable naming the dist directory. There is no
+ * `NEXT_DIST_DIR`, and `__NEXT_DIST_DIR` is a build-time DefinePlugin token
+ * substituted into dev client bundles, never a variable in this process's
+ * environment. An earlier version of this check read both and was inert for it.
+ * So the override below is ours, and it is the lever to reach for once a deploy
+ * log names the real path.
+ *
+ * Each candidate is confirmed by the `BUILD_ID` file Next writes into the dist
+ * directory, rather than assumed from the directory name. That marker means
+ * "a build finished here once", not "this build", so the success line reports
+ * the build's age: a stale directory graded by accident should be visible
+ * rather than silent.
  */
 function resolveDistDir() {
   const candidates = [process.env.BUNDLE_GUARD_DIST_DIR, ".next"].filter(Boolean);
@@ -119,19 +129,24 @@ if (!distDir) {
     .filter((entry) => entry !== "node_modules" && entry !== ".git")
     .sort()
     .join(", ");
-  const dotNext = existsSync(join(root, ".next"))
-    ? readdirSync(join(root, ".next")).sort().join(", ")
-    : "(absent)";
+  const dotNextPath = join(root, ".next");
+  /* lstat, and only list it if it really is a directory. A `.next` that is a
+     file makes readdirSync throw ENOTDIR, which would replace the whole
+     diagnostic with a stack trace in the one build you get to learn from. */
+  let dotNext = "(absent)";
+  if (existsSync(dotNextPath)) {
+    dotNext = lstatSync(dotNextPath).isDirectory()
+      ? readdirSync(dotNextPath).sort().join(", ")
+      : `(not a directory)`;
+  }
   fail(
     `no Next build found under ${root}.\n` +
-      `  Confirmed by looking for a BUILD_ID in NEXT_DIST_DIR, ` +
-      `__NEXT_DIST_DIR and .next\n` +
-      `  NEXT_DIST_DIR=${process.env.NEXT_DIST_DIR ?? "(unset)"} ` +
-      `__NEXT_DIST_DIR=${process.env.__NEXT_DIST_DIR ?? "(unset)"}\n` +
+      `  Confirmed by looking for a BUILD_ID in BUNDLE_GUARD_DIST_DIR and .next\n` +
+      `  BUNDLE_GUARD_DIST_DIR=${process.env.BUNDLE_GUARD_DIST_DIR ?? "(unset)"}\n` +
       `  Repo root holds: ${inventory}\n` +
       `  .next holds: ${dotNext}\n` +
-      `  On a deploy this means the adapter moved the output. The path it ` +
-      `moved it to is what this needs.`,
+      `  On a deploy this means the adapter moved the output. Set ` +
+      `BUNDLE_GUARD_DIST_DIR to the path it moved it to; absolute is fine.`,
   );
 }
 
@@ -321,9 +336,18 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
+/* Age of the graded build. BUILD_ID says a build finished here, not that it is
+   this one, so a stale directory graded by accident shows up as a large number
+   here rather than passing quietly. */
+const ageSeconds = Math.round(
+  (Date.now() - statSync(join(distDir, "BUILD_ID")).mtimeMs) / 1000,
+);
+const age = ageSeconds < 120 ? `${ageSeconds}s old` : `${Math.round(ageSeconds / 60)}m old`;
+
 console.log(
   `✓ bundle shape: ${PKG} barrel unpinned across ${routeCount} routes ` +
     `(${entryCount} client modules, ${componentPins} Roster components pinned ` +
     `individually), client JS ${totalBytes.toLocaleString("en-US")} of ` +
-    `${CLIENT_JS_CEILING.toLocaleString("en-US")} bytes`,
+    `${CLIENT_JS_CEILING.toLocaleString("en-US")} bytes, ` +
+    `build at ${relative(root, distDir) || distDir} ${age}`,
 );
