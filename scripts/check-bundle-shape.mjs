@@ -48,13 +48,17 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PKG = "@blakesteve/roster";
 
 /**
- * Ceiling on emitted client JS, in bytes: every .js under .next/static/chunks.
+ * Ceiling on emitted client JS, in bytes: every .js anywhere under the build's
+ * `static` directory, walked recursively.
  *
- * Measured 18 September 2026 on Roster 5.0.0: 896,830 bytes across 16 files.
- * That is not quite every byte the client receives. The three small manifests
- * under .next/static/<BUILD_ID>/ add 447 bytes and are not counted, because
- * nothing can migrate meaningful weight into them.
- * The ceiling allows 43,170 bytes of slack, 4.8%, which is room for the
+ * Recursive, and not the `static/chunks` subdirectory, because that name is not
+ * guaranteed. Vercel's adapter relocates the client assets: a real deploy had a
+ * `static` with no `chunks` in it, which failed this check twice. Summing every
+ * emitted .js under `static` holds whatever the layout is, and is also what the
+ * heading actually claims.
+ *
+ * Measured 18 September 2026 on Roster 5.0.0: 897,277 bytes across 19 files.
+ * The ceiling allows 42,723 bytes of slack, 4.8%, which is room for the
  * ordinary drift of adding posts and case studies between Roster bumps and far
  * below the 18.49% class of regression this exists to catch. Raise it in a
  * commit that says what grew and why, rather than to make a red build green.
@@ -76,6 +80,24 @@ function walk(dir) {
 function fail(message) {
   console.error(`[check-bundle-shape] ${message}`);
   process.exit(1);
+}
+
+/**
+ * One level deeper than the failing directory's own listing.
+ *
+ * The first deploy failure said `.next not found` and taught nothing. The
+ * second listed `.next` and showed a `static` with no `chunks`, which cost a
+ * third build to see inside. A diagnostic that stops one level short of the
+ * answer is a diagnostic that buys another red deploy.
+ */
+function subdirInventory(dir) {
+  const lines = [];
+  for (const entry of readdirSync(dir).sort()) {
+    const full = join(dir, entry);
+    if (!lstatSync(full).isDirectory()) continue;
+    lines.push(`    ${entry}/: ${readdirSync(full).sort().slice(0, 25).join(", ")}`);
+  }
+  return lines.length ? `\n  One level in:\n${lines.join("\n")}` : "";
 }
 
 /* Every unreadable input below is a hard exit rather than a skip. A guard that
@@ -151,15 +173,16 @@ if (!distDir) {
 }
 
 const serverDir = join(distDir, "server");
-const staticDir = join(distDir, "static/chunks");
+const staticDir = join(distDir, "static");
 for (const [label, dir] of [
   ["server", serverDir],
-  ["static/chunks", staticDir],
+  ["static", staticDir],
 ]) {
   if (!existsSync(dir)) {
     fail(
       `found a build at ${relative(root, distDir) || distDir} but no ${label} ` +
-        `directory in it.\n  It holds: ${readdirSync(distDir).sort().join(", ")}`,
+        `directory in it.\n  It holds: ${readdirSync(distDir).sort().join(", ")}` +
+        subdirInventory(distDir),
     );
   }
 }
