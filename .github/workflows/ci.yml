@@ -80,7 +80,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Runs the prebuild ramp check first, then the real Next build. Two things
+      # Runs the prebuild ramp check, the real Next build, then the postbuild
+      # bundle-shape check against its output. Two things
       # this deliberately does not receive: NEXT_PUBLIC_STORYBOOK_URL, which has
       # a real deployment as its fallback and a test pinning that fallback, and
       # any network access to Game Verdict, whose stats are fetched at build

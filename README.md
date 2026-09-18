@@ -204,6 +204,18 @@ step according to what a color was *for* rather than how light it is: once with
 at 200 where it sat darker than 700 between two near-white neighbors. Both were
 caught by a person looking at `/system`, which is not a process.
 
+`npm run check:bundle` fails if Roster's barrel got pinned as a client
+reference, or if client JS crosses a byte ceiling. It runs on `postbuild`,
+because unlike the ramp check it reads build output rather than source.
+
+It exists because Roster 4.13.0 regressed a sibling app by 18.49% and every
+gate passed identically on the good build and the bad one: vitest resolves
+Roster through Node and gets the unshaken barrel, eslint never reads build
+output, and `tsc` cares about types. The barrel is derived from the installed
+package's `exports` on every run rather than named, and the manifests are
+parsed rather than grepped. Both shortcuts have already produced a check that
+reported zero problems on a build full of them.
+
 ## The mark
 
 The logo is a **registration mark** — the crosshair a printer uses to check
@@ -391,9 +403,10 @@ would turn both real checks into `[] === []` and they would stay green forever.
 Nothing covers the pages, the layout, or the X-ray overlay. That is still a
 gap, just a smaller and more deliberate one than before.
 
-`check:ramps` is the other automated check, and it only guards color ordering.
-It runs on `prebuild`; the tests do not, so a red suite will not block a
-deploy.
+`check:ramps` and `check:bundle` are the other automated checks, and each
+guards one narrow thing: color ordering, and the shape and size of the emitted
+bundle. They run on `prebuild` and `postbuild`; the tests do not, so a red
+suite will not block a deploy.
 
 ## Deploying
 

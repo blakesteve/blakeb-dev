@@ -11,7 +11,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:ramps": "node scripts/check-ramps.mjs",
-    "prebuild": "node scripts/check-ramps.mjs"
+    "check:bundle": "node scripts/check-bundle-shape.mjs",
+    "prebuild": "node scripts/check-ramps.mjs",
+    "postbuild": "node scripts/check-bundle-shape.mjs"
   },
   "dependencies": {
     "@blakesteve/roster": "^5.0.0",
