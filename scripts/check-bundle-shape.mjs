@@ -185,17 +185,47 @@ function subdirInventory(dir) {
  * rather than silent.
  */
 function resolveDistDir() {
-  const candidates = [process.env.BUNDLE_GUARD_DIST_DIR, ".next"].filter(Boolean);
+  /* resolve, not join. `join(root, "/abs/path")` concatenates rather than
+     honoring the absolute path, so an absolute override would miss and fall
+     through to `.next`. A deploy log hands you an absolute path, so that is
+     the likely input. */
+  const override = process.env.BUNDLE_GUARD_DIST_DIR;
 
-  for (const candidate of candidates) {
-    /* resolve, not join. `join(root, "/abs/path")` concatenates rather than
-       honoring the absolute path, so an absolute override would silently miss
-       and fall through to a stale `.next`, which is a pass on the wrong build.
-       A deploy log hands you an absolute path, so that is the likely input. */
-    const dir = resolve(root, candidate);
+  /* A set override is AUTHORITATIVE, not a suggestion. If it names something
+     that is not a build, that is an exit here rather than a fallthrough to
+     `.next`.
+   *
+   * Falling through was a real defect, found in game-verdict and reproduced
+   * here: `BUNDLE_GUARD_DIST_DIR=/tmp/not-a-build` printed a full green success
+   * line and exited 0, having graded `.next` instead. The override exists to be
+   * reached for when a deploy has gone wrong, so the person who trips this is
+   * already debugging a red build, and the check answers by grading a different
+   * directory and calling it healthy. Nothing in the output says which.
+   *
+   * There is no case where someone sets this variable and wants `.next`. */
+  if (override) {
+    const dir = resolve(root, override);
     if (existsSync(join(dir, "BUILD_ID"))) return dir;
+    fail(
+      `BUNDLE_GUARD_DIST_DIR is set to ${override} but that is not a build.\n` +
+        `  Resolved to ${dir}, which has no BUILD_ID.\n` +
+        `  Refusing to fall back to .next: an override that silently grades a ` +
+        `different\n  directory is worse than no override, and you are ` +
+        `presumably using it because\n  something is already wrong.\n` +
+        `  ${
+          existsSync(dir)
+            ? `It holds: ${
+                lstatSync(dir).isDirectory()
+                  ? readdirSync(dir).sort().slice(0, 25).join(", ") || "(empty)"
+                  : "(not a directory)"
+              }`
+            : "It does not exist."
+        }`,
+    );
   }
-  return null;
+
+  const dir = resolve(root, ".next");
+  return existsSync(join(dir, "BUILD_ID")) ? dir : null;
 }
 
 const distDir = resolveDistDir();
@@ -220,8 +250,9 @@ if (!distDir) {
   }
   fail(
     `no Next build found under ${root}.\n` +
-      `  Confirmed by looking for a BUILD_ID in BUNDLE_GUARD_DIST_DIR and .next\n` +
-      `  BUNDLE_GUARD_DIST_DIR=${process.env.BUNDLE_GUARD_DIST_DIR ?? "(unset)"}\n` +
+      `  Looked in .next, confirmed by a BUILD_ID, and found none. ` +
+      `BUNDLE_GUARD_DIST_DIR is unset;\n  a set one is authoritative and would ` +
+      `have failed above rather than reaching here.\n` +
       `  Repo root holds: ${inventory}\n` +
       `  .next holds: ${dotNext}\n` +
       `  On a deploy this means the adapter moved the output. Set ` +
