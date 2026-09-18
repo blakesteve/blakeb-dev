@@ -82,10 +82,71 @@ function fail(message) {
    shrugs when it can not find its inputs is worse than no guard: it reports a
    pass nobody has any reason to doubt. */
 
-const serverDir = join(root, ".next/server");
-const staticDir = join(root, ".next/static/chunks");
-if (!existsSync(serverDir) || !existsSync(staticDir)) {
-  fail(".next not found. This reads build output — run the build first.");
+/**
+ * Find the build output, by marker rather than by name.
+ *
+ * `.next` is the default and is not a promise. An adapter can move it: Next
+ * calls `modifyConfig` on any command that loads the config, the adapter
+ * returns a whole `NextConfigComplete`, and `distDir` is one of the fields it
+ * may change. Vercel supplies such an adapter through `config.adapterPath`,
+ * and it ships in their build image rather than in `node_modules`, so what it
+ * sets `distDir` to can not be read from here.
+ *
+ * So each candidate is confirmed by the `BUILD_ID` file Next writes into the
+ * dist directory, rather than assumed from the directory name.
+ */
+function resolveDistDir() {
+  const candidates = [process.env.BUNDLE_GUARD_DIST_DIR, ".next"].filter(Boolean);
+
+  for (const candidate of candidates) {
+    /* resolve, not join. `join(root, "/abs/path")` concatenates rather than
+       honoring the absolute path, so an absolute override would silently miss
+       and fall through to a stale `.next`, which is a pass on the wrong build.
+       A deploy log hands you an absolute path, so that is the likely input. */
+    const dir = resolve(root, candidate);
+    if (existsSync(join(dir, "BUILD_ID"))) return dir;
+  }
+  return null;
+}
+
+const distDir = resolveDistDir();
+
+/* Name what was looked for and what is actually present. The first version of
+   this check failed its first real deploy with "not found" and no inventory,
+   which cost a whole build to learn nothing. */
+if (!distDir) {
+  const inventory = readdirSync(root)
+    .filter((entry) => entry !== "node_modules" && entry !== ".git")
+    .sort()
+    .join(", ");
+  const dotNext = existsSync(join(root, ".next"))
+    ? readdirSync(join(root, ".next")).sort().join(", ")
+    : "(absent)";
+  fail(
+    `no Next build found under ${root}.\n` +
+      `  Confirmed by looking for a BUILD_ID in NEXT_DIST_DIR, ` +
+      `__NEXT_DIST_DIR and .next\n` +
+      `  NEXT_DIST_DIR=${process.env.NEXT_DIST_DIR ?? "(unset)"} ` +
+      `__NEXT_DIST_DIR=${process.env.__NEXT_DIST_DIR ?? "(unset)"}\n` +
+      `  Repo root holds: ${inventory}\n` +
+      `  .next holds: ${dotNext}\n` +
+      `  On a deploy this means the adapter moved the output. The path it ` +
+      `moved it to is what this needs.`,
+  );
+}
+
+const serverDir = join(distDir, "server");
+const staticDir = join(distDir, "static/chunks");
+for (const [label, dir] of [
+  ["server", serverDir],
+  ["static/chunks", staticDir],
+]) {
+  if (!existsSync(dir)) {
+    fail(
+      `found a build at ${relative(root, distDir) || distDir} but no ${label} ` +
+        `directory in it.\n  It holds: ${readdirSync(distDir).sort().join(", ")}`,
+    );
+  }
 }
 
 /* ---- 1. Derive the barrel from the installed package ---------------------
@@ -166,7 +227,10 @@ const manifestFiles = walk(serverDir).filter((file) =>
   file.includes("client-reference-manifest"),
 );
 if (manifestFiles.length === 0) {
-  fail("no client reference manifests found under .next/server.");
+  fail(
+    `no client reference manifests found under ${relative(root, serverDir) || serverDir}.\n` +
+      `  It holds: ${readdirSync(serverDir).sort().join(", ")}`,
+  );
 }
 
 let routeCount = 0;
