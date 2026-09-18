@@ -204,9 +204,18 @@ step according to what a color was *for* rather than how light it is: once with
 at 200 where it sat darker than 700 between two near-white neighbors. Both were
 caught by a person looking at `/system`, which is not a process.
 
-`npm run check:bundle` fails if Roster's barrel got pinned as a client
-reference, or if client JS crosses a byte ceiling. It runs on `postbuild`,
-because unlike the ramp check it reads build output rather than source.
+`npm run check:bundle` fails if any of Roster's barrels got pinned as a client
+reference, if a Roster key turns up in a shape it does not recognize, or if
+client JS or CSS crosses a byte ceiling. It runs on `postbuild`, because unlike
+the ramp check it reads build output rather than source.
+
+Every one of those is an upper bound, so each also has a floor: on bytes, on
+routes, on client modules and on Roster component pins. An upper bound is
+satisfied by measuring nothing, and this check has reported health on an empty
+set more than once. Zero is not a low enough floor either. Relocating
+`static/chunks`, which is what Vercel's adapter has already done once, leaves
+447 bytes of Next build manifests behind, and that cleared a zero floor and
+passed green on a build with no application JavaScript in it.
 
 It exists because Roster 4.13.0 regressed a sibling app by 18.49% and every
 gate passed identically on the good build and the bad one: vitest resolves
