@@ -1,11 +1,16 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { REyebrow, RInlineCode, RPullquote } from "@/lib/roster-ui";
+import { REyebrow, RInlineCode, RLink, RPullquote } from "@/lib/roster-ui";
 import { Dek } from "@/components/dek";
 import { Shot } from "@/components/shot";
 import { FocusRingDemo } from "@/components/focus-ring-demo";
+import { Clip } from "@/components/clip";
 import gvEgressJune from "@/images/game-verdict/gameverdict-egress-june-2026.png";
 import gvEgressAugust from "@/images/game-verdict/gameverdict-egress-august-2026.png";
+import dialMlbLight from "@/images/megasquad/megasquad-dial-mlb-light.png";
+import dialMlbDark from "@/images/megasquad/megasquad-dial-mlb-dark.png";
+import dialNflLight from "@/images/megasquad/megasquad-dial-nfl-light.png";
+import dialNflDark from "@/images/megasquad/megasquad-dial-nfl-dark.png";
 
 /**
  * Posts, as content modules rather than MDX.
@@ -736,6 +741,281 @@ bytes actually on wire  : 10,161`}</Code>
           work and the less useful one. The check is what found the other ten,
           within a minute of existing, in three files I would never have
           thought to open.
+        </P>
+      </>
+    ),
+  },
+  {
+    slug: "scroll-the-page-turn-the-year",
+    title: "Scroll the page, turn the year",
+    dek: "MegaSquad draws its seasons as a spiral you turn by scrolling. It arrives already turned, moves without rebuilding itself, and still works without it.",
+    date: "2026-09-29",
+    tags: ["SVG", "React", "Accessibility"],
+    body: (
+      <>
+        <P>
+          MegaSquad is the pick&rsquo;em site my brother and I run for our
+          friends. Its home page lists every season we have run in a table,
+          and it still does. Above the table now sits a dial: those same
+          seasons drawn as a spiral, and it turns as you scroll.
+        </P>
+        <P>
+          It is better turned than described, so here it is doing that. Or go
+          to{" "}
+          <RLink
+            href="https://megasquad.org"
+            external
+            underline="always"
+            className="text-[length:inherit] leading-[inherit]"
+          >
+            megasquad.org
+            <span className="sr-only"> (opens in a new tab)</span>
+          </RLink>
+          , scroll past the ticket at the top, and turn it yourself.
+        </P>
+        <Clip
+          src="/video/megasquad-dial.mp4"
+          poster="/video/megasquad-dial-poster.jpg"
+          alt="The season dial on a dark background, turning backward through the past year and then forward again. Orange arcs mark NFL seasons, a blue arc March Madness, and a short green arc the MLB Playoffs. Dashed stretches mark off-seasons, a sleeping squid sits in the longest, and the date in the center counts back from September 29, 2026 to September 4, 2025."
+          caption="The dial on megasquad.org, scrolled from today back to the first season it shows, and forward again."
+        />
+
+        <H
+          eyebrow="How to read it"
+          dek="Time runs clockwise around a spiral, one lap a year, starting at the top. The oldest days are on the outside, and the dial turns so the day it is showing sits under the pointer."
+        >
+          One lap is one year
+        </H>
+        <P>
+          The pointer is at twelve o&rsquo;clock. Time runs clockwise, one full
+          lap a year, and each lap sits a little inside the one before, so the
+          oldest day is on the outside edge and today is nearer the middle.
+          The dial holds up to the last 24 months, a little over two laps
+          once it is full. MegaSquad&rsquo;s seasons only go back to September
+          2025, so today it is about a lap and a half, and the last stretch of
+          that is schedule still to be played. Anything that ages off the dial
+          stays in the table underneath.
+        </P>
+        <P>
+          Color says which sport: orange for football, blue for basketball,
+          green for baseball. A faded stretch is a live season&rsquo;s schedule
+          that hasn&rsquo;t been played yet, and dashes mean there was nothing
+          to pick. The longest of those gaps, as long as it ran 30 days
+          or more, gets a sleeping squid.
+        </P>
+        <P>
+          As it turns, the dial stops at the moments worth stopping at: the
+          first day of each season, the last day of each finished one, the
+          middle of every off-season of 30 days or more, and today. Each stop has a line of its own beside the
+          dial. Scroll back far enough and it tells you{" "}
+          <em>The Super Bowl closes NFL 2025 at 285 games</em>, or that the
+          summer was <em>22 weeks with nothing to pick</em>. Every line is
+          assembled from the season data rather than written one stop at a
+          time. Live seasons come from my brother&rsquo;s API, and finished
+          ones from a record copied out of it.
+        </P>
+
+        <H
+          eyebrow="The detail I would point to"
+          dek="When the baseball playoffs started while football was still going, each live season got its own stop for today, and the ring learned to sit on that season's lane."
+        >
+          Two seasons at once, two nows
+        </H>
+        <P>
+          On September 29 the MLB Playoffs threw their first pitch while the
+          NFL was in its third week. Two live seasons on the same day is the
+          case a single pointer handles worst. There is only one today, and
+          two different things are happening in it.
+        </P>
+        <P>
+          Two seasons running at once are drawn on two lanes, side by side,
+          so neither paints over the other. Every live season gets its own
+          Now stop, both on the same day, and the ring under the pointer sits
+          on the lane of whichever season the stop is about.
+          Scroll from one Now to the other and the date in the middle
+          doesn&rsquo;t change at all. Only the ring moves, from
+          baseball&rsquo;s lane out to football&rsquo;s. The lanes and the
+          Now stops were my idea, and they are the detail on the dial I would
+          point to first.
+        </P>
+        <Shot
+          press={dialMlbLight}
+          blueline={dialMlbDark}
+          alt="The season dial turned to September 29, 2026. The ring under the pointer sits on the inner green lane of the MLB Playoffs, and the caption beside it reads: Now, MLB Playoffs 2026, Round 1. Next lock: Cubs at Padres."
+          caption="September 29, 2026. The ring is on the MLB Playoffs' lane."
+        />
+        <Shot
+          press={dialNflLight}
+          blueline={dialNflDark}
+          alt="The same dial on the same day, one scroll later. The ring has moved out to the orange NFL lane, and the caption reads: Now, NFL 2026, Week 3. Still being played."
+          caption="Same day, one stop later. Only the ring has moved, out to the NFL's lane."
+        />
+        <P>
+          Tapping a live season&rsquo;s arc takes you straight to its Now
+          stop, which is the quick way between the two with a finger. Earlier
+          and Later reach the same stops for anyone not tapping.
+        </P>
+        <P>
+          Those pictures were taken on the playoffs&rsquo; first day, which is
+          why baseball&rsquo;s played stretch is a single green dot. A season one day old is a line from a day to itself. That has
+          no length and would draw nothing, so the dial draws it as a line of
+          zero length with a round end, and a browser draws that as a dot.
+        </P>
+
+        <H
+          eyebrow="Loading"
+          dek="The page is built with the dial already turned to the newest stop, so when it comes to life in your browser there is no jump and no flash of the wrong date."
+        >
+          It arrives already turned
+        </H>
+        <P>
+          The server draws the whole dial, turned to the newest stop. When the
+          page&rsquo;s JavaScript arrives and takes over, the dial is already
+          exactly where the script would have put it, so nothing moves. There
+          is no loading state because there is nothing left to load. The
+          drawing came with the page.
+        </P>
+
+        <H
+          eyebrow="Turning it"
+          dek="Scrolling turns the dial by changing a handful of values on the drawing directly, rather than asking the page to rebuild the drawing sixty times a second."
+        >
+          Twenty-two writes a frame
+        </H>
+        <P>
+          The obvious way to build this in React is to keep the current day in
+          state and draw the dial from it. Every scroll would then re-render
+          the drawing, up to sixty times a second, to change what is really
+          just a rotation.
+        </P>
+        <P>
+          So React draws the dial once and never draws it any differently.
+          Scrolling writes to the drawing itself instead: a rotation on the
+          group that holds the spiral, a rotation the other way on each month
+          label and on the squid so they stay upright, the ring&rsquo;s height for its
+          lane, and the date in the middle. Scroll events are gathered into at
+          most one update per frame.
+        </P>
+        <P>
+          I measured one frame of scrolling on the live site on September 29.
+          It made 22 writes, 19 of them rotations, and added or removed
+          nothing from a drawing of 64 elements. Both numbers grow with the
+          data, since every month on the dial is another label to keep
+          upright.
+        </P>
+        <P>
+          The drawing itself never re-renders. Apart from a once-a-second
+          clock tick, which lets the Now stop drop a game&rsquo;s name once it
+          kicks off,
+          React re-renders only the caption and the dial&rsquo;s label, and
+          only when the nearest stop changes.
+        </P>
+        <Code>{`root.querySelector("[data-rotor]")
+  ?.setAttribute("transform", turnTo(spiral, day));`}</Code>
+        <P>
+          Between stops it doesn&rsquo;t simply slide. Each stop holds still
+          for the first and last 28% of the scroll between it and the next,
+          and eases in between, so there is time to read one before the next
+          arrives.
+        </P>
+
+        <H
+          eyebrow="Scroll or buttons"
+          dek="Whether scrolling turns the dial or the buttons do is settled by the page's styles, and the script asks the layout which one it got, so the two can never disagree."
+        >
+          The stylesheet decides
+        </H>
+        <P>
+          Scrolling only drives the dial where that makes sense: the script is
+          running, the visitor hasn&rsquo;t asked for reduced motion, and the
+          window is at least 600 pixels tall. There, the section grows by 60%
+          of a screen for every stop after the first, and the dial stays pinned in place while
+          you scroll through it. Everywhere else it sits in the page like a
+          picture, and Earlier and Later turn it over 600 milliseconds, or
+          straight away if you have asked for less motion.
+        </P>
+        <P>
+          That decision is made once, in CSS:
+        </P>
+        <Code>{`@media (scripting: enabled)
+  and (prefers-reduced-motion: no-preference)
+  and (min-height: 600px) { … }`}</Code>
+        <P>
+          The script needs the answer too. It keeps its own copy of the query,
+          less the first clause, since a running script needs no telling that
+          scripts are running, but it only listens to that copy for changes.
+          To decide, it asks the layout: if the dial&rsquo;s stage is pinned,
+          the page is in scrolling mode.
+        </P>
+        <P>
+          That matters in a browser that doesn&rsquo;t understand{" "}
+          <RInlineCode>scripting</RInlineCode>. It ignores the
+          stylesheet&rsquo;s whole block, because one unknown part sinks the
+          query, but it would still match the script&rsquo;s shorter copy, and
+          a script trusting that copy would scroll a page laid out for
+          buttons. Reading the layout means the script is reading the
+          stylesheet&rsquo;s own answer. A test keeps the script&rsquo;s copy
+          the same as the stylesheet&rsquo;s, less that first clause.
+        </P>
+        <Code>{`const isScrollDriven = (stage: HTMLElement | null) =>
+  !!stage && getComputedStyle(stage).position === "sticky";`}</Code>
+
+        <H
+          eyebrow="For everyone"
+          dek="People using screen readers, and anyone whose browser is not running scripts, get the same seasons as a plain table, and the dial only speaks when someone asks it to."
+        >
+          The table was there first
+        </H>
+        <P>
+          A picture of a spiral is not much use read aloud. So the real content
+          of the section is still the table beneath it, which lists every
+          season MegaSquad has run, newest first. Without JavaScript the dial
+          is simply hidden, so nobody gets an empty box.
+        </P>
+        <P>
+          The dial still says what it is showing, as its label:{" "}
+          <em>Season dial, showing Apr 6, 2026: Michigan 69, UConn 63</em>. And
+          a live region announces the new stop when you press Earlier or
+          Later, or tap a season. It stays quiet while you scroll. A scroll
+          passes through every stop on the dial, and announcing each one would
+          turn a screen reader into a sports ticker.
+        </P>
+        <P>
+          At either end, the button that can&rsquo;t go any further is dimmed
+          and marked unavailable for screen readers, but it isn&rsquo;t
+          actually disabled. A disabled button drops keyboard focus to the top
+          of the page. In scrolling mode the caption reaches the last stop
+          halfway through the scroll to it, so the button you pressed to get there
+          would go disabled under your pointer, and Chromium stopped the
+          scroll short of the stop.
+        </P>
+
+        <H
+          eyebrow="Go turn it"
+          dek="The dial is drawn fresh from the season data, so today's stops and lanes move as seasons start and end, and what you find there will not match these pictures for long."
+        >
+          It will look different when you get there
+        </H>
+        <P>
+          Everything here was captured on September 29, 2026, the day the
+          baseball playoffs began. A day later the green dot is a line, and
+          before long there will be a stop on the dial that isn&rsquo;t in
+          these pictures. The page is rebuilt in the background, no more
+          than once every five minutes and only when someone visits, and the
+          dial comes with it.
+        </P>
+        <P>
+          <RLink
+            href="https://megasquad.org"
+            external
+            underline="always"
+            className="text-[length:inherit] leading-[inherit]"
+          >
+            megasquad.org
+            <span className="sr-only"> (opens in a new tab)</span>
+          </RLink>
+          , home page, scroll down past the ticket. Turn it back to the first
+          season, then tap a live one and watch the ring change lanes.
         </P>
       </>
     ),

@@ -239,7 +239,9 @@ describe("prose voice", () => {
     expect(caseStudies).toContain("That makes the front end a consumer of a");
 
     expect(posts).toContain("Tailwind v4 generates utilities from theme tokens");
-    expect(posts).toContain("was the smaller half of that day");
+    /* The tail anchor moves with each new post: it has to be the file's last
+       paragraph, or a stripper that ate the newest post would still pass. */
+    expect(posts).toContain("tap a live one and watch the ring change lanes");
 
     /* Both files open with a block comment; neither phrase should survive. */
     expect(caseStudies).not.toContain("Read from source: the bodies are JSX");
