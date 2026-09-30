@@ -762,9 +762,9 @@ bytes actually on wire  : 10,161`}</Code>
           </Link>{" "}
           is the pick&rsquo;em site my brother and I built. We started it for
           our family, and it grew from there into friend squads, work squads
-          and more. Its home page lists every season we&rsquo;ve run in a
-          table, and it still does. Above the table now sits a dial: those same
-          seasons drawn as a spiral, and it turns as you scroll.
+          and more. Every season we&rsquo;ve run is listed in a table, and
+          above the table now sits a dial: the same seasons drawn as a spiral
+          that turns as you scroll.
         </P>
         <P>
           It&rsquo;s better to watch it turn than have it described, so here it
@@ -842,9 +842,7 @@ bytes actually on wire  : 10,161`}</Code>
           on the lane of whichever season the stop is about.
           Scroll from one Now to the other and the date in the middle
           doesn&rsquo;t change at all. Only the ring moves, from
-          baseball&rsquo;s lane out to football&rsquo;s. The lanes and the
-          Now stops were my idea, and they&rsquo;re the detail on the dial I&rsquo;d
-          point to first.
+          baseball&rsquo;s lane out to football&rsquo;s.
         </P>
         <Shot
           press={dialMlbLight}
