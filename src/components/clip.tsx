@@ -1,6 +1,14 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { RButton } from "@/lib/roster-ui";
+import {
+  INITIAL_CLIP_STATE,
+  createClipController,
+  latestVisibility,
+  showsNativeControls,
+  type ClipController,
+} from "@/lib/clip-controller";
 
 /**
  * A short silent loop, framed like a `Shot`.
@@ -49,27 +57,140 @@ export function Clip({
   caption: string;
 }) {
   const reduced = useSyncExternalStore(subscribe, readReducedMotion, readServer);
+  const video = useRef<HTMLVideoElement>(null);
+  const controller = useRef<ClipController | null>(null);
+  const [state, setState] = useState(INITIAL_CLIP_STATE);
+
+  /* The loop is started from here, by `lib/clip-controller.ts`, rather than
+     by `autoplay`. The server renders the calmer version with no `autoplay`,
+     and a browser decides to autoplay when the video has buffered, not when
+     hydration adds the attribute, so on a warm cache the loop never started.
+     The controller's own comment has that history and the rest of it; this
+     component only reports to it what it can see: whether the clip is on
+     screen, what the visitor's motion setting is, and the reader's button. */
+  useEffect(() => {
+    const el = video.current;
+    if (!el) return;
+    const current = createClipController(el, (next) => {
+      /* A `play()` from a controller already torn down, by a remount in
+         development, can settle late. Its state is not this clip's. */
+      if (controller.current === current) setState(next);
+    });
+    controller.current = current;
+    const observer = new IntersectionObserver((entries) => {
+      const visible = latestVisibility(entries);
+      if (visible !== null) current.setVisible(visible);
+    });
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      controller.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    controller.current?.setReduced(reduced);
+  }, [reduced]);
+
+  const native = showsNativeControls(state);
 
   return (
-    <figure className="my-5 flex w-full flex-col gap-[7px]">
+    <figure className="relative my-5 flex w-full flex-col gap-[7px]">
       <div className="overflow-hidden rounded-[3px] border border-rule bg-panel">
         <video
+          ref={video}
           className="block h-auto w-full"
           poster={poster}
           preload="metadata"
           muted
           playsInline
           loop={!reduced}
-          autoPlay={!reduced}
-          controls={reduced}
+          controls={native}
           aria-label={alt}
         >
           <source src={src} type="video/mp4" />
         </video>
       </div>
-      <figcaption className="font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
+      {/* WCAG 2.2.2: a loop that starts itself and runs over five seconds
+          needs a way to stop it. The browser's controls cover reduced motion
+          and a refusal; everywhere else this does.
+
+          Beside the caption, not over the video. On a phone, a button in a
+          corner of the frame covered the end of Retrospect's in-frame copy
+          and a stretch of the dial. The caption line keeps its height
+          and its right-hand room whether or not the button is there, so
+          nothing moves when it appears after hydration. It sits before the
+          caption in the markup because a figcaption has to come last. */}
+      {native ? null : (
+        <ClipToggle
+          paused={state.readerPaused}
+          onToggle={() => controller.current?.toggle()}
+          onRemovedWhileFocused={() => queueMicrotask(() => video.current?.focus())}
+        />
+      )}
+      <figcaption className="flex min-h-11 items-center pr-[4.5rem] font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
         {caption}
       </figcaption>
     </figure>
+  );
+}
+
+/**
+ * The reader's Pause and Play.
+ *
+ * It disappears when the browser's own controls take over, which happens if
+ * the visitor turns on reduced motion, or the browser refuses to play. If it
+ * had focus then, focus would fall to the top of the page, so it hands focus
+ * to the video instead, which by then has controls to land on.
+ *
+ * The check runs in a layout effect's cleanup because that runs before React
+ * removes the button. By the time anything else could look, Chromium has
+ * already fired `blur` and moved focus to the body.
+ */
+function ClipToggle({
+  paused,
+  onToggle,
+  onRemovedWhileFocused,
+}: {
+  paused: boolean;
+  onToggle: () => void;
+  onRemovedWhileFocused: () => void;
+}) {
+  const wrap = useRef<HTMLSpanElement>(null);
+  const removed = useRef(onRemovedWhileFocused);
+
+  useLayoutEffect(() => {
+    removed.current = onRemovedWhileFocused;
+  });
+
+  useLayoutEffect(() => {
+    const el = wrap.current;
+    return () => {
+      if (el?.contains(document.activeElement)) removed.current();
+    };
+  }, []);
+
+  return (
+    <span ref={wrap} className="absolute bottom-0 right-0 flex h-11 items-center">
+      {/* Drawn at 28px so it doesn't crowd the caption, but a finger gets 44:
+          the `before:` box belongs to the button, so taps landing on it
+          count. It's the same trick Roster uses for its checkboxes.
+
+          A fixed 44px, centered, rather than "8px past each edge". An
+          absolute child is placed from the padding box, inside the 1px
+          border, so an inset of -8px measured 42px tall. Measured, not
+          assumed: taps 7px below the visible edge missed. */}
+      <RButton
+        type="button"
+        size="xs"
+        variant="solid"
+        colorScheme="primary"
+        className="relative before:absolute before:inset-x-[-9px] before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-['']"
+        onClick={onToggle}
+      >
+        {paused ? "Play" : "Pause"}
+        <span className="sr-only"> the clip</span>
+      </RButton>
+    </span>
   );
 }
