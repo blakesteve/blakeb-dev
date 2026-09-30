@@ -115,9 +115,9 @@ export function Clip({
           needs a way to stop it. The browser's controls cover reduced motion
           and a refusal; everywhere else this does.
 
-          Beside the caption, not over the video. On a phone, a 44px button
-          in a corner of the frame covered the end of Retrospect's in-frame
-          copy and a stretch of the dial. The caption line keeps its height
+          Beside the caption, not over the video. On a phone, a button in a
+          corner of the frame covered the end of Retrospect's in-frame copy
+          and a stretch of the dial. The caption line keeps its height
           and its right-hand room whether or not the button is there, so
           nothing moves when it appears after hydration. It sits before the
           caption in the markup because a figcaption has to come last. */}
@@ -128,7 +128,7 @@ export function Clip({
           onRemovedWhileFocused={() => queueMicrotask(() => video.current?.focus())}
         />
       )}
-      <figcaption className="flex min-h-11 items-center pr-[7.5rem] font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
+      <figcaption className="flex min-h-11 items-center pr-[4.5rem] font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
         {caption}
       </figcaption>
     </figure>
@@ -171,8 +171,23 @@ function ClipToggle({
   }, []);
 
   return (
-    <span ref={wrap} className="absolute bottom-0 right-0">
-      <RButton type="button" size="lg" variant="solid" colorScheme="neutral" onClick={onToggle}>
+    <span ref={wrap} className="absolute bottom-0 right-0 flex h-11 items-center">
+      {/* Drawn at 28px so it doesn't crowd the caption, but a finger gets 44:
+          the `before:` box belongs to the button, so taps landing on it
+          count. It's the same trick Roster uses for its checkboxes.
+
+          A fixed 44px, centered, rather than "8px past each edge". An
+          absolute child is placed from the padding box, inside the 1px
+          border, so an inset of -8px measured 42px tall. Measured, not
+          assumed: taps 7px below the visible edge missed. */}
+      <RButton
+        type="button"
+        size="xs"
+        variant="solid"
+        colorScheme="primary"
+        className="relative before:absolute before:inset-x-[-9px] before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-['']"
+        onClick={onToggle}
+      >
         {paused ? "Play" : "Pause"}
         <span className="sr-only"> the clip</span>
       </RButton>
