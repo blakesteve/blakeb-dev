@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 /**
  * A short silent loop, framed like a `Shot`.
@@ -49,11 +49,56 @@ export function Clip({
   caption: string;
 }) {
   const reduced = useSyncExternalStore(subscribe, readReducedMotion, readServer);
+  const video = useRef<HTMLVideoElement>(null);
+  /* Set when the browser refuses to start the loop, so the visitor still gets
+     a control to start it themselves rather than a still with no way in. */
+  const [refused, setRefused] = useState(false);
+
+  /* Start the loop from here, rather than trusting `autoPlay` to.
+
+     The server renders the calmer version, with no `autoplay`, because it
+     can not know the visitor's setting. Hydration then adds the attribute,
+     and a browser decides whether to autoplay when the video has buffered,
+     not when the attribute changes. So whenever the clip buffered before
+     hydration finished, which is the usual case on a warm cache, it never
+     started, and hydration had also removed its controls: a still frame with
+     no way to play it. Measured on blakeb.dev on 29 September 2026, the
+     Retrospect clip played on one load in four.
+
+     Only while it is on screen. A bare `play()` skips the rule `autoplay`
+     would have followed, that a muted loop waits until it is visible and
+     pauses when it scrolls away: without this the Retrospect clip, 9,500px
+     down its page, decoded from the moment the page loaded and a reader
+     arrived partway through the loop.
+
+     Only `NotAllowedError` counts as the browser refusing. A `play()` that a
+     `pause()` interrupts rejects with `AbortError`, which is not a refusal,
+     and treating it as one left the controls showing on a playing loop. */
+  useEffect(() => {
+    const el = video.current;
+    if (!el) return;
+    if (reduced) {
+      el.pause();
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        el.pause();
+        return;
+      }
+      el.play().catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "NotAllowedError") setRefused(true);
+      });
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [reduced]);
 
   return (
     <figure className="my-5 flex w-full flex-col gap-[7px]">
       <div className="overflow-hidden rounded-[3px] border border-rule bg-panel">
         <video
+          ref={video}
           className="block h-auto w-full"
           poster={poster}
           preload="metadata"
@@ -61,7 +106,7 @@ export function Clip({
           playsInline
           loop={!reduced}
           autoPlay={!reduced}
-          controls={reduced}
+          controls={reduced || refused}
           aria-label={alt}
         >
           <source src={src} type="video/mp4" />
