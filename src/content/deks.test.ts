@@ -42,8 +42,9 @@ const JARGON = [
 
 describe("section deks", () => {
   it("exist in both content files", () => {
-    /* 26 since the MegaSquad case study gained a section on picking. */
-    expect(deksIn("case-studies.tsx").length).toBe(26);
+    /* 29 since the Retrospect redesign: its study went from seven sections
+       to ten. */
+    expect(deksIn("case-studies.tsx").length).toBe(29);
     /* 24 since the post on the season dial, which carries seven. */
     expect(deksIn("posts.tsx").length).toBe(24);
   });
