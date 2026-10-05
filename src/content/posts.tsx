@@ -11,6 +11,10 @@ import dialMlbLight from "@/images/megasquad/megasquad-dial-mlb-light.png";
 import dialMlbDark from "@/images/megasquad/megasquad-dial-mlb-dark.png";
 import dialNflLight from "@/images/megasquad/megasquad-dial-nfl-light.png";
 import dialNflDark from "@/images/megasquad/megasquad-dial-nfl-dark.png";
+import seedsBeforeLight from "@/images/inner-squad/innersquad-nfl-card-before-light.png";
+import seedsBeforeDark from "@/images/inner-squad/innersquad-nfl-card-before-dark.png";
+import seedsAfterLight from "@/images/inner-squad/innersquad-nfl-card-after-light.png";
+import seedsAfterDark from "@/images/inner-squad/innersquad-nfl-card-after-dark.png";
 
 /**
  * Posts, as content modules rather than MDX.
@@ -1021,6 +1025,241 @@ bytes actually on wire  : 10,161`}</Code>
           </RLink>
           , home page, scroll down past the ticket. Turn it back to the first
           season, then tap a live one and watch the ring change lanes.
+        </P>
+      </>
+    ),
+  },
+  {
+    slug: "a-rule-correctly-applied-in-the-wrong-place",
+    title: "A rule, correctly applied, in the wrong place",
+    dek: "I investigated a scoring tool and wrote a nine-part plan to rebuild it, every claim checked against the code. Four of its points still turned out wrong, each correct on its own.",
+    date: "2026-10-05",
+    tags: ["Specification", "Accessibility", "API design"],
+    body: (
+      <>
+        <P>
+          Inner Squad is the tool my brother and I use to load games, score them
+          and settle seasons for MegaSquad, our pick&rsquo;em site. Settling a
+          season finalizes its standings and emails a recap to the people who
+          played. Two
+          people use the tool, and it writes to a backend that settles real
+          standings, so a silent wrong write is about the worst thing it can do.
+        </P>
+        <P>
+          In September I rebuilt it. I started by investigating: the old code,
+          the live data, and the API it talks to. Then I wrote up a plan in nine
+          parts, each saying what to build, what to measure, what not to touch,
+          and what the code and data would look like when it got there. Every
+          claim in the plan was checked against the code or the running app.
+        </P>
+        <P>
+          I expected any mistakes to show up in the code. Instead, four of the
+          plan&rsquo;s points turned out wrong, even though each looked correct on
+          its own. None was a false fact, which is why checking didn&rsquo;t
+          catch them. Each was true about one thing and applied to another.
+        </P>
+
+        <H
+          eyebrow="The rule"
+          dek="A good accessibility rule says anything you can tap should be at least 44 pixels square. Applied to every box on the screen, it made room for boxes that never hold anything, and squeezed a team’s name until it no longer fit."
+        >
+          Forty-four pixels for a box that&rsquo;s always empty
+        </H>
+        <P>
+          The plan set a floor for phones: every interactive target at least
+          44 by 44 pixels. That&rsquo;s a good rule, because a fingertip needs
+          room. The plan&rsquo;s part on phones measured the tool at 375 pixels wide
+          against it, and none of its controls passed. The smallest it found
+          were the seed boxes, 24 by 21 pixels.
+        </P>
+        <P>
+          A seed is a tournament ranking, the number beside a team in a bracket.
+          The tool had drawn two seed boxes on every game since March 2026,
+          whatever the sport. On a desktop they cost almost nothing, which is
+          why nobody had questioned them. The phone work grew every target to
+          44 pixels, correctly, and that included them.
+        </P>
+        <P>
+          Checked later, across every cached week of 2025 and 2026, the split
+          was total. 63 of 63 college tournament games carried a seed, and so
+          did 56 of 56 NBA playoff games. 0 of 557 NFL games did.
+        </P>
+        <P>
+          So on an NFL week at phone width, each team&rsquo;s line spent 44 of
+          the screen&rsquo;s 375 pixels, about 12%, on a box that could never
+          hold a value. Add the 6-pixel gap beside it, and all of that came out
+          of the team name. Its field was 177 pixels wide, and &ldquo;New
+          England Patriots&rdquo; needs about 179. The notes from that phone
+          work had already recorded that clipped name as a separate defect, not
+          yet fixed. It was the same defect.
+        </P>
+        <Shot
+          press={seedsBeforeLight}
+          blueline={seedsBeforeDark}
+          alt="An NFL score card on a phone, Pittsburgh Steelers at New England Patriots. Each team's line starts with an empty seed box marked with a dash, and 'New England Patriots' is cut off at its last letter."
+          caption="Before: two seed boxes on a game that can't have seeds"
+          frame="phone"
+        />
+        <Code>{`NFL week at 375px        before    after
+seed fields on screen    32        0
+team-name field          177px     229px
+"New England Patriots"   clipped   fits`}</Code>
+        <P>
+          The fix was a question the rule never asked: does this week use seeds
+          at all? Seed boxes are now drawn only on weeks that do. The 44-pixel
+          floor still holds for everything that&rsquo;s drawn. It was right about
+          how big a target should be. It said nothing about whether the target
+          should be there.
+        </P>
+        <Shot
+          press={seedsAfterLight}
+          blueline={seedsAfterDark}
+          alt="The same card after the fix: no seed boxes, and 'New England Patriots' fits on its line in full."
+          caption="After: no seed boxes, and the whole name"
+          frame="phone"
+        />
+
+        <H
+          eyebrow="The count"
+          dek="After the fix, every control on the page passed the size rule. That was true of the page with nothing opened on top of it. The pop-up windows had a smaller close button the whole time."
+        >
+          186 of 186, with nothing open
+        </H>
+        <P>
+          The phone work ended on a clean result. Every control met the
+          44-pixel floor at phone widths: 186 of 186, and 197 of 197 with the
+          Add Game form open. Both numbers were measured, and both were true.
+        </P>
+        <P>
+          Neither was measured with a dialog open. The close button on the
+          dialog from my component library measured 20 by 16 pixels, the
+          smallest control in the tool. The dialogs for the current week had
+          carried it since the part before. The next part added dialogs that
+          send email to a league, with the same button, and that part is the
+          one that found it. The app got a local fix the same day, and the
+          library fixed it for every app in version 4.12.0.
+        </P>
+        <P>
+          &ldquo;186 of 186&rdquo; was true of a set nobody had named: the page
+          with nothing opened on it. The rule said every target. Neither the
+          rule nor the count said in which state.
+        </P>
+
+        <H
+          eyebrow="The field"
+          dek="The plan said to tell five pairs of same-named leagues apart using a field the API had just added for that purpose. The field worked exactly as designed. These pairs differed in a way it doesn’t measure."
+        >
+          The right field for a different kind of pair
+        </H>
+        <P>
+          On MegaSquad, a squad is a group of friends, and one squad can run
+          several leagues. The tool&rsquo;s league list held five pairs of
+          leagues with identical names. The plan said to tell them apart with{" "}
+          <RInlineCode>squad_name</RInlineCode>, a field my brother had just
+          added to the API for exactly that job. I had checked the pairs: same
+          name, same sport, different IDs.
+        </P>
+        <P>
+          I hadn&rsquo;t checked the season. In the development data, every
+          pair had one squad name and two seasons. They weren&rsquo;t duplicates
+          at all. Each was a 2025 league beside the same league started again
+          for 2026, in the same squad.{" "}
+          <RInlineCode>squad_name</RInlineCode> separates leagues that belong to
+          different squads, so within every pair it was identical. Reading the
+          data before following the plan is what caught it. The season is now
+          on every row, and within a pair the newer league sorts first.
+        </P>
+        <P>
+          The field still earns its place, at a different job. Three leagues
+          sit in a squad with a different name, and those three show it. It
+          groups leagues. It doesn&rsquo;t tell a pair apart.
+        </P>
+
+        <H
+          eyebrow="The verb"
+          dek="The plan described one action as settling a league’s season and asked for it on each league. By design, the action settles every league in that sport and season, not just the one on screen."
+        >
+          Ending a season ends it for everyone
+        </H>
+        <P>
+          The plan&rsquo;s list of routes described{" "}
+          <RInlineCode>POST /admin/seasons/end</RInlineCode> as &ldquo;settle a
+          league&rsquo;s season&rdquo;, and its part on ending seasons asked
+          for it as an action on each league&rsquo;s row.
+        </P>
+        <P>
+          The endpoint takes a sport and a season, not a league, and settles
+          every league that matches. A dry run, which reports what would be
+          settled without settling anything, showed the difference against the
+          development data. For NFL 2025, the account running the tool could
+          see 5 leagues, and the dry run found 8. A button on one league&rsquo;s
+          row would have run against all eight, three of them leagues the tool
+          could never have listed, and emailed their players.
+        </P>
+        <P>
+          The menu on each row now speaks for the whole scope, not the row. It
+          reads &ldquo;End the season for NFL 2025&rdquo;, the dialog opens with
+          the same sentence, and the dry run has to happen before anything is
+          sent.
+        </P>
+
+        <H
+          eyebrow="The one it got right"
+          dek="One question looked like a matter of taste: whether creating leagues belongs in the admin tool. The API had already answered it, in who it lets create one."
+        >
+          The permission model had already decided
+        </H>
+        <P>
+          The plan got one scoping call right, and how it got it is the part
+          worth stealing. Inner Squad is an admin tool, and adding a league
+          sounds like admin work. The old tool even had code for it.
+        </P>
+        <P>
+          The API said otherwise. Creating a league needed a squad, and the
+          permission check was that you were a member of that squad. It never
+          asked whether you were a site admin. So creating a league is something
+          any member does, and it belongs in MegaSquad, where the members are.
+          The plan drew the tool&rsquo;s boundary along the API&rsquo;s
+          permission boundary and left league creation out.
+        </P>
+        <P>
+          That settled the question by reading instead of by taste. It&rsquo;s
+          the other four in reverse: the answer to &ldquo;where does this
+          apply?&rdquo; was already written down, and this time it was read
+          before the plan was written.
+        </P>
+
+        <H
+          eyebrow="What changed"
+          dek="Every one of these was a true statement missing the half that said where it applied. The fix is to write that half down, and to check it against the data rather than the description."
+        >
+          Name the set
+        </H>
+        <P>
+          Look back over the four and none started from a false fact. Each was
+          true about something, and left out what. &ldquo;At least 44
+          pixels&rdquo; didn&rsquo;t say &ldquo;for boxes that can hold a
+          value&rdquo;. &ldquo;186 of 186&rdquo; didn&rsquo;t say &ldquo;with
+          nothing open&rdquo;. &ldquo;Tell the pairs apart&rdquo; didn&rsquo;t
+          say how they differed. &ldquo;Settle a league&rdquo; described the
+          button, not what the endpoint does.
+        </P>
+        <RPullquote cite="The part worth keeping" colorScheme="amber">
+          Every claim had been checked. What each claim was about had not.
+        </RPullquote>
+        <P>
+          So the habit worth having is to write the scope as part of the rule.
+          A size floor names what it applies to. A count names what was open
+          when it was taken. A field&rsquo;s purpose comes from the data it
+          holds, not the note that announced it, and an action&rsquo;s reach
+          comes from the code that handles it, not the line that lists it.
+        </P>
+        <P>
+          Each fix was small once the scope was named. The Patriots fit on a
+          phone, every league row shows its season, and ending a season names
+          NFL 2025 before anything is sent. None of that came from following
+          the rules more carefully. It came from asking each rule what it was
+          about.
         </P>
       </>
     ),
