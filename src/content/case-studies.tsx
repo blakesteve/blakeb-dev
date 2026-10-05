@@ -959,7 +959,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsTonight}
             alt="Retrospect's Tonight view: 'Sunday night, Oct 4' over a wheel of tonight's planets, then 'Tonight, for you' with rows for Venus retrograde marked Maybe, Venus in detriment marked Not clearly, and a solar storm marked Maybe."
-            caption="Tonight's real sky, and what skies like it have meant for this listener"
+            caption="Tonight's real sky, and how this listener's listening went under skies like it"
           />
           <Shot
             press={rsNights}
@@ -1089,12 +1089,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             caption="The swing survived. The evidence for it didn't."
           />
           <p>
-            Minutes earlier, before about 540 plays since my last visit had synced, the same
-            question read <strong>Not clearly</strong>, with the same swing over the same 208 full
-            moons. The new plays made the history a little longer, which slid every fake sky a
-            little, and that alone moved the odds from about one in seven to about one in eleven. A
-            result near a line moves, and the word is built to say so rather than round up. The
-            method got better, and the one striking finding didn&rsquo;t survive it.
+            The method got better, and the one striking finding didn&rsquo;t survive it.
           </p>
           <Shot
             press={rsFullMoonMobile}
