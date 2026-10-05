@@ -21,21 +21,20 @@ const rosterTiers = getRosterComponents().reduce<Record<string, number>>(
   {},
 );
 
-import rsHero from "@/images/retrospect/retrospect-hero-desktop.png";
-import rsHeroMobile from "@/images/retrospect/retrospect-hero-mobile.png";
-import rsSkyNow from "@/images/retrospect/retrospect-skycurrently-countdown.png";
-import rsScale from "@/images/retrospect/retrospect-reveal-scale.png";
-import rsVerdict from "@/images/retrospect/retrospect-verdict-desktop.png";
-import rsVerdictMobile from "@/images/retrospect/retrospect-verdict-reveal-mobile.png";
-import rsSweepRun from "@/images/retrospect/retrospect-trial-sweep-mid-run.png";
-import rsSweepResults from "@/images/retrospect/retrospect-trial-sweep-results.png";
-import rsSkeptic from "@/images/retrospect/retrospect-skeptics-panel.png";
-import rsSkepticMobile from "@/images/retrospect/retrospect-skeptics-panel-mobile.png";
-import rsFingerprints from "@/images/retrospect/retrospect-fingerprints.png";
-import rsFingerprintsMobile from "@/images/retrospect/retrospect-fingerprints-mobile.png";
-import rsAnthem from "@/images/retrospect/retrospect-anthem-nostalgic-day.png";
-import rsYearChart from "@/images/retrospect/retrospect-year-chart.png";
-import rsBirthChart from "@/images/retrospect/retrospect-birthchart-panel.png";
+import rsLanding from "@/images/retrospect/retrospect-landing.png";
+import rsLandingMobile from "@/images/retrospect/retrospect-landing-mobile.png";
+import rsReveal from "@/images/retrospect/retrospect-reveal-mobile.png";
+import rsTonight from "@/images/retrospect/retrospect-tonight.png";
+import rsTonightMobile from "@/images/retrospect/retrospect-tonight-mobile.png";
+import rsNights from "@/images/retrospect/retrospect-every-night.png";
+import rsSky from "@/images/retrospect/retrospect-sky.png";
+import rsPairing from "@/images/retrospect/retrospect-pairing-mobile.png";
+import rsQuestions from "@/images/retrospect/retrospect-questions.png";
+import rsFullMoon from "@/images/retrospect/retrospect-full-moon.png";
+import rsFullMoonMobile from "@/images/retrospect/retrospect-full-moon-mobile.png";
+import rsHabits from "@/images/retrospect/retrospect-habits.png";
+import rsHabitsMobile from "@/images/retrospect/retrospect-habits-mobile.png";
+import rsBirthChart from "@/images/retrospect/retrospect-birth-chart-mobile.png";
 
 import ncaamDark from "@/images/megasquad/megasquad-2.0-ncaam-dark.png";
 import ncaamLight from "@/images/megasquad/megasquad-2.0-ncaam-light.png";
@@ -852,25 +851,25 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   retrospect: {
-    lede: "Your Last.fm history against the actual sky. Every scrobble you have ever logged, cross-referenced with real retrogrades, full moons, and eclipses, then held to a standard astrology never asks for.",
+    lede: "Your Last.fm history against the actual sky. Every song you’ve played, set against the real planets, moons, solar storms and eclipses of that night, then held to a standard astrology never asks for.",
     stats: [
-      { value: "25", label: "Trials per sweep", source: "5 skies × 5 measures" },
-      { value: "2,000", label: "Scrambled skies", source: "per trial" },
-      { value: "495k", label: "Scrobbles in the test library", source: "17 years, one account" },
+      { value: "12", label: "Questions, the same for everyone", source: "corrected for asking 12" },
+      { value: "9.4%", label: "Fake histories given a false yes", source: "1,000 with no sky in them" },
+      { value: "500k", label: "Plays in my history", source: "since October 2009, one account" },
       { value: "$0", label: "Hosting cost", source: "by design" },
     ],
     stack: [
       { k: "Framework", v: "Next.js 16" },
       { k: "Ephemeris", v: "astronomy-engine" },
       { k: "Source", v: "Last.fm API" },
+      { k: "Space data", v: "NASA and JPL, no key" },
       { k: "Storage", v: "Cloudflare R2" },
       { k: "Hosting", v: "Vercel Hobby" },
-      { k: "Tests", v: "Vitest" },
     ],
     also: [
-      { k: "Phenomena", v: "Mercury, Venus, Mars, moons, eclipses" },
-      { k: "Measures", v: "Nostalgia, Old Flames, Intensity…" },
-      { k: "Charts", v: "Sun, moon, rising, computed client-side" },
+      { k: "Questions", v: "Mercury, Venus, Mars, the Moon, the Sun" },
+      { k: "Views", v: "Tonight, Every night, Sky" },
+      { k: "Charts", v: "A birth chart, computed in the browser" },
       { k: "Privacy", v: "Birth data never leaves the browser" },
     ],
     body: (
@@ -887,26 +886,22 @@ export const caseStudies: Record<string, CaseStudy> = {
             history is the first. An ephemeris is the second.
           </p>
           <Shot
-            press={rsHero}
-            alt="Retrospect's landing page: a gold Saturn mark on deep navy, the wordmark, and a single field asking for a Last.fm username."
-            caption="One question, one field. The almanac styling is doing real work: this is not a horoscope app."
+            press={rsLanding}
+            alt="Retrospect's landing page: a gold Saturn mark on deep navy, the headline 'Every song has a sky.', a field asking for a Last.fm username, and below it NASA's photo of Earth with the Moon's shadow over Texas during the April 2024 eclipse."
+            caption="One field, and a real night underneath it: the 2024 eclipse, seen from a million miles out"
             priority
           />
           <p>
-            Every window is computed, not looked up. Retrograde periods, full moons, and eclipses
-            come from planetary positions via <RInlineCode>astronomy-engine</RInlineCode>, down to
-            the minute and the zodiac sign. The landing page proves it before you have typed
-            anything, by showing what the sky is doing right now and counting down to the next
-            event.
+            Every planetary window is computed, not looked up. Retrogrades, full moons and the signs the
+            planets sit in come from planetary positions via{" "}
+            <RInlineCode>astronomy-engine</RInlineCode>. Solar storms, flares and photos come from
+            NASA, and asteroid flybys from JPL. Below the field, the landing page shows the goods on a
+            made-up listener&rsquo;s history: a sample song&rsquo;s sky, a sample night, tonight, and a
+            sample set of answers.
           </p>
           <Shot
-            press={rsSkyNow}
-            alt="Four cards showing current sky events with date ranges and zodiac signs, above a live countdown reading 11 days, 16 hours, 34 minutes to the next full moon."
-            caption="Computed from positions, not scraped from a horoscope column"
-          />
-          <Shot
-            press={rsHeroMobile}
-            alt="Retrospect's landing page on a phone: the Saturn mark, wordmark, and username field stacked to a narrow screen."
+            press={rsLandingMobile}
+            alt="Retrospect's landing page on a phone: the Saturn mark, the headline, and the username field stacked on a narrow screen."
             caption="The same front door on a phone"
             frame="phone"
           />
@@ -918,42 +913,112 @@ export const caseStudies: Record<string, CaseStudy> = {
           dek="Often the honest answer is that the cosmos didn’t move your listening in any meaningful way, which is a hard thing to hand someone who just waited for half a million songs to load."
         >
           <p>
-            The honest version of this app returns a null result most of the time. That is the whole
+            The honest version of this app answers no most of the time. That is the whole
             premise, and it is also a product problem, because &ldquo;we checked, nothing happened&rdquo;
-            is a terrible thing to show someone who just waited for half a million scrobbles to
-            sync.
+            is a terrible thing to show someone who just waited for half a million plays to sync.
           </p>
           <p>
-            Almost everything else in Retrospect exists to answer that. Five skies instead of one.
-            Five measures that can be mixed freely. A listening profile that has nothing to do with
-            astronomy. If the planets are innocent, there is still something to read.
+            So the first visit is paced like a story rather than dropped as a dashboard. Four
+            screens: the scale of your history against the sky, your wildest night, the song with
+            the strangest sky, and only then the answers. Every listening figure from here on is one
+            real history, mine: 500,413 plays since October 2009, through 216 times Venus changed
+            sign and 201 solar storms. Someone else&rsquo;s numbers will be different, and that is the
+            entire point of the thing.
           </p>
           <Pull cite="The design constraint">
             Astrology is the question. Statistics is the answer. If the sky is innocent, the app has
             to be willing to say so, and still be worth the wait.
           </Pull>
           <p>
-            The reveal is paced like a story rather than dropped as a dashboard. Scale first, then
-            how often the sky did its thing, then the verdict. Every figure from here on is one real
-            library, mine: 17 years and roughly 495,000 scrobbles. Someone else&rsquo;s numbers will
-            be different, and that is the entire point of the thing.
+            My wildest night, by the sky, was the total solar eclipse of April 8, 2024. I played 80
+            songs. A usual Monday is 79. The last screen sorts the answers to twelve fixed
+            questions, explained below, into jars. Mine came back zero Yes, three Maybe, two Not
+            clearly and seven No.
           </p>
           <Shot
-            press={rsScale}
-            alt="A full-screen slide reading: 17 years. 494,589 songs. We read your entire listening diary. Every play, timestamped."
-            caption="One idea per screen, before any conclusion is offered"
+            press={rsReveal}
+            alt="The last screen of the first visit on a phone: 'So, does the sky move you?' above five jars reading 0 Yes, 3 Maybe, 2 Not clearly, 7 No and 0 Too early, then 'Mostly no. Here's exactly how, and the three maybes.'"
+            caption="The payoff of the build-up is mostly no, said plainly"
+            frame="phone"
+          />
+        </Section>
+
+        <Section
+          eyebrow="What it is"
+          title="Tonight, every night, and the whole sky"
+          dek="Three views of the same history: tonight’s real sky and what it has meant for you before, a calendar of every night you’ve listened, and a wheel you can turn through all of it."
+        >
+          <p>
+            <strong>Tonight</strong> opens on the sky right now and lines it up with your own
+            answers: Venus is retrograde until November 13, and here is what Venus retrograde has
+            looked like in your listening so far. <strong>Every night</strong> is a calendar of
+            every night you&rsquo;ve listened, filterable down to the storm nights, the flare
+            nights, the eclipses and the full moons. <strong>Sky</strong> is a wheel of the planets
+            with a timeline of all your years under it.
+          </p>
+          <Shot
+            press={rsTonight}
+            alt="Retrospect's Tonight view: 'Sunday night, Oct 4' over a wheel of tonight's planets, then 'Tonight, for you' with rows for Venus retrograde marked Maybe, Venus in detriment marked Not clearly, and a solar storm marked Maybe."
+            caption="Tonight's real sky, and how this listener's listening went under skies like it"
           />
           <Shot
-            press={rsVerdict}
-            alt="Retrospect's verdict screen. The question 'Does Mercury retrograde send you running back to old favorites?' answered with a large 'No, just +2%', a grip meter reading 'No measurable grip', and rows of sky and measure options."
-            caption="The payoff of a five-screen build-up is a null result, in plain language"
+            press={rsNights}
+            alt="The Every night view: filter chips for all nights, 243 storm nights, 132 X-flare nights, 76 eclipses and full moons, above a calendar of September 2026 where each night carries its moon phase."
+            caption="Every night since 2009, each one a door"
+          />
+          <Shot
+            press={rsSky}
+            alt="The Sky view: a large zodiac wheel with tonight's planets and the date in its center, above a timeline of plays since 2009 with markers for events along it."
+            caption="Sixteen years on one timeline, and a wheel that turns with it"
+          />
+          <p>
+            Anything you open, whether a song, a night, a planet or one of the questions, opens as
+            a sheet with its own address. A link to <RInlineCode>?q=fullmoon</RInlineCode> opens on
+            that answer. A link that lands in a chat unfurls into a share card drawn from the
+            answers already stored, never recomputed, so the card can&rsquo;t say something the page
+            doesn&rsquo;t.
+          </p>
+          <p>
+            Compare puts two listeners&rsquo; answers to the same twelve questions side by side, and
+            stops there. The old version named one of them the more sky-ruled listener. That ranked
+            two people on results that were mostly chance, so there is no winner and no score.
+          </p>
+          <Shot
+            press={rsTonightMobile}
+            alt="The Tonight view on a phone: the three view tabs, 'Sunday night, Oct 4', the wheel of tonight's sky, and the first row of 'Tonight, for you'."
+            caption="Built for a phone first"
+            frame="phone"
+          />
+        </Section>
+
+        <Section
+          eyebrow="The rule"
+          title="Facts are free, claims are earned"
+          dek="The app can tell you anything that’s simply true about the sky the night you first played a song. Only the twelve questions are allowed to say the sky changed what you played."
+        >
+          <p>
+            One rule governs every line of copy. A pairing is a dated fact: I first played Twilight
+            by Elliott Smith at 4:04 p.m. on August 1, 2012, under a full moon, with Mercury
+            retrograde. I&rsquo;ve played it 148 times since. That is all true, and none of it says
+            the moon did anything.
+          </p>
+          <p>
+            Every pairing that touches a question links to it, in the same words every time:
+            &ldquo;Coincidence or pattern?&rdquo; and which of the twelve has the answer, or needs
+            more nights to give one. The fun stays, and the claim goes where it can be checked.
+          </p>
+          <Shot
+            press={rsPairing}
+            alt="A song sheet on a phone for Twilight: the night's space weather, NASA's picture of that day, 'You've played it 148 times since.', and a link reading 'Coincidence or pattern? Question 1, on Mercury retrograde, has the answer.'"
+            caption="A fact, and a pointer to where the claim would be tested"
+            frame="phone"
           />
         </Section>
 
         <Section
           eyebrow="The math"
-          title="Rotate the calendar, do not reshuffle it"
-          dek="Your result is re-run against two thousand fake skies, each made by sliding the real calendar of events to a random date. Sliding rather than shuffling keeps your weekly and seasonal habits intact, so an effect has to beat plain chance to count."
+          title="Twelve questions, asked the same way for everyone"
+          dek="Every result is re-run against two thousand fake skies, made by sliding the real calendar of events to random dates. There are twelve fixed questions, and the bar for a yes accounts for asking twelve at once."
         >
           <p>
             Any large listening history shows <em>some</em> difference during retrograde, because
@@ -961,124 +1026,135 @@ export const caseStudies: Record<string, CaseStudy> = {
             what chance produces on its own.
           </p>
           <p>
-            So every claim faces a <strong>circular permutation test</strong>. The real event
-            calendar is rotated to 2,000 random offsets against the same listening data, and the
-            real effect only counts when it beats the scrambled ones. Rotation matters more than it
-            sounds: a plain reshuffle would destroy the structure of both the calendar and the
-            listening, and hand back a null that is easy to beat. Rotating preserves seasonality,
-            weekly rhythm, and the fact that people listen in streaks. The null keeps the shape of
-            your actual life.
+            So every question is checked against fake skies, a <strong>circular permutation
+            test</strong>. The real calendar of events is slid to 2,000 random start dates against
+            the same listening, and the real result only counts when it beats most of them. Sliding
+            matters more than it sounds: a plain reshuffle scrambles both the calendar and the
+            listening, and hands back a version of chance that is easy to beat. Sliding keeps
+            seasons, weekly rhythm and the streaks people listen in. The fake skies keep the shape
+            of your actual life.
           </p>
           <p>
-            The seed is fixed, so the same library returns the same p-value every time. A verdict
-            that changed on refresh wouldn&rsquo;t be a verdict.
+            The random slides are fixed per listener, per question and per version of the engine,
+            so the same history gets the same answer every time. They&rsquo;re drawn as fractions
+            of the history&rsquo;s length, so a new day of plays shifts them only slightly instead of
+            drawing a fresh set.
+          </p>
+          <p>
+            The twelve are fixed and the same for everyone. Each gets one word. <strong>Yes</strong> needs two things: it has to
+            survive a correction for asking twelve questions at once (Benjamini-Hochberg, at 10%,
+            for anyone checking), and chance alone has to produce a swing that big less than one time in twenty.{" "}
+            <strong>Maybe</strong> is under one in ten, <strong>Not clearly</strong> is under about
+            one in three, and anything weaker is <strong>No</strong>. Fewer than six events, or
+            fewer than 500 plays inside them, is <strong>Too early</strong>. The size and direction of a
+            swing go in the sentence, never in the word.
           </p>
           <Shot
-            press={rsSkeptic}
-            alt="The skeptic's panel: a histogram of 2,000 scrambled skies with the real result marked on it, reading '989 of 2,000 scrambled skies beat yours, p=0.494'."
-            caption="989 of 2,000 scrambled skies beat the real one. The pile is chance; the line is you."
+            press={rsQuestions}
+            alt="A grid of the twelve questions with their words: Mercury retrograde No, Full moon Maybe, New moon No, Venus at home No, Strong Moon No, Venus and Mars No, Solar storms Maybe, Big flares No, Mars in water Not clearly, Venus in detriment Not clearly, Venus retrograde Maybe, Mars retrograde No."
+            caption="The same twelve for every listener. None of mine came back Yes."
           />
+        </Section>
+
+        <Section
+          eyebrow="The full moon"
+          title="The one finding, asked again"
+          dek="The previous version of Retrospect told me full moons kept me up late. Asked again with the correction, the swing is still there, but chance makes one that big too often to call it real."
+        >
+          <p>
+            The previous version of Retrospect didn&rsquo;t have twelve questions. It had a sweep: five
+            skies against five measures, 25 combinations, each with its own scramble test. On my
+            history exactly one cleared the usual bar, a full moon keeping me up past midnight, at
+            +33%. The app called it <em>an iron grip</em>.
+          </p>
+          <p>
+            The old write-up of it named the catch: run 25 tests at the usual bar and about one
+            false positive is expected from chance alone, and one came back. It chose to label
+            results by strength rather than correct for that. The grip meter measured how big a
+            swing was. Whether it was real rested on a single test that knew nothing about the
+            other 24.
+          </p>
+          <p>
+            The redesign asks the full moon once, in a fixed question, with the correction. On 4
+            October 2026 it answers <strong>Maybe</strong>. Across 208 full moons, about a 40%
+            bigger share of my plays came after midnight, so the swing held up. The evidence
+            didn&rsquo;t: chance alone produces a swing that big about one time in eleven, and
+            once the other eleven questions are allowed for, it isn&rsquo;t close to the bar for a
+            yes. The likely
+            range runs from 6% smaller to 108% bigger, which includes no effect at all.
+          </p>
           <Shot
-            press={rsSkepticMobile}
-            alt="The skeptic's panel on a phone, with the same histogram and p-value."
-            caption="The nerd numbers survive the trip to a small screen"
+            press={rsFullMoon}
+            alt="The full moon question sheet: 'Does a full moon change how late you listen?' answered Maybe, with 'a 40% bigger share of your plays came after midnight, which could be chance', a bar sitting at 'Could be chance', a range from 6% smaller to 108% bigger, 208 full moons, and the math: p = 0.091 from 2,000 shuffled skies, adjusted p 0.37."
+            caption="The swing survived. The evidence for it didn't."
+          />
+          <p>
+            The method got better, and the one striking finding didn&rsquo;t survive it.
+          </p>
+          <Shot
+            press={rsFullMoonMobile}
+            alt="The same full moon question on a phone, reading Maybe with the chance bar and the range."
+            caption="Plain words first. The p-value is behind a switch."
             frame="phone"
           />
         </Section>
 
         <Section
-          eyebrow="The payoff"
-          title="Mercury is innocent. The full moon is not."
-          dek="Within my own listening trends, Mercury retrograde was a negligible bump, not high enough to consider an impact. Full moons, it turns out, really do keep me up past midnight."
+          eyebrow="The proof"
+          title="A thousand listeners with no sky in them"
+          dek="To check the new bar, the app is run on a thousand made-up histories where the sky does nothing. Fewer than one in ten get a false yes. Without the correction, about four in ten would have had a result that looked real."
         >
           <p>
-            Mercury retrograde is the famous claim, and the one the whole app is framed around. On
-            my library it comes back at 1.02×, which is nothing.
+            The correction is only as good as its false alarms, so the repo tests it directly.{" "}
+            <RInlineCode>npm run null-test</RInlineCode> builds 1,000 synthetic listening histories
+            with no sky effect in them at all, runs all twelve questions on each, and counts how
+            many get any Yes.
           </p>
           <p>
-            So the sweep runs every sky against every measure, 25 trials, and surfaces only what
-            survives the scramble test. For me, exactly one did: <strong>Full Moon × Night Owl, an
-            iron grip.</strong> Not the claim anyone makes at parties.
+            On the current code it was 94 of 1,000, or 9.4%, against a ceiling of 13%: the 10% the
+            correction aims for, plus room for chance. Without the correction, 393 of those 1,000
+            histories, 39.3%, had at least one question that cleared the usual bar by chance. That
+            is the failure the correction exists for: ask twelve questions of a sky that does
+            nothing, and four histories in ten turn up something that looks real.
           </p>
           <p>
-            That result is mine, not a finding about full moons. Another account runs the same 25
-            trials and gets its own answer, or more often no answer at all, which is a perfectly
-            good outcome and one the app is built to report. The sweep exists precisely because
-            there is no way to guess in advance which combination, if any, is yours.
-          </p>
-          <Shot
-            press={rsSweepRun}
-            alt="The sweep running, showing 'trial 2 of 25, Mercury Retrograde by Old Flame' in progress."
-            caption="25 trials, each one a full permutation test, served and cached individually"
-          />
-          <Shot
-            press={rsSweepResults}
-            alt="Sweep results: Full Moon by Night Owl at plus 33 percent marked 'an iron grip', with Mars by Discovery, Venus by Discovery, and Venus by Nostalgia marked 'a lead'."
-            caption="One conviction, three leads. The magnifying glass means chance could still fake it."
-          />
-          <p>
-            Opened up, that trial reads: <em>Does a full moon keep you up past midnight? Oh yes,
-            +33%.</em> Index 1.33× for me, and the grip meter that sat empty for Mercury lights all four
-            bars. Same component, opposite ends of the same scale, which is the point of having a
-            grip meter instead of a p-value in the headline.
-          </p>
-          <Shot
-            press={rsVerdictMobile}
-            alt="The full moon verdict on a phone: 'Does a full moon keep you up past midnight?' answered 'Oh yes, +33%', with a four-bar grip meter reading 'An iron grip' and index 1.33×."
-            caption="The one that survived on my library. Another account gets its own answer, or none."
-            frame="phone"
-          />
-          <p>
-            Running 25 tests at p&nbsp;&lt;&nbsp;0.05 means roughly one false positive is expected
-            from chance alone, and exactly one conviction came back. Retrospect doesn&rsquo;t correct the
-            threshold for that. It labels instead: a conviction survived its scramble test, a lead
-            is large but unconfirmed and says so on its face. For a tool whose tagline is
-            entertainment with error bars, saying which tier a result lives in seemed more honest
-            than a quieter number nobody would read.
+            The full run is meant for any change to the engine or the answer rule. A quicker
+            version, 100 smaller histories with a looser ceiling, runs in CI with every other test,
+            and it also checks that the same histories would break that ceiling without the
+            correction. Drop the correction and the build goes red, which is what &ldquo;it
+            can&rsquo;t happen again&rdquo; means here: not a promise, a check.
           </p>
         </Section>
 
         <Section
           eyebrow="When the sky is innocent"
           title="Your habits leave fingerprints anyway"
-          dek="Even when the planets did nothing, your listening still says plenty: the hour you play most, your longest unbroken streak, your single most nostalgic day."
+          dek="Even when the planets did nothing, your listening still says plenty: the hours you play most, the day of the week you lean on, your longest unbroken streak."
         >
           <p>
-            The listening profile needs no astronomy at all. Archetypes, golden hour, best streak,
-            loudest month: all computed from the same timestamps, all there whether or not the
-            planets did anything.
+            The listening profile needs no astronomy at all, and it says so in its own subtitle:
+            &ldquo;Not the sky.&rdquo; Archetypes, golden hour, the day you lean on, loudest month,
+            pace and best streak, all computed from the same timestamps, all there whether or not
+            the planets did anything.
           </p>
           <Shot
-            press={rsFingerprints}
-            alt="Listening fingerprints: Comfort Creature at 66 percent, Crate Digger at 13 percent, Daylight Listener at 2.9 percent, with golden hour, best day, loudest month, and pace."
-            caption="Comfort Creature, 66%. Best streak: 1,180 days straight."
+            press={rsHabits}
+            alt="Your habits: Comfort Creature at 66 percent, Crate Digger at 13 percent, Daylight Listener at 2 percent after midnight, then golden hour 3 to 5 p.m., Fridays, December, 81 a day with a best streak of 715 days, above a bar chart of plays by hour."
+            caption="Comfort Creature: 66% of my plays are songs I already knew"
           />
           <Shot
-            press={rsFingerprintsMobile}
-            alt="The same listening fingerprints stacked on a phone screen."
+            press={rsHabitsMobile}
+            alt="The same listening habits stacked on a phone screen."
             caption="Dense figures that still hold their shape on a narrow screen"
             frame="phone"
           />
           <p>
-            The specifics land harder than the statistics. A retrograde anthem, a single most
-            nostalgic day, and NASA&rsquo;s picture of the sky on that exact date.
-          </p>
-          <Shot
-            press={rsAnthem}
-            alt="Two cards: a retrograde anthem showing Into Your Eyes by Lucero with album art, and a most nostalgic day of February 7, 2015 with NASA's Astronomy Picture of the Day for that date."
-            caption="258 old favorites in one day, and the sky above them that night"
-          />
-          <p>
-            Ambient tracks were the quiet threat to all of this. Rain, static, and sleep playlists
+            Sleep sounds were the quiet threat to all of this. Rain, white noise and ASMR tracks
             run for hours unattended, and those plays add up to counts that can dwarf anything you
-            actually chose that week, so sleep and noise artists can be excluded in one click. It is
-            a data-quality switch wearing a friendly label.
+            actually chose that week. The previous version made filtering them a switch. Now they&rsquo;re left
+            out of every measure automatically, because a data-quality fix shouldn&rsquo;t depend on
+            someone finding the toggle.
           </p>
-          <Shot
-            press={rsYearChart}
-            alt="A bar chart of scrobbles per year from 2009 to 2026, with thin ochre stripes marking Mercury retrograde periods."
-            caption="Every year of listening, with retrograde windows striped over it"
-          />
         </Section>
 
         <Section
@@ -1087,21 +1163,24 @@ export const caseStudies: Record<string, CaseStudy> = {
           dek="The first load can take quite some time, especially for Last.fm accounts that have many years of listening history, because the music service only hands over so much at a time. That wait got a small solar system to watch instead of a spinner."
         >
           <p>
-            The first sync of a large library takes minutes, because Last.fm is rate limited and the
+            The first sync of a large history takes minutes, because Last.fm is rate limited and the
             history is pulled page by page. That wait wasn&rsquo;t going away, so it got a planetary
-            system instead of a spinner: planets spawn, orbit, occasionally collide, and explode,
-            while the scrobble counter climbs behind them.
+            system instead of a spinner. Every planet is a year of your history recovered so far:
+            they spawn, orbit, occasionally collide and explode, while the count climbs underneath
+            and the copy keeps you company (&ldquo;Mercury has never once hurried.&rdquo;).
           </p>
           <p>
-            The sync itself is built for serverless. Each invocation pulls pages for a fixed time
-            budget at roughly five requests a second, flushes once at the end, and dedupes on read,
-            because new scrobbles landing mid-backfill shift the page boundaries underneath you.
+            The sync is built for short server calls. Each one pulls pages for eight seconds, four
+            at a time with a quarter-second pause between batches, to stay polite to Last.fm. It
+            saves once at the end, because every save rewrites the stored history. And it throws
+            out duplicates when reading, because new plays arriving mid-download shift which songs
+            land on which page.
           </p>
           <Clip
             src="/video/retrospect-loading.mp4"
             poster="/video/retrospect-loading-poster.jpg"
-            alt="Retrospect's loading screen: planets spawn and orbit a gold sun on a dark field, occasionally colliding and exploding, while a progress bar fills and a scrobble counter climbs beneath the words 'Consulting the ephemeris'."
-            caption="The wait, with something to watch. Planets spawn, orbit, and occasionally collide."
+            alt="Retrospect's loading screen: planets spawn and orbit a gold sun on a dark field, occasionally colliding, above the words 'Reading your sky…', a line of playful copy, and a progress bar with a count of scrobbles climbing toward half a million as it reaches back through the years."
+            caption="The production screen, replayed with simulated progress so nothing had to re-sync"
           />
         </Section>
 
@@ -1112,20 +1191,23 @@ export const caseStudies: Record<string, CaseStudy> = {
         >
           <p>
             Retrospect runs on Vercel&rsquo;s free tier with Cloudflare R2 for storage. R2 was chosen
-            specifically because it has <strong>zero egress fees</strong>, so a read-heavy access
-            pattern can&rsquo;t generate a surprise bill, and Vercel Hobby pauses rather than charges when
-            limits are hit. Histories are stored as gzipped blobs, so a 500,000-scrobble library is
-            about 7 MB and the free tier holds roughly a thousand of them.
+            specifically because it has <strong>zero egress fees</strong>: it charges nothing to
+            serve data out, so a rush of visitors can&rsquo;t generate a surprise bill, and Vercel Hobby pauses rather than charges
+            when limits are hit. Two daily jobs do the housekeeping: one fills and refreshes
+            NASA&rsquo;s data, the other deletes any history nobody has looked at in 90 days. None of
+            the NASA or JPL sources need a key.
           </p>
           <p>
-            Birth charts are the one thing that never touches a server. Sun, moon, and rising sign
-            are computed in the browser and saved only on that device, because birth date, time, and
-            location is a more sensitive payload than anything else the app handles.
+            Birth charts are the one thing that never touches a server. The chart is a sheet on the
+            Sky view: Sun, Moon, Mercury, Venus and Mars at the minute you were born, and a rising
+            sign if you add a place, worked out in the browser and saved only on that device. Birth
+            date, time and place are a more sensitive payload than anything else the app handles.
           </p>
           <Shot
             press={rsBirthChart}
-            alt="The birth chart panel: fields for birth date, local time, UTC offset, and optional coordinates, with a note that everything is computed in the browser."
-            caption="Computed client-side and stored locally. The server never sees it."
+            alt="The birth chart sheet on a phone: fields for birth date, local time, the birthplace's UTC offset and optional coordinates, with a note that everything is computed in the browser and saved only on the device."
+            caption="Computed in the browser and stored there. The server never sees it."
+            frame="phone"
           />
         </Section>
       </>

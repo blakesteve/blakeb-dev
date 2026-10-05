@@ -116,7 +116,7 @@ export const projects: Project[] = [
        with the standard instead, so the two do not read as one paragraph
        printed twice. */
     blurb:
-      "Astrology makes a claim and never has to be right. Here it gets a permutation test, and most of the time the answer comes back no.",
+      "Astrology makes a claim and never has to be right. Here it gets twelve fixed questions and a test against chance, and most of the time the answer comes back no.",
     status: "MIT",
     host: "retrospect-seven.vercel.app",
     links: [
@@ -130,7 +130,7 @@ export const projects: Project[] = [
     world: { press: "#b98a12", blueline: "#d9a82c" },
     props: [
       { label: "Stack", value: "Next 16 · astronomy-engine · R2" },
-      { label: "Scale", value: "25 sky × measure trials", accent: true },
+      { label: "Scale", value: "12 questions · 2,000 fake skies each", accent: true },
       { label: "Note", value: "Read the math; the repo is public" },
     ],
   },

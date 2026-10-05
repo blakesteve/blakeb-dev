@@ -121,6 +121,76 @@ function proseIn(file: string): string {
 
 const PROSE = FILES.map((f) => [f, proseIn(f)] as const);
 
+/* Stems with open affixes on both sides, not a list of exact words. The
+   first version listed `favour` but not `favoured`, `organise` but not
+   `organising`, and missed `grey`, `optimise`, `catalogue` and
+   `customise` outright - so it would have passed the words most likely to
+   turn up in writing about a design system. */
+const BRITISH = new RegExp(
+  String.raw`\b\w*(?:` +
+    [
+      "colour",
+      "behaviour",
+      "favour",
+      "honour",
+      "labour",
+      "rumour",
+      /* not `organism`, which is a real word in a repo that talks about
+         atoms and molecules. */
+      "organis(?!m)",
+      "realis",
+      /* The British verb forms only. A bare `analys` stem flagged
+         "analysis" and "analyst", which are American too. "analyses" is
+         left alone: it's also the plural of "analysis". */
+      "analys(?=ed|ing|er|e\\b)",
+      "optimis",
+      "customis",
+      "normalis",
+      "serialis",
+      "initialis",
+      "minimis",
+      "maximis",
+      "summaris",
+      "emphasis[ei]d",
+      "standardis",
+      "prioritis",
+      "recognis",
+      "apologis",
+      "centre",
+      "centred",
+      "defence",
+      "licence",
+      "offence",
+      "pretence",
+      "catalogue",
+      "dialogue",
+      "programme",
+      "manoeuvre",
+      "aluminium",
+      "judgement",
+      "sceptic",
+      "whilst",
+      "amongst",
+      "labelled",
+      "labelling",
+      "modelled",
+      "modelling",
+      "cancelled",
+      "cancelling",
+      "travelled",
+      "travelling",
+      "fulfil\\b",
+      "grey",
+      "learnt",
+      "spelt",
+      "dreamt",
+      "practise",
+    ].join("|") +
+    String.raw`)\w*\b`,
+  "gi",
+);
+
+
 describe("prose voice", () => {
   it("never uses the closed form cannot", () => {
     /* Blake writes "can't", or "can not" as two words. The closed form reads as
@@ -137,76 +207,24 @@ describe("prose voice", () => {
   it("uses American spellings", () => {
     /* Never in the code, always in the prose about the code, which is why a
        linter has never once caught one of these. */
-    /* Stems with open affixes on both sides, not a list of exact words. The
-       first version listed `favour` but not `favoured`, `organise` but not
-       `organising`, and missed `grey`, `optimise`, `catalogue` and
-       `customise` outright - so it would have passed the words most likely to
-       turn up in writing about a design system. */
-    const BRITISH = new RegExp(
-      String.raw`\b\w*(?:` +
-        [
-          "colour",
-          "behaviour",
-          "favour",
-          "honour",
-          "labour",
-          "rumour",
-          /* not `organism`, which is a real word in a repo that talks about
-             atoms and molecules. */
-          "organis(?!m)",
-          "realis",
-          "analys",
-          "optimis",
-          "customis",
-          "normalis",
-          "serialis",
-          "initialis",
-          "minimis",
-          "maximis",
-          "summaris",
-          "emphasis[ei]d",
-          "standardis",
-          "prioritis",
-          "recognis",
-          "apologis",
-          "centre",
-          "centred",
-          "defence",
-          "licence",
-          "offence",
-          "pretence",
-          "catalogue",
-          "dialogue",
-          "programme",
-          "manoeuvre",
-          "aluminium",
-          "judgement",
-          "sceptic",
-          "whilst",
-          "amongst",
-          "labelled",
-          "labelling",
-          "modelled",
-          "modelling",
-          "cancelled",
-          "cancelling",
-          "travelled",
-          "travelling",
-          "fulfil\\b",
-          "grey",
-          "learnt",
-          "spelt",
-          "dreamt",
-          "practise",
-        ].join("|") +
-        String.raw`)\w*\b`,
-      "gi",
-    );
 
     for (const [file, prose] of PROSE) {
       const hits = [...prose.matchAll(BRITISH)].map((m) => m[0]);
       expect([...new Set(hits)], `${file}: American spellings only`).toEqual([]);
     }
+  });
+
+  it("tells the British analyse from the American analysis", () => {
+    /* The stem used to be a bare `analys`, which failed this file's own prose
+       for writing "the version of the analysis". Both sides are pinned, so
+       narrowing it can't quietly stop catching the British forms. */
+    const flagged = (text: string) => [...text.matchAll(BRITISH)].map((m) => m[0]);
+    expect(flagged("We analyse it. They analysed it, analysing as they went.")).toEqual([
+      "analyse",
+      "analysed",
+      "analysing",
+    ]);
+    expect(flagged("The analysis held up, and so did the analyst.")).toEqual([]);
   });
 
   it("reads the prose it claims to read, all the way to the end", () => {

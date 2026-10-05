@@ -115,9 +115,13 @@ handle slot, and a real employer's name in a squad description. All three had
 already shipped. None of them is a name the guards look for, which is the whole
 reason they passed.
 
-game-verdict's 26 frames and retrospect's 15 have no such script yet. They will
+game-verdict's 26 frames and retrospect's 14 have no such script yet. They will
 go stale the same way MegaSquad's did, which is to say silently, two days after
 somebody changes a color. Generalizing that script is on the portfolio roadmap.
+Retrospect's were reshot by hand on 4 October 2026, after its redesign, from
+production and Blake's own history; the visits triggered only the hourly
+top-up any visit does. Its loading clip is the production screen with the
+sync progress simulated in the browser, so nothing had to re-sync to film it.
 
 ## Writing
 
