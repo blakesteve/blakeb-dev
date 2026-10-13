@@ -2,6 +2,18 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /**
+   * Off: from 16.3, `next dev` writes a managed block into AGENTS.md whenever
+   * it detects a coding agent, and puts it back if it's removed, so every dev
+   * run left an uncommitted change. With this off it removes the block, and
+   * deletes AGENTS.md if nothing else is in it, which is why that file and the
+   * CLAUDE.md that only imported it are gone.
+   *
+   * `experimental.agentUpgrade` stays at its default, `security`: it stops an
+   * agent's dev or build while the installed Next has a known advisory.
+   */
+  agentRules: false,
+
+  /**
    * Roster's type declarations, forced into the serverless bundle.
    *
    * `lib/roster.ts` counts the library's components by parsing

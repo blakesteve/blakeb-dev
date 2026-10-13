@@ -68,7 +68,7 @@ export const projects: Project[] = [
         /* Re-check this whenever the case study twin is re-checked. It is the
            fallback for the same live figure, and unlike that one it carries no
            date, so a stale value here asserts itself as present tense. */
-        value: "1,832 games tracked",
+        value: "1,884 games tracked",
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
@@ -157,7 +157,7 @@ export const projects: Project[] = [
          on its main branch, playoff and tournament variants folded into their
          base league. Components are distinct Roster components, by Roster's
          own list, imported in mega-squad's `src` on its main branch, tests and
-         stories excluded. Both checked 29 Sept 2026. */
+         stories excluded. Both checked 13 Oct 2026. */
       { label: "Scale", value: "13 leagues · 27 Roster components", accent: true },
       { label: "Note", value: "Front end mine, API my brother's" },
     ],

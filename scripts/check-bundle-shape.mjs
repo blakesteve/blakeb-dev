@@ -70,25 +70,37 @@ const PKG = "@blakesteve/roster";
  * emitted .js under `static` holds whatever the layout is, and is also what the
  * heading actually claims.
  *
- * Measured 18 September 2026 on Roster 5.0.0: 897,277 bytes across 19 files.
- * The ceiling allows 42,723 bytes of slack, 4.8%, which is room for the
- * ordinary drift of adding posts and case studies between Roster bumps and far
- * below the 18.49% class of regression this exists to catch. Raise it in a
- * commit that says what grew and why, rather than to make a red build green.
+ * Measured 13 October 2026 on Next 16.4.0 and Roster 5.9.0: 919,626 bytes
+ * across 19 files. The ceiling allows 43,787 bytes of slack, 4.7614%, which is
+ * room for the ordinary drift of adding posts and case studies between Roster
+ * bumps and far below the 18.49% class of regression this exists to catch.
+ * Raise it in a commit that says what grew and why, rather than to make a red
+ * build green.
+ *
+ * What grew in this raise, from 900,763 on Next 16.3.0 and Roster 5.0.0: 16,914
+ * bytes from Next 16.4.0 alone (built with Roster held at 5.0.0), 1,840 from
+ * Roster 5.9.0, and 109 from the same branch's `REyebrow` `wraps` prop. The
+ * first measurement, 18 September, was 897,277.
  */
-const CLIENT_JS_CEILING = 940_000;
+const CLIENT_JS_CEILING = 963_413;
 
 /**
  * Ceiling on emitted client CSS, same walk, every .css under `static`.
  *
- * Measured 18 September 2026 on a clean build: 218,526 bytes across 2 files.
- * The ceiling allows 10,405 bytes of slack, 4.7614%.
+ * Measured 13 October 2026 on Next 16.4.0 and Roster 5.9.0: 236,739 bytes
+ * across 2 files. The ceiling allows 11,272 bytes of slack, 4.7614%.
+ *
+ * What grew, from 219,533: 17,246 bytes of Roster's stylesheet between 5.0.0
+ * and 5.9.0, then -146 from Next 16.4.0 with the same branch's one-line font
+ * fix, and 106 for the `leading-normal` that `REyebrow`'s `wraps` prop adds.
+ * That crossed the old ceiling of 228,931 (set on 18 September at 218,526
+ * bytes) by 7,808.
  *
  * That slack is EQUAL to the JS ceiling's 4.7614%, on purpose, and not tighter.
  * Equal to four decimal places rather than approximately, which is why the
- * number is 228,931 and not a round 229,000: a round one came out at 4.79%,
- * marginally LOOSER, and a comment claiming equality while printing two
- * different figures is the exact defect this paragraph exists to call out.
+ * numbers are 963,413 and 248,011 and not round ones: a round 248,000 comes out
+ * at 4.7567%, and a comment claiming equality while printing two different
+ * figures is the exact defect this paragraph exists to call out.
  * There is a line going around two other apps claiming their CSS budget is
  * "tighter than the JS budget on purpose" when in both it is looser, so: this
  * one is equal, and the reason is that nothing about CSS here drifts more
@@ -96,13 +108,15 @@ const CLIENT_JS_CEILING = 940_000;
  * dominated by the same dependency. A tighter CSS budget would buy earlier
  * warning on the one number that is least likely to move on its own.
  *
- * Roster's stylesheet is 141,023 of the 218,526, or 64.5%, measured
- * DIFFERENTIALLY: built once with the two `@import` lines in `globals.css` and
- * once without, and subtracted. 77,503 bytes without them.
+ * Roster's stylesheet is 157,653 bytes, 66.6% of a 236,633-byte build of this
+ * branch before the `wraps` prop, measured DIFFERENTIALLY: built once with the
+ * two `@import` lines in `globals.css` and once without, and subtracted. 78,980
+ * bytes without them. (On 18 September,
+ * on Roster 5.0.0: 141,023 of 218,526, or 64.5%.)
  *
  * Do not re-derive that share by dividing `roster.css`'s on-disk size by the
- * total. On disk it is 142,426 plus 2,790 of `tokens.css`, which divides out to
- * 66.5% and is wrong in the loose direction here. It is wrong in the other
+ * total. On disk it is 159,415 plus 2,790 of `tokens.css`, which divides out to
+ * 68.5% and is wrong in the loose direction here. It is wrong in the other
  * direction elsewhere: in a sibling app the stylesheet expands about 18,000
  * bytes through Tailwind and the on-disk figure understates its share by nine
  * points. The expansion is a property of the consuming app's Tailwind config,
@@ -111,7 +125,7 @@ const CLIENT_JS_CEILING = 940_000;
  *
  * This is the ceiling that reports the day Roster's stylesheet stops shaking.
  */
-const CLIENT_CSS_CEILING = 228_931;
+const CLIENT_CSS_CEILING = 248_011;
 
 const problems = [];
 

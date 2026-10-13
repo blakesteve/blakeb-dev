@@ -240,15 +240,15 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,754", label: "Verdicts cast", source: "29 Sept 2026 snapshot", live: "verdicts" },
-      { value: "1,832", label: "Games tracked", source: "29 Sept 2026 snapshot", live: "games" },
+      { value: "2,894", label: "Verdicts cast", source: "13 Oct 2026 snapshot", live: "verdicts" },
+      { value: "1,884", label: "Games tracked", source: "13 Oct 2026 snapshot", live: "games" },
       /* Counted off `origin/main`. That is NOT this repo's default branch -
          game-verdict releases from `dev` - but `main` is its release line, so
          this counts shipped work rather than whatever `dev` is carrying, and it
          matches how the Roster card counts. No live path for this one: the repo
          is private, so there is nothing for the GitHub reader to reach, which
          makes it the only number on this card that can go stale silently. */
-      { value: "1,023", label: "Commits", source: "29 Sept 2026 snapshot · private repo" },
+      { value: "1,080", label: "Commits", source: "13 Oct 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -636,7 +636,7 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   roster: {
-    lede: "The component library this site is built out of, with exactly one real customer: me. Seven apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.",
+    lede: "The component library this site is built out of, with exactly one real customer: me. Eight apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.",
     stats: [
       {
         value: String(getRosterComponentCount()),
@@ -647,8 +647,8 @@ export const caseStudies: Record<string, CaseStudy> = {
         /* Matches `git rev-list --count origin/main` after a fetch, which is
            the same count the GitHub API reports and the same thing the live
            path above renders. Not a local working copy, which drifts ahead.
-           Last checked 29 Sept 2026. */
-        value: "354",
+           Last checked 13 Oct 2026. */
+        value: "376",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -664,10 +664,10 @@ export const caseStudies: Record<string, CaseStudy> = {
               label: "Tests",
               source: `live · roster @ ${meta.version}`,
             }
-          : { value: "1,420", label: "Tests", source: "roster @ 5.0.0" })(
+          : { value: "2,220", label: "Tests", source: "roster @ 5.9.0" })(
         getRosterMeta(),
       ),
-      { value: "7", label: "Apps consuming it", source: "including this one" },
+      { value: "8", label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
       { k: "Runtime", v: "React 19" },

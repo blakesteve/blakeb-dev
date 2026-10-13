@@ -190,15 +190,17 @@
   --roster-gray-900: var(--ink);
   --roster-gray-950: #0a0b07;
 
-  /* Roster's typographic components (Eyebrow, InlineCode, Stat's source line,
-     DescriptionList's terms) reach for `font-mono`, so it has to resolve to
-     Plex Mono or the page sets in two different monospaces.
+  /* This app's own monospace. Tailwind's preflight sets bare `code`, `kbd`,
+     `samp` and `pre` in `var(--default-mono-font-family)`, which reads
+     --font-mono, so those resolve to Plex Mono rather than the browser's.
 
-     This cannot go in `@theme inline` below. Roster imports Tailwind's theme
-     inside `@layer roster`, which sits ABOVE `theme` in the order declared at
-     the top of this file — so Roster's own --font-mono would win. Declared
-     here unlayered, it beats both, which is the same reason the --roster-*
-     overrides above live out here rather than in the theme block. */
+     Roster's components don't read this. Their `rst:font-mono` reads
+     --roster-font-mono, set beside --roster-font-ui further down.
+
+     It sits here, unlayered, rather than in `@theme inline` below because an
+     older Roster shipped its own --font-mono inside its layer, which would
+     have won over the theme. Roster 5.9.0 ships none, so it could move, but
+     that's untested in a browser and not worth doing for its own sake. */
   --font-mono: var(--font-util);
 }
 
@@ -381,12 +383,18 @@
  * the whole component library renders in a reading face. Archivo is this site's
  * only sans, so the controls speak the same language as the headings.
  *
+ * Its mono components (Eyebrow, InlineCode, Stat's source line,
+ * DescriptionList's terms) read --roster-font-mono and fall back to
+ * `ui-monospace`. Unset, they rendered in the system mono beside this page's
+ * Plex Mono (found on production, 6 Oct), so it points at --font-util.
+ *
  * Set outside `@theme` on purpose: `--roster-*` variables are read by Roster's
  * compiled CSS at runtime, not compiled by this app's Tailwind.
  */
 :root {
   --roster-font-ui: var(--font-archivo), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
+  --roster-font-mono: var(--font-util);
 }
 
 body {
