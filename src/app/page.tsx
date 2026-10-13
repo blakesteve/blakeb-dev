@@ -124,7 +124,7 @@ export default async function Home() {
       <section className="mt-10 overflow-hidden rounded-[3px] border border-rule bg-panel">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-rule px-4 py-2">
           <REyebrow>Built with @blakesteve/roster</REyebrow>
-          <REyebrow>
+          <REyebrow wraps>
             v{version} · {componentCount} components · tokens read live
           </REyebrow>
         </div>

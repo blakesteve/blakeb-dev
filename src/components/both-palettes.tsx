@@ -32,15 +32,18 @@ export function BothPalettes({
 }) {
   /*
    * Type is pinned alongside the palette. This site maps `--roster-font-ui` to
-   * Archivo and sets its own mono face on controls, so without these two the
-   * left column would render this site's type under the label "as Roster ships
-   * it" — the one thing this figure exists to disprove.
+   * Archivo, sets its own mono face on controls, and maps `--roster-font-mono`
+   * to Plex Mono, so without these three the left column would render this
+   * site's type under the label "as Roster ships it" — the one thing this
+   * figure exists to disprove. `initial` makes the mono variable invalid here,
+   * so Roster's own fallback stack applies.
    */
   const shippedFont = getRosterShippedFontUi();
   const shipped = {
     ...getRosterShippedTokens(),
     "--roster-font-ui": shippedFont,
     "--control-face": shippedFont,
+    "--roster-font-mono": "initial",
   } as CSSProperties;
 
   return (

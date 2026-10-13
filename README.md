@@ -54,18 +54,28 @@ order, and the order matters:
    how the dark ramp's 300 and 400 ended up swapped, which put every eyebrow one
    step too bright on the proof.
 
-Some values can't live in `@theme inline`: Roster imports Tailwind's theme
-inside `@layer roster`, which sits above this app's `theme` layer, so a
-declaration there loses. `--font-mono` and the `--roster-*` overrides are
-declared unlayered, where they beat both.
+The `--roster-*` overrides are declared unlayered on `:root`, after Roster's
+own `tokens.css`, so they win by order. `--font-mono` sits beside them for a
+reason that no longer holds: an older Roster shipped its own `--font-mono`
+inside its layer. 5.9.0 ships none.
 
 `--roster-font-ui` is one of those overrides and is mapped to Archivo. Roster
 4.5.0 added it because its components previously set no `font-family` at all
 and inherited `body`, which here is Source Serif — so buttons, badges, inputs
 and table cells all rendered in a reading face. Two components opt back out on
 purpose: `RButton` takes the mono control face through `--control-face`, and
-`BothPalettes` rebinds both variables in its "as Roster ships it" column so that
-column shows the untouched library rather than this site's type.
+`BothPalettes` rebinds both variables, and unsets `--roster-font-mono`, in its
+"as Roster ships it" column so that column shows the untouched library rather
+than this site's type.
+
+`--roster-font-mono` is the other, mapped to Plex Mono through `--font-util`.
+Roster's mono components (Eyebrow, InlineCode, Stat's source line and
+DescriptionList's terms on this site, among others) read it and fall back to
+`ui-monospace`. Before this fix the site never set it, so they rendered in the
+system mono beside the page's own Plex Mono.
+`src/lib/roster-fonts.test.ts` fails if it stops being set. `--font-mono` is
+this site's own: Tailwind's preflight sets bare `code`, `kbd`, `samp` and `pre`
+from it, and Roster doesn't read it.
 
 ## Live data
 
@@ -259,8 +269,8 @@ fetch fails.
 
 Press <kbd>⌥X</kbd> on any page to outline and name every Roster component on it.
 
-Roster's compiled classes are not uniquely prefixed, so there is no dependable
-way to detect its components in the DOM. X-ray relies on deliberate annotation
+Roster's classes carry an `rst:` prefix, which says a class came from Roster
+but not which component it belongs to. So X-ray relies on deliberate annotation
 instead: everything the site renders from Roster goes through `lib/roster-ui.tsx`,
 which stamps `data-roster="<Name>"`. That keeps the marker honest — if something
 is outlined, it really is a Roster component — and keeps the annotation next to
