@@ -223,8 +223,28 @@ reference, if a Roster key turns up in a shape it does not recognize, or if
 client JS or CSS crosses a byte ceiling. It runs on `postbuild`, because unlike
 the ramp check it reads build output rather than source.
 
+It also fails if the emitted CSS has a `:hover` rule outside
+`@media (hover: hover)`. A phone fires `:hover` on whatever was tapped and
+leaves it on until the next tap lands elsewhere, so an unguarded hover style
+stays lit after the finger lifts. Tailwind 4 already wraps its `hover:`
+variant in that query, which covered almost everything here before this
+check existed: 173 of the 177 hover selectors in `main`'s build on 15 Oct 2026,
+nearly all of them Roster's. It does not wrap an arbitrary variant that contains `:hover` (write
+`[&_a]:hover:`, not `[&_a:hover]:`), and nothing wraps CSS written by hand.
+Rules that must apply everywhere are listed in `HOVER_ALLOW` in
+`scripts/lib/hover-guard.mjs`, each with its reason; today that is only the
+registration mark, whose behavior on phones is its own ticket. The scanner's
+tests, and a check of `globals.css` and the TSX source, run in `npm test`
+(`src/lib/hover-guard.test.ts`).
+
+Tailwind scans every file for class names, tests included, so a test that
+spells out an unguarded class as a fixture emits that class into the real
+stylesheet. The first version of the hover test did exactly that and failed
+the build. Split such strings.
+
 Every one of those is an upper bound, so each also has a floor: on bytes, on
-routes, on client modules and on Roster component pins. An upper bound is
+routes, on client modules, on Roster component pins and on guarded hover
+rules. An upper bound is
 satisfied by measuring nothing, and this check has reported health on an empty
 set more than once. Zero is not a low enough floor either. Relocating
 `static/chunks`, which is what Vercel's adapter has already done once, leaves

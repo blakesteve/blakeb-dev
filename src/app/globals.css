@@ -653,8 +653,18 @@ body {
   transition: transform 0.55s cubic-bezier(0.34, 1.5, 0.5, 1);
 }
 
-/* Hovering either way out fixes the registration. */
-.group\/sheet:has(a:hover) .misplate {
+/* Hovering either way out fixes the registration. Only where there is a
+   hover: on a phone a tap leaves `:hover` on the link, and the plates stayed
+   seated after the finger lifted. Keyboard focus seats them too, so the snap
+   isn't only for a mouse. A tap gets nothing: tried with `:active`, a 100ms
+   press against this 0.55s overshoot read as a twitch, not a snap, and any
+   press on the page set it off. */
+@media (hover: hover) {
+  .group\/sheet:has(a:hover) .misplate {
+    transform: translate(0, 0);
+  }
+}
+.group\/sheet:has(a:focus-visible) .misplate {
   transform: translate(0, 0);
 }
 
