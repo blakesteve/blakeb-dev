@@ -32,7 +32,7 @@ const FOLIO_TYPE =
   "[&_[aria-current]]:block [&_[aria-current]]:truncate " +
   "[&_*]:!font-[family-name:var(--font-util)] [&_*]:!text-[0.625rem] " +
   "[&_*]:!uppercase [&_*]:!tracking-[0.16em] [&_*]:!font-normal " +
-  "[&_a]:!text-ink-faint [&_a:hover]:!text-spot [&_a]:!no-underline";
+  "[&_a]:!text-ink-faint [&_a]:hover:!text-spot [&_a]:!no-underline";
 
 export function RBreadcrumbs({
   className = "",

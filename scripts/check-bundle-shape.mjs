@@ -1,6 +1,7 @@
 /**
- * Fails the build if Roster's barrel got pinned as a client reference, or if
- * total client JS crossed its ceiling.
+ * Fails the build if Roster's barrel got pinned as a client reference, if
+ * total client JS or CSS crossed its ceiling, or if the emitted CSS has a
+ * hover rule a phone would apply.
  *
  * Roster 4.13.0 regressed a sibling app by 18.49% and nobody found out until
  * somebody measured by hand. Every gate this app has is blind to it: vitest
@@ -18,6 +19,12 @@
  *
  * SIZE. Shape is the known mechanism, not the only one. The ceilings catch a
  * regression that arrives some other way, including from outside Roster.
+ *
+ * And one about what the stylesheet says rather than how big it is.
+ *
+ * HOVER. Every `:hover` rule in the emitted CSS sits inside
+ * `@media (hover: hover)`, or a phone's tap leaves it lit. `lib/hover-guard.mjs`
+ * says why, and holds the short allow-list of rules that apply everywhere.
  *
  * COVERAGE. Both of the above are upper bounds, and an upper bound is satisfied
  * by measuring nothing. Every count and every byte sum the success line prints
@@ -56,6 +63,7 @@ import { readFileSync, existsSync, readdirSync, statSync, lstatSync } from "node
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative, resolve } from "node:path";
 import { createContext, runInContext } from "node:vm";
+import { HOVER_ALLOW, checkHover } from "./lib/hover-guard.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PKG = "@blakesteve/roster";
@@ -688,6 +696,46 @@ for (const [label, extension, ceiling] of [
   }
 }
 
+/* HOVER. Read from the same emitted stylesheets the CSS ceiling summed. The
+   floor is the coverage rule again: Tailwind guards every `hover:` variant, so
+   a real build carries well over a hundred guarded hover selectors, nearly
+   all of them Roster's. A scan that read nothing would find nothing unguarded
+   and pass, so finding almost nothing guarded is a failure too. 175 on
+   15 Oct 2026, when the check was added. */
+const HOVER_GUARDED_FLOOR = 100;
+const hover = checkHover(
+  emitted
+    /* lstat, as everywhere else here: a dangling symlink must not trade the
+       diagnostics for a stack trace. */
+    .filter((file) => file.endsWith(".css") && lstatSync(file).isFile())
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n"),
+);
+if (hover.guarded < HOVER_GUARDED_FLOOR) {
+  problems.push(
+    `only ${hover.guarded} guarded hover selector(s) in the emitted CSS, under the ` +
+      `floor of ${HOVER_GUARDED_FLOOR}.\n  The scan is probably not reading the stylesheets.`,
+  );
+}
+if (hover.unguarded.length > 0) {
+  problems.push(
+    `${hover.unguarded.length} hover selector(s) apply on touch screens, outside ` +
+      `@media (hover: hover):\n` +
+      hover.unguarded.map((selector) => `    ${selector}`).join("\n") +
+      `\n\n  A tap leaves :hover on, so these stay lit on a phone. Use Tailwind's ` +
+      `hover: variant,\n  or wrap the rule in @media (hover: hover). If one must ` +
+      `apply everywhere,\n  add it to HOVER_ALLOW in scripts/lib/hover-guard.mjs ` +
+      `with the reason.`,
+  );
+}
+if (hover.stale.length > 0) {
+  problems.push(
+    `HOVER_ALLOW lists selector(s) the emitted CSS no longer has:\n` +
+      hover.stale.map((selector) => `    ${selector}`).join("\n") +
+      `\n\n  Remove them, so the allow-list can't quietly cover something new.`,
+  );
+}
+
 if (problems.length > 0) {
   console.error(`[check-bundle-shape] ${problems.length} problem(s).\n`);
   console.error(problems.join("\n\n"));
@@ -709,5 +757,6 @@ console.log(
     `${CLIENT_JS_CEILING.toLocaleString("en-US")}, CSS ` +
     `${totals.CSS.toLocaleString("en-US")} of ` +
     `${CLIENT_CSS_CEILING.toLocaleString("en-US")} bytes, ` +
+    `${hover.guarded} hover selectors guarded and ${HOVER_ALLOW.length} allowed, ` +
     `build at ${relative(root, distDir) || distDir} ${age}`,
 );
