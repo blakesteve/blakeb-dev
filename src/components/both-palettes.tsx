@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { REyebrow } from "@/lib/roster-ui";
+import { RCard, REyebrow } from "@/lib/roster-ui";
 import { getRosterShippedFontUi, getRosterShippedTokens } from "@/lib/roster";
 
 /**
@@ -49,18 +49,18 @@ export function BothPalettes({
   return (
     <figure className="my-5 flex w-full flex-col gap-[7px]">
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+        <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
           <REyebrow>As Roster ships it</REyebrow>
           {/* Pinned to the package's own values. Does not follow the toggle. */}
           <div style={shipped} className="flex flex-wrap items-center gap-2">
             {children}
           </div>
-        </div>
+        </RCard>
 
-        <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+        <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
           <REyebrow tone="primary">As this page remaps it</REyebrow>
           <div className="flex flex-wrap items-center gap-2">{children}</div>
-        </div>
+        </RCard>
       </div>
 
       <figcaption className="font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">

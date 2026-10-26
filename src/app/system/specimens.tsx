@@ -11,7 +11,7 @@ import {
   Switch,
   Input,
 } from "@blakesteve/roster";
-import { RButton, REyebrow, RStat, RPullquote, RInlineCode } from "@/lib/roster-ui";
+import { RButton, RCard, REyebrow, RStat, RPullquote, RInlineCode } from "@/lib/roster-ui";
 
 /**
  * Live components, not screenshots.
@@ -33,10 +33,10 @@ import { RButton, REyebrow, RStat, RPullquote, RInlineCode } from "@/lib/roster-
 
 function Cell({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+    <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
       <REyebrow>{label}</REyebrow>
       <div className="flex flex-wrap items-center gap-2">{children}</div>
-    </div>
+    </RCard>
   );
 }
 

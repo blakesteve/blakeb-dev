@@ -68,7 +68,7 @@ export const projects: Project[] = [
         /* Re-check this whenever the case study twin is re-checked. It is the
            fallback for the same live figure, and unlike that one it carries no
            date, so a stale value here asserts itself as present tense. */
-        value: "1,884 games tracked",
+        value: "1,972 games tracked",
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
@@ -151,14 +151,14 @@ export const projects: Project[] = [
     world: { press: "#c62828", blueline: "#e23b3b" },
     props: [
       { label: "Stack", value: "Vite · React 19 · Zustand" },
-      /* Thirteen, not ten. This card repeated a figure the case study owns and
-         drifted a month behind it, which is the exact failure the comment two
+      /* This card once said ten while the case study said thirteen: it
+         repeated a figure the case study owns and drifted a month behind it, which is the exact failure the comment two
          entries above describes. Leagues are the hub's `SportLeague` registry
          on its main branch, playoff and tournament variants folded into their
          base league. Components are distinct Roster components, by Roster's
          own list, imported in mega-squad's `src` on its main branch, tests and
-         stories excluded. Both checked 13 Oct 2026. */
-      { label: "Scale", value: "13 leagues · 27 Roster components", accent: true },
+         stories excluded. Both checked 25 Oct 2026. */
+      { label: "Scale", value: "14 leagues · 29 Roster components", accent: true },
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },

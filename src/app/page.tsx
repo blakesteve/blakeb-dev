@@ -164,10 +164,7 @@ export default async function Home() {
               brandColorTop="var(--world)"
               brandColorBottom="transparent"
               padding="none"
-              className={
-                "world relative overflow-hidden rounded-[3px] !border !border-rule !bg-panel " +
-                "pb-[13px] transition-colors hover:!border-[var(--world)]"
-              }
+              className="world pb-[13px] transition-colors hover:border-[var(--world)]"
               style={
                 {
                   "--world-press": project.world.press,

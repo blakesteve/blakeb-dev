@@ -240,15 +240,15 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "2,894", label: "Verdicts cast", source: "13 Oct 2026 snapshot", live: "verdicts" },
-      { value: "1,884", label: "Games tracked", source: "13 Oct 2026 snapshot", live: "games" },
+      { value: "3,399", label: "Verdicts cast", source: "25 Oct 2026 snapshot", live: "verdicts" },
+      { value: "1,972", label: "Games tracked", source: "25 Oct 2026 snapshot", live: "games" },
       /* Counted off `origin/main`. That is NOT this repo's default branch -
          game-verdict releases from `dev` - but `main` is its release line, so
          this counts shipped work rather than whatever `dev` is carrying, and it
          matches how the Roster card counts. No live path for this one: the repo
          is private, so there is nothing for the GitHub reader to reach, which
          makes it the only number on this card that can go stale silently. */
-      { value: "1,080", label: "Commits", source: "13 Oct 2026 snapshot · private repo" },
+      { value: "1,116", label: "Commits", source: "25 Oct 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -647,8 +647,8 @@ export const caseStudies: Record<string, CaseStudy> = {
         /* Matches `git rev-list --count origin/main` after a fetch, which is
            the same count the GitHub API reports and the same thing the live
            path above renders. Not a local working copy, which drifts ahead.
-           Last checked 13 Oct 2026. */
-        value: "376",
+           Last checked 25 Oct 2026. */
+        value: "392",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -664,7 +664,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               label: "Tests",
               source: `live · roster @ ${meta.version}`,
             }
-          : { value: "2,220", label: "Tests", source: "roster @ 5.9.0" })(
+          : { value: "2,539", label: "Tests", source: "roster @ 5.15.0" })(
         getRosterMeta(),
       ),
       { value: "8", label: "Apps consuming it", source: "including this one" },
@@ -1215,9 +1215,9 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   megasquad: {
-    lede: "Multi-sport pick’ems for your friend group. Thirteen leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
+    lede: "Multi-sport pick’ems for your friend group. Fourteen leagues across five sports, picks that auto-lock at tip-off, and standings that settle the trash talk. I built the front end; my brother built the API.",
     stats: [
-      { value: "13", label: "Leagues supported", source: "five sports, 20 competitions" },
+      { value: "14", label: "Leagues supported", source: "five sports, 22 competitions" },
       { value: "285", label: "Games in one season", source: "scored, reconciled, settled" },
       { value: "32", label: "Ways it answers back", source: "13 hits, 12 misses, 7 scoldings" },
       { value: "30 s", label: "Poll interval", source: "idle after 5 min" },

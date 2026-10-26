@@ -57,7 +57,7 @@ order, and the order matters:
 The `--roster-*` overrides are declared unlayered on `:root`, after Roster's
 own `tokens.css`, so they win by order. `--font-mono` sits beside them for a
 reason that no longer holds: an older Roster shipped its own `--font-mono`
-inside its layer. 5.9.0 ships none.
+inside its layer. Roster 5.9.0 and later ship none.
 
 `--roster-font-ui` is one of those overrides and is mapped to Archivo. Roster
 4.5.0 added it because its components previously set no `font-family` at all
@@ -76,6 +76,36 @@ system mono beside the page's own Plex Mono.
 `src/lib/roster-fonts.test.ts` fails if it stops being set. `--font-mono` is
 this site's own: Tailwind's preflight sets bare `code`, `kbd`, `samp` and `pre`
 from it, and Roster doesn't read it.
+
+### Panels are Roster Cards
+
+The press sheet's panels (the typefaces and colophon on `/about`, the specimen
+cells on `/system`, a case study's sidebar, the palette comparison, the release
+history) and its image frames (`Shot`, `Clip`) are `RCard`s, so X-ray outlines
+them as the Roster components they are. Their colors come from
+`--roster-card-bg` and `--roster-card-border`, set on `:root` to `--panel` and
+`--rule`. The 3px corner comes from `press-card`, a class `RCard` adds that sets
+`--roster-radius-xl` on the card alone: Card reads that token on its own
+element, so setting it site-wide would have rounded every other Roster element
+that uses `rounded-xl` too.
+
+A panel that was hand-rolled also takes `press-panel`, which puts back what
+Card adds and the panel never had: the raised shadow, Card's own text color, a
+stacking context, `position: relative` and a transition. The home page's
+project cards don't, because they were Roster Cards already, shadow included.
+The move was measured as no visible change outside X-ray: every element's box
+and visible styles at rest, under the pointer and through the Tab order, in both
+states, at 390 and 1280, against the same code on the previous build. In X-ray
+the panels and frames are now outlined and labeled as Card, which is the point.
+
+Still hand-rolled, each for a reason: the live system strip on `/` (a
+`<section>`, and Card only renders a `div`), and the token swatches, the
+post code block, the ramp step labels on `/system`, and the X-ray and CRT popovers
+and buttons, which aren't cards.
+
+`RBreadcrumbs` sets the trail in the folio mono with plain utilities. It used
+`!important` on all of them, which the trail never needed: the `utilities`
+layer outranks `roster`, as it does for the dek's Alert overrides.
 
 ## Live data
 

@@ -4,6 +4,7 @@ import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { SiteFooter, CONTACT } from "@/components/site-footer";
 import { Portrait } from "@/components/portrait";
 import {
+  RCard,
   RCta,
   RDescriptionList,
   REyebrow,
@@ -255,9 +256,9 @@ export default function AboutPage() {
 
         <div className="grid gap-3 sm:grid-cols-3">
           {TYPEFACES.map((face) => (
-            <div
+            <RCard
               key={face.name}
-              className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]"
+              padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]"
             >
               <REyebrow>{face.role}</REyebrow>
               <span className={`text-[1.6rem] leading-none text-ink ${face.className}`}>
@@ -266,12 +267,12 @@ export default function AboutPage() {
               <span className="font-[family-name:var(--font-util)] text-[10.5px] text-ink-faint">
                 {face.name}
               </span>
-            </div>
+            </RCard>
           ))}
         </div>
 
         <div className="grid gap-3 pt-3 sm:grid-cols-2">
-          <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+          <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
             <REyebrow>Pressed with</REyebrow>
             <RDescriptionList
               items={[
@@ -282,9 +283,9 @@ export default function AboutPage() {
                 { term: "Host", description: "Vercel" },
               ]}
             />
-          </div>
+          </RCard>
 
-          <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+          <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
             <REyebrow>Two states, one design</REyebrow>
             <RDescriptionList
               items={[
@@ -300,7 +301,7 @@ export default function AboutPage() {
                 { term: "Proof it", description: "Press ⌥X to outline every component" },
               ]}
             />
-          </div>
+          </RCard>
         </div>
       </section>
 

@@ -395,6 +395,50 @@
   --roster-font-ui: var(--font-archivo), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   --roster-font-mono: var(--font-util);
+
+  /* Roster's Card, in the press sheet's panel colors. Both tokens point at
+     variables that already flip with `.dark`, so one declaration covers both
+     states, and it wins over Roster's own `.dark` values by coming later. */
+  --roster-card-bg: var(--panel);
+  --roster-card-border: var(--rule);
+}
+
+/*
+ * The press sheet's card corner, on every RCard (the wrapper in
+ * `lib/roster-ui.tsx` adds this class): 3px, where Roster's Card is 12px.
+ *
+ * Scoped to the card rather than set on `:root`, because it's a shared token:
+ * `--roster-radius-xl` rounds every Roster element that uses `rounded-xl`, so
+ * setting it site-wide would reshape far more than cards. Card reads it on its
+ * own element (`border-radius: var(--roster-radius-xl, .75rem)`), so setting it
+ * here changes the card and only the card, plus anything inside it that reads
+ * the same token. In Roster 5.15.0 the readers are Card, Skeleton at `xl`,
+ * LiquidTabs and ModerationQueue, and none of the others renders inside a card
+ * here (checked 25 Oct 2026).
+ */
+.press-card {
+  --roster-radius-xl: 3px;
+}
+
+/*
+ * A panel that became an RCard, drawn exactly as it was hand-rolled. Card adds
+ * things these panels never had: a raised shadow, its own text color, a
+ * stacking context, `position: relative` and a transition. Each is put back
+ * here, because the rule for this site is that moving a panel onto Roster
+ * changes nothing a reader can see. The home page's project cards don't take
+ * this class: they were Roster Cards already, shadow and all.
+ *
+ * Unlayered, which also means it overrides any utility a call site sets for
+ * these five properties (`relative`, `isolate`, `shadow-*`, `text-*`,
+ * `transition-*`); none of the panels sets one. Overflow is left to each call
+ * site, since the image frames clip and the text panels don't.
+ */
+.press-panel {
+  position: static;
+  isolation: auto;
+  box-shadow: none;
+  color: inherit;
+  transition: none;
 }
 
 body {
