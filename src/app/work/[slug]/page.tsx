@@ -5,6 +5,7 @@ import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { RBreadcrumbs } from "@/components/breadcrumbs";
 import {
+  RCard,
   RCta,
   RDescriptionList,
   REyebrow,
@@ -62,13 +63,13 @@ async function resolveStats(stats: CaseStudyStat[]): Promise<CaseStudyStat[]> {
 /** The two metadata panels in the sidebar. Same shape, same treatment. */
 function SidebarPanel({ label, rows }: { label: string; rows: { k: string; v: string }[] }) {
   return (
-    <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+    <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
       <REyebrow>{label}</REyebrow>
       <RDescriptionList
         items={rows.map((row) => ({ term: row.k, description: row.v }))}
         className="text-[10.5px] [&>div>dt]:normal-case [&>div>dt]:tracking-normal"
       />
-    </div>
+    </RCard>
   );
 }
 
@@ -117,7 +118,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
             { label: "Work", href: "/work" },
             { label: project.name },
           ]}
-          currentClassName="!text-[var(--world)]"
+          currentClassName="text-[var(--world)]"
         />
       </TopBar>
 

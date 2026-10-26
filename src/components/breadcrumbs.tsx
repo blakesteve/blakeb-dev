@@ -30,13 +30,13 @@ const FOLIO_TYPE =
   "[&_ol]:min-w-0 [&_ol]:flex-nowrap " +
   "[&_li]:min-w-0 [&_li]:shrink-0 [&_li:last-child]:shrink " +
   "[&_[aria-current]]:block [&_[aria-current]]:truncate " +
-  "[&_*]:!font-[family-name:var(--font-util)] [&_*]:!text-[0.625rem] " +
-  "[&_*]:!uppercase [&_*]:!tracking-[0.16em] [&_*]:!font-normal " +
-  "[&_a]:!text-ink-faint [&_a]:hover:!text-spot [&_a]:!no-underline";
+  "[&_*]:font-[family-name:var(--font-util)] [&_*]:text-[0.625rem] " +
+  "[&_*]:uppercase [&_*]:tracking-[0.16em] [&_*]:font-normal " +
+  "[&_a]:text-ink-faint [&_a]:hover:text-spot [&_a]:no-underline";
 
 export function RBreadcrumbs({
   className = "",
-  currentClassName = "!text-spot",
+  currentClassName = "text-spot",
   ...props
 }: Omit<ComponentProps<typeof Breadcrumbs>, "linkComponent">) {
   return (

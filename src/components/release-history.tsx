@@ -1,4 +1,4 @@
-import { REyebrow } from "@/lib/roster-ui";
+import { RCard, REyebrow } from "@/lib/roster-ui";
 import { getRosterHistory, milestones } from "@/lib/roster-npm";
 
 /**
@@ -21,7 +21,7 @@ export async function ReleaseHistory() {
 
   return (
     <figure className="my-5 flex w-full flex-col gap-[7px]">
-      <div className="flex flex-col gap-[10px] rounded-[3px] border border-rule bg-panel px-[15px] py-[14px]">
+      <RCard padding="none" className="press-panel flex flex-col gap-[10px] overflow-visible px-[15px] py-[14px]">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <REyebrow>Majors</REyebrow>
           <REyebrow>
@@ -50,7 +50,7 @@ export async function ReleaseHistory() {
             </li>
           ))}
         </ol>
-      </div>
+      </RCard>
 
       <figcaption className="font-[family-name:var(--font-util)] text-[9.5px] uppercase tracking-[0.14em] text-ink-faint">
         Read from the npm registry at build time. The deprecation notice is npm&rsquo;s,

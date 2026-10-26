@@ -47,8 +47,14 @@ export function storyHref(name: string, tier: string) {
   return `${STORYBOOK_URL}/?path=/docs/${tier}-${name.toLowerCase()}--docs`;
 }
 
-export function RCard(props: ComponentProps<typeof Card>) {
-  return <Card data-roster="Card" {...props} />;
+/**
+ * Roster's Card in the press sheet's shape. `press-card` (globals.css) scopes
+ * the 3px corner to the card itself; the colors come from `--roster-card-bg`
+ * and `--roster-card-border` on `:root`. A hand-rolled panel moved onto RCard
+ * also takes `press-panel`, which keeps it drawn exactly as it was.
+ */
+export function RCard({ className, ...props }: ComponentProps<typeof Card>) {
+  return <Card data-roster="Card" className={className ? `press-card ${className}` : "press-card"} {...props} />;
 }
 
 /**

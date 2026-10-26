@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
-import { RButton } from "@/lib/roster-ui";
+import { RButton, RCard } from "@/lib/roster-ui";
 import {
   INITIAL_CLIP_STATE,
   createClipController,
@@ -96,7 +96,7 @@ export function Clip({
 
   return (
     <figure className="relative my-5 flex w-full flex-col gap-[7px]">
-      <div className="overflow-hidden rounded-[3px] border border-rule bg-panel">
+      <RCard padding="none" className="press-panel">
         <video
           ref={video}
           className="block h-auto w-full"
@@ -110,7 +110,7 @@ export function Clip({
         >
           <source src={src} type="video/mp4" />
         </video>
-      </div>
+      </RCard>
       {/* WCAG 2.2.2: a loop that starts itself and runs over five seconds
           needs a way to stop it. The browser's controls cover reduced motion
           and a refusal; everywhere else this does.

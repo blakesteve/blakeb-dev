@@ -1,5 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
-import { REyebrow } from "@/lib/roster-ui";
+import { RCard, REyebrow } from "@/lib/roster-ui";
 
 /**
  * A screenshot, framed as a printed plate.
@@ -34,7 +34,7 @@ export function Shot({
         "my-5 flex flex-col gap-[7px] " + (frame === "phone" ? "max-w-[300px]" : "w-full")
       }
     >
-      <div className="overflow-hidden rounded-[3px] border border-rule bg-panel">
+      <RCard padding="none" className="press-panel">
         <Image
           src={press}
           alt={alt}
@@ -53,7 +53,7 @@ export function Shot({
             className="hidden h-auto w-full dark:block"
           />
         ) : null}
-      </div>
+      </RCard>
 
       <figcaption>
         <REyebrow className="!tracking-[0.12em]">{caption}</REyebrow>
