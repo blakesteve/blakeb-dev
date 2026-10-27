@@ -854,7 +854,7 @@ export const caseStudies: Record<string, CaseStudy> = {
     lede: "Your Last.fm history against the actual sky. Every song you’ve played, set against the real planets, moons, solar storms and eclipses of that night, then held to a standard astrology never asks for.",
     stats: [
       { value: "12", label: "Questions, the same for everyone", source: "corrected for asking 12" },
-      { value: "9.4%", label: "Fake histories given a false yes", source: "1,000 with no sky in them" },
+      { value: "7.1%", label: "Fake histories given a false yes", source: "1,000 with no sky in them" },
       { value: "500k", label: "Plays in my history", source: "since October 2009, one account" },
       { value: "$0", label: "Hosting cost", source: "by design" },
     ],
@@ -921,7 +921,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             So the first visit is paced like a story rather than dropped as a dashboard. Four
             screens: the scale of your history against the sky, your wildest night, the song with
             the strangest sky, and only then the answers. Every listening figure from here on is one
-            real history, mine: 500,413 plays since October 2009, through 216 times Venus changed
+            real history, mine, as it stood in early October 2026: 500,413 plays since October 2009,
+            through 216 times Venus changed
             sign and 201 solar storms. Someone else&rsquo;s numbers will be different, and that is the
             entire point of the thing.
           </p>
@@ -1111,15 +1112,16 @@ export const caseStudies: Record<string, CaseStudy> = {
             many get any Yes.
           </p>
           <p>
-            On the current code it was 94 of 1,000, or 9.4%, against a ceiling of 13%: the 10% the
-            correction aims for, plus room for chance. Without the correction, 393 of those 1,000
-            histories, 39.3%, had at least one question that cleared the usual bar by chance. That
+            On the current code it was 71 of 1,000, or 7.1%, against a ceiling of 13%: the 10% the
+            correction aims for, plus room for chance. Without the correction, 385 of those 1,000
+            histories, 38.5%, had at least one question that cleared the usual bar by chance. That
             is the failure the correction exists for: ask twelve questions of a sky that does
             nothing, and four histories in ten turn up something that looks real.
           </p>
           <p>
-            The full run is meant for any change to the engine or the answer rule. A quicker
-            version, 100 smaller histories with a looser ceiling, runs in CI with every other test,
+            The full run is in CI too, on every pull request that touches the engine or the answer
+            rule, and every Monday. A quicker version, 100 smaller histories with a looser ceiling,
+            runs with every other test,
             and it also checks that the same histories would break that ceiling without the
             correction. Drop the correction and the build goes red, which is what &ldquo;it
             can&rsquo;t happen again&rdquo; means here: not a promise, a check.

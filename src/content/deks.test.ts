@@ -45,9 +45,8 @@ describe("section deks", () => {
     /* 29 since the Retrospect redesign: its study went from seven sections
        to ten. */
     expect(deksIn("case-studies.tsx").length).toBe(29);
-    /* 30 since "A rule, correctly applied, in the wrong place", which
-       carries six. */
-    expect(deksIn("posts.tsx").length).toBe(30);
+    /* 40 since "Every song has a sky", which carries ten. */
+    expect(deksIn("posts.tsx").length).toBe(40);
   });
 
   it.each(ALL.map((d) => [d.dek.slice(0, 45), d.dek] as const))(
