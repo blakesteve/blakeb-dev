@@ -15,6 +15,14 @@ import seedsBeforeLight from "@/images/inner-squad/innersquad-nfl-card-before-li
 import seedsBeforeDark from "@/images/inner-squad/innersquad-nfl-card-before-dark.png";
 import seedsAfterLight from "@/images/inner-squad/innersquad-nfl-card-after-light.png";
 import seedsAfterDark from "@/images/inner-squad/innersquad-nfl-card-after-dark.png";
+import rsRevealYears from "@/images/retrospect/retrospect-reveal-years-mobile.png";
+import rsSongSky from "@/images/retrospect/retrospect-song-sky-mobile.png";
+import rsStormNight from "@/images/retrospect/retrospect-storm-night-mobile.png";
+import rsStormCalendar from "@/images/retrospect/retrospect-storm-calendar.png";
+import rsEclipseWheel from "@/images/retrospect/retrospect-eclipse-wheel.png";
+import rsTonightNow from "@/images/retrospect/retrospect-tonight-now-mobile.png";
+import rsQuestion from "@/images/retrospect/retrospect-question-mobile.png";
+import rsTooEarly from "@/images/retrospect/retrospect-too-early-mobile.png";
 
 /**
  * Posts, as content modules rather than MDX.
@@ -1260,6 +1268,355 @@ team-name field          177px     229px
           NFL 2025 before anything is sent. None of that came from following
           the rules more carefully. It came from asking each rule what it was
           about.
+        </P>
+      </>
+    ),
+  },
+  {
+    slug: "every-song-has-a-sky",
+    title: "Every song has a sky",
+    dek: "Retrospect puts your whole Last.fm history under the real sky: the planets, the Moon, NASA’s storms and eclipses. Then it tells you, honestly, whether any of it moved you.",
+    date: "2026-10-27",
+    tags: ["Product", "Data visualization", "Statistics"],
+    body: (
+      <>
+        <P>
+          <Link
+            href="/work/retrospect"
+            className="text-ink underline decoration-rule underline-offset-2 transition-colors hover:decoration-spot"
+          >
+            Retrospect
+          </Link>{" "}
+          reads your Last.fm history, every song you&rsquo;ve ever scrobbled,
+          and lines each one up with the real sky at the minute you played it.
+          Where the planets were, what the Moon was doing, whether NASA logged
+          a solar storm or a flare that night, how close the nearest asteroid
+          came, and what NASA photographed that day. Then it asks twelve
+          questions astrology&rsquo;s folklore likes to answer for you, and
+          checks them against your own listening.
+        </P>
+        <P>
+          Astrology has a lot of moving parts, and most apps about it assume
+          you already know what they all mean. Retrospect is built for both
+          kinds of visitor at once. If you know what Venus in detriment means,
+          the dignities, the stations and a note for practitioners are all
+          there. If you just want to see the sky the night you first heard
+          your favorite song, everything reads as a plain sentence, and terms
+          like Kp or lunar distance explain themselves when you tap them.
+        </P>
+
+        <H
+          eyebrow="The first visit"
+          dek="Before any chart, the first visit tells a history as a short story: how big it is against the sky, its wildest night, its strangest song, and then the answers."
+        >
+          Seventeen years under the sky
+        </H>
+        <P>
+          Mine opens with the numbers: 502,865 plays across seventeen years,
+          217 times Venus changed sign, 202 solar storms, and 5,115 close
+          passes by asteroids, each nearer than about four times the
+          Moon&rsquo;s distance.
+        </P>
+        <Shot
+          press={rsRevealYears}
+          alt="The first screen of Retrospect's reveal on a phone, for the account squareses: 'Seventeen years under the sky.' above 502,865 plays, 217 times Venus changed sign, 202 solar storms, and 5,115 asteroid flybys closer than about 4 lunar distances, beside a faint wheel of tonight's sky."
+          caption="My history, before a single chart"
+          frame="phone"
+        />
+
+        <H
+          eyebrow="The sky of a song"
+          dek="Tap any song to see the sky at the exact minute you first played it: the planets, the Moon, the space weather, and NASA’s own photos from that day."
+        >
+          The minute you first heard it
+        </H>
+        <P>
+          The landing page has a sample listener, made up but set against the
+          real sky, so you can try everything before typing a username. They
+          first played Good Luck, Babe! by Chappell Roan at 10:22 p.m. CDT on
+          Friday, May 10, 2024. Tap the song and its sheet opens on NASA&rsquo;s
+          photo of Earth that day and a picture of the Sun that evening. Under
+          them is the wheel at that minute, with Venus, Mars and the Moon all
+          ringed in gold, because each was in a sign it rules. The Moon had
+          moved into Cancer, its home sign, at 10:12 p.m., ten minutes before
+          the first play.
+        </P>
+        <Shot
+          press={rsSongSky}
+          alt="The sample listener's sheet for Good Luck, Babe! on a phone: 'Chappell Roan · pop', 'First played 10:22 p.m. CDT, Fri May 10, 2024', and a zodiac wheel with Mars, Venus and the Moon ringed in gold for at home. Below it, 'The night of May 10': a waxing crescent Moon, 11% lit, in Gemini, and space weather of Kp 9, a G5 storm, the top of the scale."
+          caption="Good Luck, Babe!, first played during the strongest storm in about 20 years"
+          frame="phone"
+        />
+        <P>
+          Below the wheel is the night itself: a waxing crescent Moon, 11% lit;
+          a G5 geomagnetic storm, the top of NOAA&rsquo;s scale; an X5.8 solar
+          flare; and a small asteroid passing at one and a half times the
+          Moon&rsquo;s distance. Then one more line: &ldquo;You&rsquo;ve
+          played it 142 times since.&rdquo;
+        </P>
+
+        <H
+          eyebrow="Wild nights"
+          dek="Retrospect goes looking for the biggest nights in a history, the eclipses, the strongest storms and the asteroids that came closer than the Moon, and shows what was played on each."
+        >
+          Eclipses, storms and close calls
+        </H>
+        <P>
+          Every history gets a row of its wildest nights. The sample
+          listener&rsquo;s include that same May 10, which NOAA called the
+          strongest storm since the Halloween storms of 2003. Mine is mostly
+          eclipses. On the total solar eclipse of April 8, 2024, I played 80
+          songs, exactly a usual Monday. On the total lunar eclipse of May 15,
+          2022, I played 174, on a Sunday when I usually play 66.
+        </P>
+        <Shot
+          press={rsStormNight}
+          alt="The sample listener's sheet for Friday, May 10, 2024, on a phone: the headline 'The strongest geomagnetic storm in about 20 years', the line 'G5, the top of NOAA's scale. NOAA called it the strongest since the Halloween storms of 2003.', and NASA's photo of Earth from DSCOVR at 11:34 a.m. CDT that day."
+          caption="A wild night opens on what made it wild"
+          frame="phone"
+        />
+
+        <H
+          eyebrow="Every night"
+          dek="A calendar of a whole history where each night is a door with that night’s real Moon on it. Filters light up every storm, eclipse, full moon or genre night ever listened through."
+        >
+          A door for every night
+        </H>
+        <P>
+          The Every night view is a calendar of your whole listening history,
+          newest first. Each night is a door with that night&rsquo;s real Moon
+          on it, and a night busier than usual for its weekday glows brighter. A
+          strip across the top charts the whole history at once.
+        </P>
+        <P>
+          Then there are the filters. Light up storm nights, X-flare nights,
+          eclipses, full or new moons, asteroids closer than the Moon,
+          fireballs, first plays and a few more, and every matching door
+          glows. My history
+          has 244 storm nights, 208 full moons and 567 fireball nights. Genres
+          light up too, and they combine with the sky: I have 95 full-moon
+          nights with at least three folk plays in them.
+        </P>
+        <Shot
+          press={rsStormCalendar}
+          alt="The Every night calendar for squareses with the Storm nights filter on, showing May 2024. Five doors are lit: the 2nd, 10th, 12th, 15th and 17th, each with its Moon phase. A strip across the top charts lit nights over the years, and a panel at the bottom reads '244 storm nights you listened on' and 'Coincidence or pattern? Question 7, on solar storms, has the answer.', with buttons for a random lit door and Clear."
+          caption="May 2024 with the storm nights lit. The 10th was the big one."
+        />
+        <P>
+          Each filter opens a panel that says what the lit nights mean and what
+          they don&rsquo;t. For storms, it points to question 7, which tests
+          whether storms change how late you listen. For folk under a full
+          moon, it says the thing the whole app is built on: &ldquo;Facts, not
+          proof. Retrospect doesn&rsquo;t test genres against the sky: with a
+          dozen genres and a dozen skies, chance alone would hand you several
+          &lsquo;patterns&rsquo;.&rdquo;
+        </P>
+
+        <H
+          eyebrow="Sky"
+          dek="The Sky view is an orrery: tonight’s planets where they really are, songs as stars around the edge, and a dial that turns the whole sky back through every night of a history."
+        >
+          Every year on one wheel
+        </H>
+        <P>
+          The Sky view is a zodiac wheel with the planets where they really
+          are tonight.
+          A colored ring marks a planet that&rsquo;s at home, exalted, in
+          detriment or in fall, which is astrology&rsquo;s way of saying how
+          comfortable it is in that sign, and you can tap any planet for more.
+          A dozen of your songs sit outside the signs as stars, each where the
+          Sun was when you first played it.
+        </P>
+        <P>
+          Under the wheel is a dial that runs through every night of your
+          history. Drag it, or press the Play your years button and watch the
+          whole sky turn from your first night to tonight.
+        </P>
+        <Clip
+          src="/video/retrospect-years.mp4"
+          poster="/video/retrospect-years-poster.jpg"
+          alt="Retrospect's Sky view for squareses, playing through the years. The planets slide around a zodiac wheel ringed with gold stars, song titles surface along the rim, and under the wheel the date jumps back from tonight to October 6, 2009, the first night of the history, then counts up to October 27, 2026 while a gold handle sweeps along a chart of plays by year."
+          caption="Play your years: seventeen years of sky in fifteen seconds"
+        />
+        <P>
+          The Jump to a wild night button moves the dial to the next one. From
+          tonight it wraps around to my first, the night of January 14, 2010,
+          when an annular solar eclipse peaked just after 1 a.m. my time. The
+          Sun and the Moon sit together on the wheel, and I played 104 songs
+          on a night when a usual Thursday is 76.
+        </P>
+        <Shot
+          press={rsEclipseWheel}
+          alt="The Sky view's wheel on Thursday, January 14, 2010, with the Sun and the Moon side by side in Capricorn, gold stars around the rim, and below it '104 plays, annular solar eclipse' above the dial's chart of plays from 2010 to 2026."
+          caption="The night of January 14, 2010: an annular eclipse, so the Sun and Moon share a spot"
+        />
+        <P>
+          Add your birth date and time, and a place if you like, and the same
+          wheel shows your birth chart. It&rsquo;s worked out in your browser,
+          and nothing about your birth is sent anywhere.
+        </P>
+
+        <H
+          eyebrow="Tonight"
+          dek="The home page is tonight’s real sky, the conditions from the twelve questions that are true right now, and what a listener’s plays did the last times the sky looked like this."
+        >
+          What&rsquo;s overhead tonight
+        </H>
+        <P>
+          The Tonight view is the home page. It shows the sky right now, and for
+          each of the twelve questions whose sky is overhead, how your listening
+          went the times before. As I write this, Mercury and Venus are both
+          retrograde until November 13. While Mercury was retrograde, a 1%
+          bigger share of my plays were old favorites, which could easily be
+          chance.
+        </P>
+        <Shot
+          press={rsTonightNow}
+          alt="Retrospect's Tonight view for squareses on a phone: 'Tuesday night, Oct 27', the sky right now at 6:37 p.m. CDT drawn as a zodiac wheel, then 'Tonight, for you' with rows for Mercury retrograde until Nov 13, answered No, and Venus retrograde until Nov 13, answered Not clearly, each with a sentence about old favorites."
+          caption="Tonight on my account, Tuesday, October 27"
+          frame="phone"
+        />
+        <P>
+          Further down, a list called Coming up in your sky shows what&rsquo;s
+          next: the Moon entering Cancer on October 29, Venus and Mars coming
+          into harmony on November 5, a new moon on November 9. Each one has a
+          Show on the wheel button that turns the wheel forward to that moment.
+          For the practitioners, there&rsquo;s a panel with all seven planets
+          and a note written for them.
+        </P>
+
+        <H
+          eyebrow="Twelve questions"
+          dek="Twelve questions from astrology’s folklore, the same for everyone, each answered from your own listening in a plain sentence. For most people, most of the answers are no."
+        >
+          Does the sky move you?
+        </H>
+        <P>
+          Folklore says a full moon keeps people up, Mercury retrograde brings
+          the past back around, and solar storms leave people wired. Retrospect
+          turns twelve claims like these into questions it can check against
+          your plays. Does a full moon change how late you listen? Does
+          Mercury retrograde change how often you go back to old favorites?
+          The lore sits under each question, and it&rsquo;s always labeled as
+          lore.
+        </P>
+        <P>
+          Every answer is Yes, Maybe, Not clearly, No or Too early, with a
+          sentence saying what happened and a bar showing how easily chance
+          could explain it. The sample listener&rsquo;s storm answer is Not
+          clearly: on storm nights, a 10% bigger share of their plays came
+          after midnight, which could be chance. Mine come back zero Yes, two
+          Maybe, three Not clearly and seven No.
+        </P>
+        <Shot
+          press={rsQuestion}
+          alt="Question 7 of 12 for the sample listener on a phone: 'Do solar storms change how late you listen?', the folklore beneath it in italics, then a card reading 'Not clearly' with the sentence 'On storm nights, a 10% bigger share of your plays came after midnight, which could be chance.' and a bar filled to 'Could be chance'. Below the card: 'If solar storms move you at all, it's likely somewhere between an 8% smaller and a 30% bigger share.'"
+          caption="An answer, a sentence, and how much chance could explain"
+          frame="phone"
+        />
+
+        <H
+          eyebrow="How it stays honest"
+          dek="Retrospect can say anything true about the sky on a date. Only the twelve questions may say the sky changed your listening, and a test with a thousand made-up listeners keeps them honest."
+        >
+          Facts are free, claims are earned
+        </H>
+        <P>
+          All of that rests on one rule for every sentence in the app. A fact
+          about the sky on a date is free. &ldquo;During the strongest
+          geomagnetic storm in about 20 years&rdquo; is true, and it says
+          nothing about cause, so Retrospect can show as many facts as it
+          likes. A claim that the sky changed your listening has to be earned,
+          and only the twelve questions can earn one. That&rsquo;s why the
+          storm calendar points to question 7 instead of saying the storm kept
+          you up.
+        </P>
+        <P>
+          The limit of twelve is deliberate. Ask a sky that does nothing enough
+          questions, and chance will hand you a few yeses anyway. So the repo
+          tests the answers on a thousand made-up listeners whose plays ignore
+          the sky completely, and counts how many get a Yes. On today&rsquo;s
+          code it&rsquo;s 71, and the check fails if it ever goes above 130.
+          Without the correction for asking twelve questions at once, 385 of
+          them would have found something. A second test plants a
+          full-moon habit in a made-up history and makes sure Retrospect finds
+          it.
+        </P>
+        <P>
+          A question also needs six separate events before it answers at
+          all. The sample listener has lived through one
+          Mars retrograde, and played 22% more during it, which sounds like a
+          lot until the next line says an ordinary stretch that long swings by
+          up to about 30%.
+        </P>
+        <Shot
+          press={rsTooEarly}
+          alt="Question 12 of 12 for the sample listener, on a phone: 'Does Mars retrograde change how much you listen?', the lore it tests, and 'Too early. 1 of the 6 retrogrades a verdict needs.' Below that, 'Dec 6, 2024 to Feb 23, 2025: 22% more listening.', then 'At an ordinary time, a stretch this long usually swings how much you listen by up to about 30% either way, so one retrograde can't show a pattern.'"
+          caption="One retrograde, and how much an ordinary stretch swings"
+          frame="phone"
+        />
+        <P>
+          The wording is tested too. Every sentence the answers can produce is
+          checked for words that suggest a mechanism, like &ldquo;energy&rdquo;
+          and &ldquo;vibrations&rdquo;, and for sentences that open like
+          advice. The rest of the app&rsquo;s copy is checked for words like
+          &ldquo;caused&rdquo; and &ldquo;made you&rdquo;. For anyone checking
+          the math: each question is a circular rotation test over 2,000
+          rotations, and a Yes has to pass Benjamini-Hochberg at a 10% false discovery rate and have p
+          under 0.05 on its own.{" "}
+          <Link
+            href="/work/retrospect"
+            className="text-ink underline decoration-rule underline-offset-2 transition-colors hover:decoration-spot"
+          >
+            The case study
+          </Link>{" "}
+          has the rest.
+        </P>
+
+        <H
+          eyebrow="Bring a friend"
+          dek="Two listeners can line up their answers to the same twelve questions, and every sheet has a link of its own, so a song’s sky or one wild night can be sent straight to someone."
+        >
+          Compare with a friend
+        </H>
+        <P>
+          Put in a friend&rsquo;s username and the Compare view lines your
+          answers up with theirs. It never names a winner, since results that
+          are mostly chance shouldn&rsquo;t rank anybody. Every sheet has its
+          own address, so a link to a song&rsquo;s sky or a single night opens
+          right on it, and a link dropped in a chat unfolds into a card drawn
+          from the same stored answers.
+        </P>
+        <P>
+          The first sync of a big history takes a few minutes, because Last.fm
+          hands it over a page at a time. The wait is a small solar system
+          where every planet is a year of your history, and since October 26 a
+          screen reader hears the count as it climbs.
+        </P>
+
+        <H
+          eyebrow="Try it"
+          dek="The sample listener on the landing page shows everything without a username. After that, put in your own and see what the sky was doing for you."
+        >
+          Read your own sky
+        </H>
+        <P>
+          On{" "}
+          <RLink
+            href="https://retrospect-seven.vercel.app"
+            external
+            underline="always"
+            className="text-[length:inherit] leading-[inherit]"
+          >
+            retrospect-seven.vercel.app
+            <span className="sr-only"> (opens in a new tab)</span>
+          </RLink>
+          , tap the sample&rsquo;s May 10 storm night and the song played under
+          it, then put in your own username.
+        </P>
+        <P>
+          Most of your answers will probably come back no. The sky on the night
+          you first heard your favorite song is still worth the look.
         </P>
       </>
     ),
