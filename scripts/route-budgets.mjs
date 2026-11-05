@@ -20,7 +20,7 @@
  *
  * Measured 5 November 2026 on Next 16.4.2 and Roster 5.18.0, a clean copy with
  * `.env.local` beside it. The nav in the bar, on every route, moved these from
- * `main` at 2861b8f: most routes up by under 2 kB, and `/` down by about 24 kB,
+ * `main` at 2861b8f: most routes up by about 2.6 kB, and `/` down by about 23 kB,
  * because a second copy of four Roster components that only it loaded is gone.
  *
  * Re-measure when you change one: a figure carried forward from an older tree
@@ -28,16 +28,16 @@
  * prints every route's first load.
  */
 export const ROUTE_FIRST_LOAD = {
-  "/": 635_925,
+  "/": 636_601,
   "/_global-error": 457_352,
-  "/_not-found": 635_925,
-  "/about": 650_764,
-  "/resume": 636_260,
-  "/system": 727_127,
-  "/work": 653_370,
-  "/work/[slug]": 657_245,
-  "/writing": 653_370,
-  "/writing/[slug]": 653_370,
+  "/_not-found": 636_601,
+  "/about": 651_440,
+  "/resume": 636_936,
+  "/system": 727_803,
+  "/work": 654_046,
+  "/work/[slug]": 657_921,
+  "/writing": 654_046,
+  "/writing/[slug]": 654_046,
 };
 
 /**

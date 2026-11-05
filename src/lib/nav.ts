@@ -35,6 +35,22 @@ export function ariaCurrentFor(item: NavSection, { section, within }: NavPlace) 
   return undefined;
 }
 
+/** Where the lit item's tab sits on screen. */
+export type TabBox = { left: number; width: number };
+
+/**
+ * The keyframes that carry the tab from one nav item to the next, or null when
+ * there's nothing to slide: no item was lit, none is lit now, or it's the same
+ * item, as on a hop from a section to one of its deep pages.
+ */
+export function tabSlide(from: TabBox | null, to: TabBox | null) {
+  if (!from || !to || (from.left === to.left && from.width === to.width)) return null;
+  return [
+    { transform: `translateX(${from.left - to.left}px) scaleX(${from.width / to.width})` },
+    { transform: "none" },
+  ];
+}
+
 /**
  * Reaches far below the screen, for the observers on the title and the TL;DR
  * anchor. Whatever's below the fold then counts as intersecting, so going from

@@ -6,6 +6,7 @@ import {
   ariaCurrentFor,
   isPastTitle,
   isShowingRunningHead,
+  tabSlide,
 } from "./nav";
 
 /**
@@ -61,6 +62,33 @@ describe("isPastTitle", () => {
   it("isn't past for a title below the viewport, which isn't intersecting either", () => {
     expect(isPastTitle({ isIntersecting: false, top: 2_000 }, BAR)).toBe(false);
     expect(isPastTitle({ isIntersecting: false, top: BAR }, BAR)).toBe(false);
+  });
+});
+
+describe("tabSlide", () => {
+  const WORK = { left: 72, width: 30 };
+  const ABOUT = { left: 184, width: 40 };
+
+  it("starts at the last item, sized to it, and ends where the tab already is", () => {
+    expect(tabSlide(WORK, ABOUT)).toEqual([
+      { transform: "translateX(-112px) scaleX(0.75)" },
+      { transform: "none" },
+    ]);
+    expect(tabSlide(ABOUT, WORK)?.[0].transform).toBe("translateX(112px) scaleX(1.3333333333333333)");
+  });
+
+  it("doesn't slide on a hop within a section, where the lit item stays put", () => {
+    expect(tabSlide(WORK, { ...WORK })).toBeNull();
+  });
+
+  it("doesn't slide when no item was lit, or none is lit now", () => {
+    expect(tabSlide(null, ABOUT)).toBeNull();
+    expect(tabSlide(WORK, null)).toBeNull();
+    expect(tabSlide(null, null)).toBeNull();
+  });
+
+  it("still slides between two items the same width", () => {
+    expect(tabSlide(WORK, { left: 200, width: 30 })?.[0].transform).toBe("translateX(-128px) scaleX(1)");
   });
 });
 

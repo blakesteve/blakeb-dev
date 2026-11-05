@@ -118,6 +118,10 @@ the nav's place under it, because there isn't room for both. Whichever half is
 off is `visibility: hidden` in `globals.css`, so it leaves the tab order with no
 script deciding which half that is.
 
+Each page draws its own bar, so a hop mounts a new one and CSS has nothing to
+transition from. The lit tab is still a server-drawn `::before`; `nav-links.tsx`
+remembers which item was lit and animates the tab from there before paint.
+
 The second nav item's label and path are one constant, `SPECIMENS_PAGE` in
 `lib/nav.ts`, because the name is provisional. A new label has to fit the row at
 375, 360, 340 and 320: nine characters does, and ten doesn't.

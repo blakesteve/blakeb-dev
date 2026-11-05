@@ -49,6 +49,14 @@ describe("the observers on the title and the TL;DR anchor", () => {
   });
 });
 
+describe("the running head", () => {
+  /* Roster's line height left it 0.6px above the nav beside it. */
+  it("sets the nav's line height, so the two share a baseline", () => {
+    expect(read("components", "nav-links.tsx")).toContain("leading-[15px]");
+    expect(read("components", "breadcrumbs.tsx")).toContain("[&_*]:leading-[15px]");
+  });
+});
+
 describe("the lit nav item", () => {
   /* X-ray's label is every annotated component's `::after`. A tab drawn there
      blanked the label on the lit link and pulled the tab off the rule. */
@@ -57,6 +65,12 @@ describe("the lit nav item", () => {
     expect(css).toMatch(/\.nav-link\[aria-current\]::before \{/);
     expect(css).not.toMatch(/\.nav-link\[aria-current\]::after/);
     expect(css).toMatch(/\.xray \[data-roster\]::after \{/);
+  });
+
+  it("scales from its left edge, which the slide's keyframes assume", () => {
+    expect(read("app", "globals.css")).toMatch(
+      /\.nav-link\[aria-current\]::before \{[^}]*transform-origin: left;/,
+    );
   });
 });
 

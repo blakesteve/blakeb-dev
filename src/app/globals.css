@@ -708,6 +708,7 @@ body {
   left: 0;
   height: 2px;
   background: var(--spot);
+  transform-origin: left;
 }
 
 /* ---------------------------------------------------------------------------
