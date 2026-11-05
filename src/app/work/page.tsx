@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { AlsoSeparately } from "@/components/also-separately";
 import { REyebrow, RLabeledDivider, RCta } from "@/lib/roster-ui";
 import { projects } from "@/lib/projects";
@@ -32,9 +31,7 @@ export default async function WorkIndexPage() {
 
   return (
     <main className="flex min-h-full flex-col">
-      <TopBar>
-        <RBreadcrumbs items={[{ label: "Blake Ball", href: "/" }, { label: "Work" }]} />
-      </TopBar>
+      <TopBar section="work" />
 
       <header className="mx-auto w-full max-w-[1180px] px-6 pt-11 sm:px-8">
         <h1 className="m-0 pb-[14px] font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">

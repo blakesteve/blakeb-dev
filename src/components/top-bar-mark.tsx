@@ -14,7 +14,9 @@ import { RegistrationMark } from "@/components/registration-mark";
  *
  * Width animates alongside opacity so the nav does not sit behind a 19px hole
  * while the mark is hidden; the margin goes with it, since a `gap` would hold
- * the space open regardless.
+ * the space open regardless. Hidden is `invisible`, which takes it out of the
+ * tab order and the accessibility tree. `transition-all` holds that back until
+ * the fade has finished.
  */
 export function TopBarMark({ yieldsToFolio = false }: { yieldsToFolio?: boolean }) {
   /* Starts hidden only when something above it is expected to be showing. That
@@ -50,13 +52,13 @@ export function TopBarMark({ yieldsToFolio = false }: { yieldsToFolio?: boolean 
     <Link
       href="/"
       aria-label="Blake Ball, home"
-      tabIndex={shown ? undefined : -1}
-      aria-hidden={shown ? undefined : true}
       className={
         "group -my-1 inline-flex shrink-0 items-center overflow-hidden py-1 " +
         "transition-all duration-300 ease-out " +
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-spot " +
-        (shown ? "mr-4 w-[19px] opacity-100" : "pointer-events-none mr-0 w-0 opacity-0")
+        (shown
+          ? "mr-4 w-[19px] opacity-100 max-[341px]:mr-2"
+          : "pointer-events-none invisible mr-0 w-0 opacity-0")
       }
     >
       <RegistrationMark size={19} />

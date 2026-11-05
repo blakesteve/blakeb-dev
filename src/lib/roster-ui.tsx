@@ -58,7 +58,7 @@ export function RCard({ className, ...props }: ComponentProps<typeof Card>) {
 }
 
 /**
- * Every control on this site is mono caps — the breadcrumb trail, the state
+ * The site's controls are mono caps — the running head, the state
  * toggle, the X-ray and CRT toggles, the CTAs. That is the press-sheet
  * vocabulary, so a Button in the site's own sans would be the odd one out, and
  * the specimens on /system would be advertising a button this site never

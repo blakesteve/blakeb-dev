@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { SiteFooter, CONTACT } from "@/components/site-footer";
 import { Portrait } from "@/components/portrait";
 import {
@@ -64,11 +63,7 @@ export default function AboutPage() {
 
   return (
     <main className="flex min-h-full flex-col">
-      <TopBar>
-        <RBreadcrumbs
-          items={[{ label: "Blake Ball", href: "/" }, { label: "About" }]}
-        />
-      </TopBar>
+      <TopBar section="about" />
 
       {/* ---- Lede and portrait ---- */}
       <header className="mx-auto w-full max-w-[1180px] px-6 pt-11 sm:px-8">

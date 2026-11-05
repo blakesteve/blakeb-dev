@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import {
   RCard,
   RCta,
@@ -108,19 +107,11 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         } as CSSProperties
       }
     >
-      <TopBar tldr>
-        {/* Roster's Breadcrumbs, routed through next/link by RBreadcrumbs so
-            the hop back stays client-side. The typography comes from the same
-            Eyebrow class list the rest of the folio uses. */}
-        <RBreadcrumbs
-          items={[
-            { label: "Blake Ball", href: "/" },
-            { label: "Work", href: "/work" },
-            { label: project.name },
-          ]}
-          currentClassName="text-[var(--world)]"
-        />
-      </TopBar>
+      <TopBar
+        tldr
+        within="work"
+        runningHead={{ parent: { label: "Work", href: "/work" }, current: project.name, world: true }}
+      />
 
       {/* The project's own world, mixed from its accent so it holds in both
           production states without authoring two gradients. */}
@@ -139,7 +130,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               once this scrolls away the bar reveals its own copy, so the lens
               stays reachable without a second source of truth. */}
           <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 pb-[14px]">
-            <h1 className="m-0 font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">
+            <h1 data-page-title className="m-0 font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">
               {project.name}
             </h1>
             <TldrToggle anchor />
