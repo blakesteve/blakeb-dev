@@ -178,19 +178,20 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
           )
         : null}
 
-      {/* Always available, and the only hint on the page for touch users. */}
-      <button
-        type="button"
+      {/* Always available, and the only hint on the page for touch users. The
+          gap is the word space this had inline: a flex Button drops the space. */}
+      <RButton
+        variant="ghost"
         data-xray-ui
         onClick={() => setMode(!on)}
         aria-pressed={on}
-        className="fixed bottom-4 right-4 z-[60] rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot"
+        className="fixed bottom-4 right-4 z-[60] h-auto gap-[7.4px] rounded-full border-rule bg-panel px-3 py-2 text-[10px] font-normal leading-[15px] uppercase tracking-[0.14em] text-ink-faint shadow-sm hover:border-spot hover:bg-panel hover:text-spot"
       >
         <span aria-hidden="true" className="text-spot">
           ⌥X
-        </span>{" "}
+        </span>
         X-ray
-      </button>
+      </RButton>
 
       {on ? (
         <aside

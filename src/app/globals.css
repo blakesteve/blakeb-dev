@@ -497,6 +497,7 @@ body {
    annotating the panel that exists to read the page. It is the one place the
    annotation is pure noise: you look through the legend, not at it. Overridden
    rather than excluded with :not(), so the selector above stays legible. */
+.xray [data-xray-ui][data-roster],
 .xray [data-xray-ui] [data-roster] {
   outline: none;
 }

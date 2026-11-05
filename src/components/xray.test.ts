@@ -67,6 +67,10 @@ describe("what gets a label", () => {
   });
 });
 
+it("builds its controls from Roster", () => {
+  expect(read("components", "xray.tsx")).not.toMatch(/<button\b/);
+});
+
 it("hears Esc before a dialog does, so the top layer closes first", () => {
   expect(read("components", "xray.tsx")).toContain('window.addEventListener("keydown", onKey, true);');
 });

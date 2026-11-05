@@ -20,23 +20,23 @@
  *
  * Measured 5 November 2026 on Next 16.4.2 and Roster 5.18.0, a clean copy with
  * `.env.local` beside it. X-ray's placed labels, in the layout and so on every
- * route, moved these up by 5,940 bytes from `main` at 35f42e9.
+ * route, moved these up by 5,933 bytes from `main` at 35f42e9.
  *
  * Re-measure when you change one: a figure carried forward from an older tree
  * stops being a measurement. Run `npm run check:bundle` on a fresh build; it
  * prints every route's first load.
  */
 export const ROUTE_FIRST_LOAD = {
-  "/": 642_541,
+  "/": 642_534,
   "/_global-error": 457_352,
-  "/_not-found": 642_541,
-  "/about": 657_380,
-  "/resume": 642_876,
-  "/system": 733_743,
-  "/work": 659_986,
-  "/work/[slug]": 663_861,
-  "/writing": 659_986,
-  "/writing/[slug]": 659_986,
+  "/_not-found": 642_534,
+  "/about": 657_373,
+  "/resume": 642_869,
+  "/system": 733_736,
+  "/work": 659_979,
+  "/work/[slug]": 663_854,
+  "/writing": 659_979,
+  "/writing/[slug]": 659_979,
 };
 
 /**
