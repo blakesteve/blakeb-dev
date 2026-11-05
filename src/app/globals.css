@@ -583,6 +583,134 @@ body {
    imported before Tailwind, as it is at the top of this file. */
 
 /* ---------------------------------------------------------------------------
+   The bar's slot, drawn by `bar-slot.tsx`.
+
+   The nav owns the slot until a deep page's title has gone up under the bar.
+   From 768px the running head then rises in beside the nav. Under it there's
+   no room for both, so it takes the nav's place. 768 and not 640: from 640 to
+   about 700 the padding and the toggle's label have both arrived, and with the
+   TL;DR handoff on, the head's current item had no width at all. Whichever
+   half is off is `visibility: hidden`, delayed by the slide when hiding so the
+   fade is seen, which takes it out of the tab order and the accessibility tree
+   per breakpoint with no script deciding.
+   --------------------------------------------------------------------------- */
+.bar-slot {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+  height: 20px;
+}
+.bar-slot-nav {
+  flex: none;
+  transition:
+    transform 280ms cubic-bezier(0.3, 1.2, 0.5, 1),
+    opacity 200ms;
+}
+.bar-slot-head {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding-left: 22px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    transform 280ms cubic-bezier(0.3, 1.2, 0.5, 1),
+    opacity 200ms,
+    visibility 0s linear 280ms;
+}
+.bar-slot-head::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: 1px;
+  background: var(--rule);
+}
+.bar-slot-past .bar-slot-head {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    transform 280ms cubic-bezier(0.3, 1.2, 0.5, 1),
+    opacity 200ms,
+    visibility 0s;
+}
+@media (max-width: 767.98px) {
+  .bar-slot-head {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 0;
+    transform: translateY(20px);
+  }
+  .bar-slot-head::before {
+    display: none;
+  }
+  .bar-slot-past .bar-slot-nav {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition:
+      transform 280ms cubic-bezier(0.3, 1.2, 0.5, 1),
+      opacity 200ms,
+      visibility 0s linear 280ms;
+  }
+}
+
+/* The dot before a case study's current item. `--world` as text is 2.86:1 for
+   Roster on the press sheet, so the color rides here and the words stay ink. */
+.bar-slot-head-world [aria-current]::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--world);
+  vertical-align: 1px;
+}
+
+/* The blanket reduced-motion rule zeroes durations, not delays, so the half
+   going away would sit transparent but reachable for the length of the slide. */
+@media (prefers-reduced-motion: reduce) {
+  .bar-slot-nav,
+  .bar-slot-head {
+    transition-delay: 0s !important;
+  }
+}
+
+/* The mark's focus ring, on the links in the bar. Unlayered, because Roster's
+   `Link` turns the outline off and draws a ring of its own, and a utility can't
+   put it back. */
+.nav-link:focus-visible,
+.bar-slot-head a:focus-visible {
+  outline: 2px solid var(--spot);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* The lit nav item: ink, with a tab on the bar's bottom rule. On `::before`
+   because X-ray's label is this link's `::after`. */
+.nav-link[aria-current] {
+  color: var(--ink);
+}
+.nav-link[aria-current]::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -14.5px;
+  left: 0;
+  height: 2px;
+  background: var(--spot);
+}
+
+/* ---------------------------------------------------------------------------
    Print.
 
    Only /resume is meant to be printed, and it is the actual PDF export: the

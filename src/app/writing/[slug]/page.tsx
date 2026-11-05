@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { TldrToggle } from "@/components/tldr-toggle";
 import { REyebrow } from "@/lib/roster-ui";
 import { getPost, posts, postsByDate, formatPostDate } from "@/content/posts";
@@ -33,18 +32,11 @@ export default async function PostPage(props: PageProps<"/writing/[slug]">) {
 
   return (
     <main className="flex min-h-full flex-col">
-      <TopBar tldr>
-        <RBreadcrumbs
-          items={[
-            { label: "Blake Ball", href: "/" },
-            { label: "Writing", href: "/writing" },
-            { label: post.title },
-          ]}
-          /* The title is a whole sentence; let it wrap rather than blow the
-             bar's height out on a phone. */
-          className="[&_[aria-current]]:!line-clamp-1"
-        />
-      </TopBar>
+      <TopBar
+        tldr
+        within="writing"
+        runningHead={{ parent: { label: "Writing", href: "/writing" }, current: post.title }}
+      />
 
       {/* One column, capped at a reading measure. Prose is the whole job here,
           so nothing sits beside it competing for attention. */}
@@ -60,7 +52,7 @@ export default async function PostPage(props: PageProps<"/writing/[slug]">) {
           </div>
 
           <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
-            <h1 className="m-0 max-w-[26ch] font-[family-name:var(--font-display)] text-[clamp(1.875rem,5vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.03em]">
+            <h1 data-page-title className="m-0 max-w-[26ch] font-[family-name:var(--font-display)] text-[clamp(1.875rem,5vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.03em]">
               {post.title}
             </h1>
             <TldrToggle anchor />

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { TldrToggle } from "@/components/tldr-toggle";
+import { BELOW_THE_FOLD, isPastTitle } from "@/lib/nav";
 
 /**
  * The TL;DR control in the sticky bar, which yields to the one beside the title.
@@ -23,6 +24,9 @@ import { TldrToggle } from "@/components/tldr-toggle";
  *
  * Width animates alongside opacity so the bar does not hold an empty gap open
  * while the button is hidden; a `gap` would reserve the space regardless.
+ * Hidden is `invisible`, not `aria-hidden` and opacity, because an invisible
+ * button leaves the tab order and a transparent one doesn't. `transition-all`
+ * holds that back until the fade has finished.
  */
 export function TopBarTldr() {
   /* Starts hidden: the page's own copy is on screen at the top, which is what
@@ -45,11 +49,16 @@ export function TopBarTldr() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         seen.current = true;
-        setShown(!entry.isIntersecting);
+        /* Above the screen, not just off it. On a very short screen the page's
+           copy starts below the fold, and showing this there put it over the
+           nav. */
+        setShown(
+          isPastTitle({ isIntersecting: entry.isIntersecting, top: entry.boundingClientRect.top }, 0),
+        );
       },
       /* A sliver still counts as visible, so the handoff happens as the page's
          copy leaves rather than once it is comfortably gone. */
-      { threshold: 0.01 },
+      { rootMargin: `0px 0px ${BELOW_THE_FOLD} 0px`, threshold: 0.01 },
     );
     observer.observe(anchor);
     return () => observer.disconnect();
@@ -57,11 +66,13 @@ export function TopBarTldr() {
 
   return (
     <div
-      aria-hidden={shown ? undefined : true}
       className={
-        "inline-flex shrink-0 items-center overflow-hidden " +
+        "inline-flex shrink-0 items-center " +
         "transition-all duration-300 ease-out " +
-        (shown ? "mr-2 w-[86px] opacity-100" : "pointer-events-none mr-0 w-0 opacity-0")
+        /* Clipped only while hidden: shown, it would cut the button's focus ring. */
+        (shown
+          ? "mr-2 w-[86px] opacity-100"
+          : "pointer-events-none invisible mr-0 w-0 overflow-hidden opacity-0")
       }
     >
       <TldrToggle />

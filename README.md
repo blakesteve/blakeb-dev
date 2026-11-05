@@ -107,6 +107,21 @@ and buttons, which aren't cards.
 `!important` on all of them, which the trail never needed: the `utilities`
 layer outranks `roster`, as it does for the dek's Alert overrides.
 
+### The bar
+
+One row on every page: mark, slot, TL;DR handoff, state toggle. The slot holds
+the nav, and `TopBar` takes which section the page is (`section`), which section
+it sits under (`within`), and on `/work/[slug]` and `/writing/[slug]` a running
+head. An `IntersectionObserver` on the page's `data-page-title` h1 swaps the
+running head in as the title goes under the bar: beside the nav from 768px, in
+the nav's place under it, because there isn't room for both. Whichever half is
+off is `visibility: hidden` in `globals.css`, so it leaves the tab order with no
+script deciding which half that is.
+
+The second nav item's label and path are one constant, `SPECIMENS_PAGE` in
+`lib/nav.ts`, because the name is provisional. A new label has to fit the row at
+375, 360, 340 and 320: nine characters does, and ten doesn't.
+
 ## Live data
 
 | Figure | Source |
@@ -412,6 +427,8 @@ buys nothing.
 | `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
 | `content/deks.test.ts` | that every section in both content files has a dek, that each is long enough to say something and short enough to read, that none repeats another, and that none smuggles in the jargon the lens exists to avoid |
 | `lib/bundle-guard.test.ts` | the real `check-bundle-shape.mjs` as a child process against synthetic builds, each failing case beside its healthy twin: a split that adds copies passes, a page past its cap fails, a shared chunk counts in each page's first load, and a route the table doesn't list fails |
+| `lib/nav.ts` | which nav item a page lights, what counts as past the title (a title below the viewport doesn't), and that the running head can't survive a client navigation |
+| `components/top-bar.test.ts` | that a hidden bar control is `invisible` rather than transparent, so it leaves the tab order, and that no page draws a breadcrumb of its own |
 | `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
 | `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", and that the extractor feeding both checks is still reading all of it |

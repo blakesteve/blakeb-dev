@@ -70,23 +70,7 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* The home page has no breadcrumb, so the nav takes that slot. */}
-      <TopBar yieldsToFolio>
-        <nav aria-label="Primary">
-          <ul className="m-0 flex list-none gap-5 p-0">
-            {["Work", "System", "About", "Writing"].map((item) => (
-              <li key={item}>
-                <a
-                  href={`/${item.toLowerCase()}`}
-                  className="font-[family-name:var(--font-util)] text-[11px] tracking-[0.06em] text-ink no-underline transition-colors hover:text-spot"
-                >
-                  {item}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </TopBar>
+      <TopBar yieldsToFolio />
 
       <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-8">
 

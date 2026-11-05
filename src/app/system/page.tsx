@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { SiteFooter } from "@/components/site-footer";
 import { REyebrow, RLabeledDivider, RDescriptionList, storyHref } from "@/lib/roster-ui";
 import {
@@ -33,11 +32,7 @@ export default function SystemPage() {
 
   return (
     <main className="flex min-h-full flex-col">
-      <TopBar>
-        <RBreadcrumbs
-          items={[{ label: "Blake Ball", href: "/" }, { label: "System" }]}
-        />
-      </TopBar>
+      <TopBar section="specimens" />
 
       <header className="mx-auto w-full max-w-[1180px] px-6 pb-2 pt-11 sm:px-8">
         <h1 className="m-0 pb-[14px] font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">

@@ -11,16 +11,16 @@ import type { ComponentProps } from "react";
  * `linkComponent` is a function, and functions cannot cross the server/client
  * boundary — a server component passing `NextLink` into a client component
  * fails the prerender with "Functions cannot be passed directly to Client
- * Components". Binding it here, inside the boundary, keeps the pages that use
- * it server-rendered.
+ * Components". Binding it here, inside the boundary, keeps any caller free of
+ * that.
  *
  * The typography lives here too. Roster's breadcrumb is a 14px semibold text
  * trail; this site's is a 10px tracked-out mono label, the same eyebrow that
- * carries the folio. That override is long, and it was going to be pasted at
- * every call site, so it is applied once here and the pages just pass items.
+ * carries the folio. That override is long, so it lives here and a caller just
+ * passes items.
  *
- * `currentClassName` defaults to the spot color and is overridden on a case
- * study, where the last crumb takes that project's own accent instead.
+ * Its one use is the running head in the bar (`bar-slot.tsx`), which sets the
+ * current crumb to `--ink`.
  */
 
 const FOLIO_TYPE =
@@ -36,7 +36,7 @@ const FOLIO_TYPE =
 
 export function RBreadcrumbs({
   className = "",
-  currentClassName = "text-spot",
+  currentClassName,
   ...props
 }: Omit<ComponentProps<typeof Breadcrumbs>, "linkComponent">) {
   return (

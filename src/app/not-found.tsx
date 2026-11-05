@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { REyebrow, RCta } from "@/lib/roster-ui";
 
 export const metadata = {
@@ -38,11 +37,7 @@ const PLATES = [
 export default function NotFound() {
   return (
     <main className="group/sheet flex min-h-full flex-col">
-      <TopBar>
-        <RBreadcrumbs
-          items={[{ label: "Blake Ball", href: "/" }, { label: "404" }]}
-        />
-      </TopBar>
+      <TopBar />
 
       <section className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-center px-6 py-16 sm:px-8">
         <REyebrow tone="primary" size="sm">

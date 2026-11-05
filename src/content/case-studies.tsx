@@ -843,7 +843,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <p>
             What it does instead: press <Code>⌥X</Code> and every Roster component on this page
             outlines itself and says its own name, including the buttons two sections up and the
-            breadcrumb you arrived through. The claim and the evidence are the same object.
+            nav you arrived through. The claim and the evidence are the same object.
           </p>
         </Section>
       </>

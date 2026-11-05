@@ -2,7 +2,6 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
-import { RBreadcrumbs } from "@/components/breadcrumbs";
 import { SiteFooter, CONTACT } from "@/components/site-footer";
 import { REyebrow, RCta } from "@/lib/roster-ui";
 import { PrintButton } from "./print-button";
@@ -42,11 +41,7 @@ export default function ResumePage() {
 
   return (
     <main className="flex min-h-full flex-col">
-      <TopBar>
-          <RBreadcrumbs
-          items={[{ label: "Blake Ball", href: "/" }, { label: "Résumé" }]}
-        />
-      </TopBar>
+      <TopBar within="about" />
 
       {/* The sheet. `resume-sheet` is what the print rules target. */}
       <article className="resume-sheet mx-auto w-full max-w-[860px] px-6 pt-10 sm:px-8 print:max-w-none print:px-0 print:pt-0">
