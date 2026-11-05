@@ -105,6 +105,16 @@ const PKG = "@blakesteve/roster";
 /**
  * Ceiling on emitted client CSS, same walk, every .css under `static`.
  *
+ * Raised 4 November 2026 for Roster 5.18.0, from 248,011. The same tree
+ * measured 243,859 on 5.15.0 (c4d7fe7) and 249,675 on 5.18.0, 1,664 over. All
+ * 5,816 bytes of that are Roster's stylesheet, 166,257 to 172,073 on disk: new
+ * utilities and tokens for `Timeline`, `RadioTileGroup` and `FileUpload`'s
+ * preview, none of which this app uses yet, because the stylesheet ships whole.
+ * No rule in the 5.15.0 build was removed or changed. The app's own CSS didn't
+ * move, and every JS chunk is byte-identical. 261,563 keeps the 4.7614% slack.
+ *
+ * The history below is the 248,011 ceiling's.
+ *
  * Measured 13 October 2026 on Next 16.4.0 and Roster 5.9.0: 236,739 bytes
  * across 2 files. The ceiling allows 11,272 bytes of slack, 4.7614%.
  *
@@ -140,9 +150,9 @@ const PKG = "@blakesteve/roster";
  * not of Roster, so the only figure worth quoting is one measured this way in
  * this app.
  *
- * This is the ceiling that reports the day Roster's stylesheet stops shaking.
+ * This is the ceiling that reports the day Roster's stylesheet changes shape.
  */
-const CLIENT_CSS_CEILING = 248_011;
+const CLIENT_CSS_CEILING = 261_563;
 
 const problems = [];
 

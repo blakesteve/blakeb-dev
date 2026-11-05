@@ -664,7 +664,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               label: "Tests",
               source: `live · roster @ ${meta.version}`,
             }
-          : { value: "2,539", label: "Tests", source: "roster @ 5.15.0" })(
+          : { value: "2,701", label: "Tests", source: "roster @ 5.18.0" })(
         getRosterMeta(),
       ),
       { value: "8", label: "Apps consuming it", source: "including this one" },

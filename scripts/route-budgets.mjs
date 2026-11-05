@@ -20,6 +20,7 @@
  *
  * Measured 4 November 2026 on `main` at c4d7fe7 (Next 16.4.0, Roster 5.15.0),
  * a clean copy with `.env.local` beside it, built twice with the same figures.
+ * Roster 5.18.0 moved none of them: every JS chunk came out byte-identical.
  *
  * Re-measure when you change one: a figure carried forward from an older tree
  * stops being a measurement. Run `npm run check:bundle` on a fresh build; it
