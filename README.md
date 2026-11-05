@@ -249,9 +249,18 @@ at 200 where it sat darker than 700 between two near-white neighbors. Both were
 caught by a person looking at `/system`, which is not a process.
 
 `npm run check:bundle` fails if any of Roster's barrels got pinned as a client
-reference, if a Roster key turns up in a shape it does not recognize, or if
-client JS or CSS crosses a byte ceiling. It runs on `postbuild`, because unlike
-the ramp check it reads build output rather than source.
+reference, if a Roster key turns up in a shape it does not recognize, if a
+route's first-load JS crosses its budget in `scripts/route-budgets.mjs`, or if
+emitted CSS crosses its ceiling. It runs on `postbuild`, because unlike the ramp
+check it reads build output rather than source.
+
+A route's first load is what a visitor downloads to open it: the build
+manifest's root files plus that page's entry files, each file once, polyfills
+out. Each route's cap is its measured figure plus 25,000 bytes, and a route the
+table doesn't list fails, so a new page can't go unbudgeted. The total across
+every emitted file still prints, marked as reported, not budgeted: Turbopack
+writes shared code once per group of routes, so that sum counts copies nobody
+downloads twice, and it moves when the grouping does.
 
 It also fails if the emitted CSS has a `:hover` rule outside
 `@media (hover: hover)`. A phone fires `:hover` on whatever was tapped and
@@ -402,6 +411,7 @@ buys nothing.
 | `content/posts.ts` | date formatting, lookup, sort order, and the data invariants routing depends on: unique slugs, URL-safe slugs, `YYYY-MM-DD` dates, and a dek short enough to survive as a meta description |
 | `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
 | `content/deks.test.ts` | that every section in both content files has a dek, that each is long enough to say something and short enough to read, that none repeats another, and that none smuggles in the jargon the lens exists to avoid |
+| `lib/bundle-guard.test.ts` | the real `check-bundle-shape.mjs` as a child process against synthetic builds, each failing case beside its healthy twin: a split that adds copies passes, a page past its cap fails, a shared chunk counts in each page's first load, and a route the table doesn't list fails |
 | `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
 | `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", and that the extractor feeding both checks is still reading all of it |

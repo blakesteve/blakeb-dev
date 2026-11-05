@@ -1,7 +1,7 @@
 /**
- * Fails the build if Roster's barrel got pinned as a client reference, if
- * total client JS or CSS crossed its ceiling, or if the emitted CSS has a
- * hover rule a phone would apply.
+ * Fails the build if Roster's barrel got pinned as a client reference, if a
+ * route's first-load JS crossed its budget, if emitted CSS crossed its ceiling,
+ * or if the emitted CSS has a hover rule a phone would apply.
  *
  * Roster 4.13.0 regressed a sibling app by 18.49% and nobody found out until
  * somebody measured by hand. Every gate this app has is blind to it: vitest
@@ -17,8 +17,9 @@
  * in a client reference manifest, its whole namespace is a live root again and
  * every component ships whether imported or not. That is the 18.49%.
  *
- * SIZE. Shape is the known mechanism, not the only one. The ceilings catch a
- * regression that arrives some other way, including from outside Roster.
+ * SIZE. Shape is the known mechanism, not the only one. The per-route budgets
+ * (`route-budgets.mjs`) and the CSS ceiling catch a regression that arrives
+ * some other way, including from outside Roster.
  *
  * And one about what the stylesheet says rather than how big it is.
  *
@@ -64,13 +65,23 @@ import { fileURLToPath } from "node:url";
 import { dirname, join, relative, resolve } from "node:path";
 import { createContext, runInContext } from "node:vm";
 import { HOVER_ALLOW, checkHover } from "./lib/hover-guard.mjs";
+import { ROUTE_FIRST_LOAD, ROUTE_SLACK } from "./route-budgets.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PKG = "@blakesteve/roster";
 
 /**
- * Ceiling on emitted client JS, in bytes: every .js anywhere under the build's
- * `static` directory, walked recursively.
+ * Emitted client JS, in bytes: every .js anywhere under the build's `static`
+ * directory, walked recursively. REPORTED, NOT GATED, since 4 November 2026.
+ *
+ * This total counts each route's copy of shared code once per copy, because
+ * Turbopack writes shared code once per group of routes, and a visitor opens
+ * one route and downloads one copy. So the sum moves when the grouping moves,
+ * whether or not anyone's download did. What fails the build now is each
+ * route's first load, budgeted in `route-budgets.mjs` and checked in section 4.
+ * The total stays in the success line because a jump in it is still worth a
+ * look, and it keeps its floor, which is about whether the output was found.
+ * Its last ceiling was 963,413. The history below is that ceiling's.
  *
  * Recursive, and not the `static/chunks` subdirectory, because that name is not
  * guaranteed. Vercel's adapter relocates the client assets: a real deploy had a
@@ -90,7 +101,6 @@ const PKG = "@blakesteve/roster";
  * Roster 5.9.0, and 109 from the same branch's `REyebrow` `wraps` prop. The
  * first measurement, 18 September, was 897,277.
  */
-const CLIENT_JS_CEILING = 963_413;
 
 /**
  * Ceiling on emitted client CSS, same walk, every .css under `static`.
@@ -104,17 +114,16 @@ const CLIENT_JS_CEILING = 963_413;
  * That crossed the old ceiling of 228,931 (set on 18 September at 218,526
  * bytes) by 7,808.
  *
- * That slack is EQUAL to the JS ceiling's 4.7614%, on purpose, and not tighter.
- * Equal to four decimal places rather than approximately, which is why the
- * numbers are 963,413 and 248,011 and not round ones: a round 248,000 comes out
- * at 4.7567%, and a comment claiming equality while printing two different
- * figures is the exact defect this paragraph exists to call out.
- * There is a line going around two other apps claiming their CSS budget is
- * "tighter than the JS budget on purpose" when in both it is looser, so: this
- * one is equal, and the reason is that nothing about CSS here drifts more
- * slowly than JS. Both grow when a post or a case study is added, and both are
- * dominated by the same dependency. A tighter CSS budget would buy earlier
- * warning on the one number that is least likely to move on its own.
+ * That slack was set EQUAL to the JS ceiling's 4.7614%, on purpose, and not
+ * tighter, while the JS total still had a ceiling. Equal to four decimal places
+ * rather than approximately, which is why the numbers were 963,413 and 248,011
+ * and not round ones: a round 248,000 comes out at 4.7567%, and a comment
+ * claiming equality while printing two different figures is the exact defect
+ * this paragraph existed to call out. Two other apps claimed their CSS budget
+ * was "tighter than the JS budget on purpose" when in both it was looser. This
+ * one was equal, because nothing about CSS here drifts more slowly than JS:
+ * both grow when a post or a case study is added, and both are dominated by
+ * the same dependency.
  *
  * Roster's stylesheet is 157,653 bytes, 66.6% of a 236,633-byte build of this
  * branch before the `wraps` prop, measured DIFFERENTIALLY: built once with the
@@ -451,6 +460,8 @@ let routeCount = 0;
 let entryCount = 0;
 let componentPins = 0;
 const barrelPins = [];
+/** Each page's entry files, by page, for section 4. */
+const pageFiles = new Map();
 
 /**
  * What a legitimate Roster component module key looks like.
@@ -518,6 +529,32 @@ for (const file of manifestFiles) {
         `${relative(root, file)} route ${route} has no clientModules object.\n` +
           `  The manifest format changed and this check can no longer read it.`,
       );
+    }
+    /* Pages only. A route handler (`/opengraph-image/route`) sends no JS, and
+       its entry files are empty. A page with no `entryJSFiles` at all means the
+       format moved, and measuring it as its root files alone would read low
+       and pass. */
+    if (route.endsWith("/page")) {
+      if (!entry.entryJSFiles || typeof entry.entryJSFiles !== "object") {
+        fail(
+          `${relative(root, file)} route ${route} has no entryJSFiles object.\n` +
+            `  The manifest format changed and this page's first load can no ` +
+            `longer be measured.`,
+        );
+      }
+      const page = route.slice(0, -"/page".length) || "/";
+      const files = pageFiles.get(page) ?? new Set();
+      for (const list of Object.values(entry.entryJSFiles)) {
+        if (!Array.isArray(list)) {
+          fail(
+            `${relative(root, file)} route ${route} lists entry files that are ` +
+              `not an array.\n  The manifest format changed and this check can ` +
+              `no longer read it.`,
+          );
+        }
+        for (const entryFile of list) files.add(entryFile);
+      }
+      pageFiles.set(page, files);
     }
     for (const [key, value] of Object.entries(entry.clientModules)) {
       entryCount += 1;
@@ -626,7 +663,7 @@ if (barrelPins.length > 0) {
  * Floors under the byte budgets, because zero is not a low enough bar.
  *
  * A zero-only floor is cleared by the debris. Moving `static/chunks` aside,
- * which is the exact adapter relocation the JS ceiling comment above documents
+ * which is the exact adapter relocation the comment on the total above documents
  * as having happened on a real deploy, leaves three Next build manifests under
  * `static/<buildId>/` totalling 447 bytes. Verified: that measures
  * "client JS 447 of 940,000", clears a zero floor, sits under the ceiling, and
@@ -647,7 +684,8 @@ const emitted = walk(staticDir);
 const totals = {};
 
 for (const [label, extension, ceiling] of [
-  ["JS", ".js", CLIENT_JS_CEILING],
+  /* No ceiling on JS: see the comment at the top of this file. */
+  ["JS", ".js", null],
   ["CSS", ".css", CLIENT_CSS_CEILING],
 ]) {
   const files = emitted.filter((file) => file.endsWith(extension));
@@ -658,7 +696,7 @@ for (const [label, extension, ceiling] of [
   totals[label] = totalBytes;
 
   /* A ceiling with no floor under it is satisfied by an empty build, and this
-     is not hypothetical here: the comment on the ceilings records that Vercel's
+     is not hypothetical here: the comment on the total records that Vercel's
      adapter has already relocated this app's client assets once. Have it
      relocate them OUT of `static` rather than into a differently named
      subdirectory, or turn on `experimental.inlineCss`, which moves the whole
@@ -683,7 +721,7 @@ for (const [label, extension, ceiling] of [
     );
   }
 
-  if (totalBytes > ceiling) {
+  if (ceiling !== null && totalBytes > ceiling) {
     const over = totalBytes - ceiling;
     const percent = ((totalBytes / ceiling - 1) * 100).toFixed(2);
     problems.push(
@@ -692,6 +730,131 @@ for (const [label, extension, ceiling] of [
         `${over.toLocaleString("en-US")} (${percent}%).\n\n` +
         `  Find what grew before raising the ceiling. If the growth is real and ` +
         `wanted,\n  raise it in a commit that says what grew.`,
+    );
+  }
+}
+
+/* ---- 4. First load per route --------------------------------------------- */
+
+/**
+ * What a visitor downloads to open each page, against its budget in
+ * `route-budgets.mjs`: the build manifest's `rootMainFiles` plus the page's
+ * own entry files, each file once. A file both lists counts once, because the
+ * browser fetches it once, and a chunk two pages share counts in each of their
+ * first loads, because each of their visitors downloads it.
+ *
+ * Polyfills are out: Next loads `polyfillFiles` with `noModule`, so a browser
+ * that runs this app's modules never fetches them.
+ *
+ * The case this has to get right is the reason it replaced the total: a chunk
+ * split into per-route copies leaves every route's first load where it was and
+ * must pass, and a route that grows fails, whatever the total did.
+ */
+const buildManifestPath = join(distDir, "build-manifest.json");
+let rootMainFiles;
+try {
+  rootMainFiles = JSON.parse(readFileSync(buildManifestPath, "utf8")).rootMainFiles;
+} catch (error) {
+  fail(`could not read ${relative(root, buildManifestPath)}: ${error.message}`);
+}
+if (!Array.isArray(rootMainFiles) || rootMainFiles.length === 0) {
+  fail(
+    `${relative(root, buildManifestPath)} lists no rootMainFiles.\n` +
+      `  The manifest format changed. Measured without them, every route's ` +
+      `first load would\n  read low by the framework and pass.`,
+  );
+}
+
+/* A listed file that isn't on disk is a failure, not a zero: measuring around
+   it reads low. The manifests move with the assets, so a build that writes
+   `static/immutable/chunks` lists those paths and they resolve here as they
+   are. `statSync` and not this file's usual `lstat`: a symlink's own size would
+   read low, and a dangling one has already failed `existsSync`. */
+const missingFiles = new Set();
+function emittedSize(file) {
+  const full = join(distDir, file);
+  if (!existsSync(full)) {
+    missingFiles.add(file);
+    return 0;
+  }
+  return statSync(full).size;
+}
+
+const firstLoad = [...pageFiles]
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([page, files]) => {
+    let bytes = 0;
+    for (const file of new Set([...rootMainFiles, ...files])) bytes += emittedSize(file);
+    const measured = ROUTE_FIRST_LOAD[page];
+    return {
+      page,
+      bytes,
+      entries: files.size,
+      cap: measured === undefined ? null : measured + ROUTE_SLACK,
+    };
+  });
+
+if (missingFiles.size > 0) {
+  const listed = [...missingFiles].sort();
+  problems.push(
+    `${listed.length} file(s) a page loads first are not in the build.\n\n` +
+      listed.slice(0, 10).map((file) => `  ${file}`).join("\n") +
+      (listed.length > 10 ? `\n  and ${listed.length - 10} more` : "") +
+      `\n\n  Each page's first load reads low by what's missing, which looks ` +
+      `like a lean build.`,
+  );
+}
+
+/* The coverage rule again. A cap is an upper bound, so manifests that lost the
+   pages' own files read low and pass every one. A floor per route can't catch
+   that, because `/_global-error` honestly loads little past the root files, so
+   this floors the unique bytes pages load beyond them: 361,301 on 4 November
+   2026, far below which means the entries weren't read, not a smaller app. */
+const ENTRY_BYTES_FLOOR = 100_000;
+const entryFiles = new Set([...pageFiles.values()].flatMap((files) => [...files]));
+for (const file of rootMainFiles) entryFiles.delete(file);
+const entryBytes = [...entryFiles].reduce((sum, file) => sum + emittedSize(file), 0);
+if (entryBytes < ENTRY_BYTES_FLOOR) {
+  problems.push(
+    `pages load only ${entryBytes.toLocaleString("en-US")} bytes beyond the root ` +
+      `files, under the floor of ${ENTRY_BYTES_FLOOR.toLocaleString("en-US")}.\n` +
+      `  The entry files probably weren't read, and every route would pass its cap.`,
+  );
+}
+
+const n = (bytes) => bytes.toLocaleString("en-US");
+for (const { page, bytes, entries, cap } of firstLoad) {
+  /* Every page in a real build has a layout's files at the least. None means
+     the entries weren't read, and root files alone would pass any cap. */
+  if (entries === 0) {
+    problems.push(
+      `${page} lists no entry files, so its first load reads as the root files ` +
+        `alone.\n  The manifest format changed.`,
+    );
+  }
+  if (cap === null) {
+    problems.push(
+      `${page} has no first-load budget. It loads ${n(bytes)} bytes of JS first.\n\n` +
+        `  Add it to scripts/route-budgets.mjs, measured on a clean build.`,
+    );
+  } else if (bytes > cap) {
+    problems.push(
+      `${page} loads ${n(bytes)} bytes of JS first, over its cap of ${n(cap)} ` +
+        `(${n(cap - ROUTE_SLACK)} measured plus ${n(ROUTE_SLACK)} slack) by ` +
+        `${n(bytes - cap)}.\n\n` +
+        `  This is what a visitor to ${page} downloads, so no split or merge ` +
+        `elsewhere moves it.\n  Find what grew on this route. If the growth is ` +
+        `real and wanted, re-measure\n  its row in scripts/route-budgets.mjs in a ` +
+        `commit that says what grew.`,
+    );
+  }
+}
+for (const page of Object.keys(ROUTE_FIRST_LOAD)) {
+  if (!pageFiles.has(page)) {
+    problems.push(
+      `${page} has a first-load budget but no page in this build.\n\n` +
+        `  If the page is gone, remove its row from scripts/route-budgets.mjs. ` +
+        `If it isn't,\n  its manifest was not read.`,
     );
   }
 }
@@ -750,13 +913,21 @@ const ageSeconds = Math.round(
 );
 const age = ageSeconds < 120 ? `${ageSeconds}s old` : `${Math.round(ageSeconds / 60)}m old`;
 
+/* The table is the evidence: the figures a re-measure copies into
+   `route-budgets.mjs`, and what a reviewer reads a change's cost from. */
+const tightest = firstLoad.reduce((a, b) => (b.cap - b.bytes < a.cap - a.bytes ? b : a));
+const width = Math.max(...firstLoad.map(({ page }) => page.length));
 console.log(
   `✓ bundle shape: ${PKG} barrel unpinned across ${routeCount} routes ` +
     `(${entryCount} client modules, ${componentPins} Roster components pinned ` +
-    `individually), client JS ${totals.JS.toLocaleString("en-US")} of ` +
-    `${CLIENT_JS_CEILING.toLocaleString("en-US")}, CSS ` +
-    `${totals.CSS.toLocaleString("en-US")} of ` +
-    `${CLIENT_CSS_CEILING.toLocaleString("en-US")} bytes, ` +
+    `individually), first-load JS within budget on ${firstLoad.length} pages ` +
+    `(closest: ${tightest.page}, ${n(tightest.cap - tightest.bytes)} under), CSS ` +
+    `${n(totals.CSS)} of ${n(CLIENT_CSS_CEILING)} bytes, ` +
     `${hover.guarded} hover selectors guarded and ${HOVER_ALLOW.length} allowed, ` +
-    `build at ${relative(root, distDir) || distDir} ${age}`,
+    `build at ${relative(root, distDir) || distDir} ${age}\n` +
+    `  client JS ${n(totals.JS)} bytes across every emitted file: reported, not ` +
+    `budgeted, because it counts each route's copy of shared code\n` +
+    firstLoad
+      .map(({ page, bytes, cap }) => `  ${page.padEnd(width)}  ${n(bytes).padStart(9)} of ${n(cap)}`)
+      .join("\n"),
 );
