@@ -359,6 +359,36 @@ X-ray's own button and legend are built from Roster too, so they carry
 it the legend annotates itself, over the top of the list you are reading, and
 reports its own Eyebrows as page content.
 
+The names used to be an `::after` inside each box, anchored by a
+`position: relative` that X-ray added to everything it outlined. That covered
+the short components it was naming, and on a phone one ran off the right edge
+and made a 375px screen a 398px page. They're placed from measured boxes now:
+
+- **`lib/xray-place.ts` decides.** It's pure, rectangles in and placements out,
+  so the rule has literal tests. Above by default, below when there's no room,
+  smallest boxes first. Text counts as an obstacle, because a specimen sits
+  closer under its eyebrow than a label is tall. A label with nowhere clear to
+  go overlaps by the least it can rather than going missing, so a few in dense
+  copy do land on text.
+- **Two layers, and no scroll code.** The page's labels sit in a layer at the
+  document's origin, one under the bar, so they scroll natively and slide under
+  it. The bar's sit in a layer inside the bar. A tall component's label rides a
+  sticky track the height of the component, which pins it under the bar.
+- **`lib/xray-scan.ts` measures.** One test for the labels and the legend's
+  count: `checkVisibility` and a box over 1px, never `aria-hidden` or `inert`,
+  because Roster's Dialog marks the page behind it and the labels should stay.
+  Popups aren't labeled: one counts as part of its trigger.
+- **It re-measures on what can move a box,** debounced to a frame: resize, fonts,
+  mutations outside the overlay, `transitionend`, a scroll from an inner
+  scroller, and a client hop. Nothing in the overlay can trigger it, so a quiet
+  page does no work. `TopBar`'s `data-bar-rest` sentinel says where the bar
+  rests, which a stuck bar can't.
+
+Esc goes to the top layer first: with a dialog, listbox or menu open it closes
+that and X-ray stays on, and the next Esc turns X-ray off. Hovering or focusing a
+name in the legend lights every instance of it. Under 640px the legend starts
+folded to its count.
+
 The panel links each name to its Storybook story. It used to fall back to
 declaring "Storybook not deployed yet" — a claim it has no way to verify, and
 one that was false in production for as long as the URL defaulted to an empty
@@ -504,8 +534,9 @@ has to prove it still contains a known sentence from each file and has still
 dropped a known comment. Without that, a one-character change to the stripper
 would turn both real checks into `[] === []` and they would stay green forever.
 
-Nothing covers the pages, the layout, or the X-ray overlay. That is still a
-gap, just a smaller and more deliberate one than before.
+Nothing covers the pages or the layout, and X-ray's placing is covered but its
+measuring isn't. That is still a gap, just a smaller and more deliberate one
+than before.
 
 `check:ramps` and `check:bundle` are the other automated checks, and each
 guards one narrow thing: color ordering, and the shape and size of the emitted
