@@ -18,25 +18,26 @@
  * real growth could hide behind a chunk that happened to merge. A route's
  * first load is what its visitor pays, whichever way the chunks fall.
  *
- * Measured 4 November 2026 on `main` at c4d7fe7 (Next 16.4.0, Roster 5.15.0),
- * a clean copy with `.env.local` beside it, built twice with the same figures.
- * Roster 5.18.0 moved none of them: every JS chunk came out byte-identical.
+ * Measured 4 November 2026 on Next 16.4.2 and Roster 5.18.0, a clean copy with
+ * `.env.local` beside it, built twice with the same figures. Next 16.4.0 to
+ * 16.4.2 added 187 bytes to every route. Roster 5.15.0 to 5.18.0 added none:
+ * every JS chunk came out byte-identical.
  *
  * Re-measure when you change one: a figure carried forward from an older tree
  * stops being a measurement. Run `npm run check:bundle` on a fresh build; it
  * prints every route's first load.
  */
 export const ROUTE_FIRST_LOAD = {
-  "/": 659_503,
-  "/_global-error": 457_165,
-  "/_not-found": 633_828,
-  "/about": 648_667,
-  "/resume": 634_163,
-  "/system": 725_030,
-  "/work": 651_273,
-  "/work/[slug]": 655_148,
-  "/writing": 651_273,
-  "/writing/[slug]": 651_273,
+  "/": 659_690,
+  "/_global-error": 457_352,
+  "/_not-found": 634_015,
+  "/about": 648_854,
+  "/resume": 634_350,
+  "/system": 725_217,
+  "/work": 651_460,
+  "/work/[slug]": 655_335,
+  "/writing": 651_460,
+  "/writing/[slug]": 651_460,
 };
 
 /**

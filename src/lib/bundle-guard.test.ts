@@ -394,6 +394,13 @@ describe("the bundle guard's first load per route", () => {
     expect(out).toContain("has no entryJSFiles object");
   });
 
+  it("fails entry files that aren't an array", () => {
+    const entryJSFiles = { layout: "static/chunks/layout.js" };
+    const { code, out } = run(buildFixture({ entryOverride: { "/about": { entryJSFiles } } }));
+    expect(code).toBe(1);
+    expect(out).toContain("lists entry files that are not an array");
+  });
+
   it("fails a page whose entry files are empty, which would read low and pass", () => {
     const { code, out } = run(buildFixture({ entryOverride: { "/about": { entryJSFiles: {} } } }));
     expect(code).toBe(1);
