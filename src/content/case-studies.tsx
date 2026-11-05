@@ -240,15 +240,15 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "3,399", label: "Verdicts cast", source: "25 Oct 2026 snapshot", live: "verdicts" },
-      { value: "1,972", label: "Games tracked", source: "25 Oct 2026 snapshot", live: "games" },
+      { value: "3,488", label: "Verdicts cast", source: "4 Nov 2026 snapshot", live: "verdicts" },
+      { value: "2,058", label: "Games tracked", source: "4 Nov 2026 snapshot", live: "games" },
       /* Counted off `origin/main`. That is NOT this repo's default branch -
          game-verdict releases from `dev` - but `main` is its release line, so
          this counts shipped work rather than whatever `dev` is carrying, and it
          matches how the Roster card counts. No live path for this one: the repo
          is private, so there is nothing for the GitHub reader to reach, which
          makes it the only number on this card that can go stale silently. */
-      { value: "1,116", label: "Commits", source: "25 Oct 2026 snapshot · private repo" },
+      { value: "1,158", label: "Commits", source: "4 Nov 2026 snapshot · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -262,7 +262,7 @@ export const caseStudies: Record<string, CaseStudy> = {
       { k: "Extra", v: "Discord bot (CF Worker)" },
     ],
     also: [
-      { k: "Badges", v: "20 achievements, 6 categories" },
+      { k: "Badges", v: "38 achievements, 7 categories" },
       { k: "Social", v: "Threads, reactions, profiles" },
       { k: "Compare", v: "Head-to-head dueling bars" },
       { k: "Digest", v: "Weekly email, cron" },
@@ -393,7 +393,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
           <p>
             The same string is also emitted as the <Code>FAQPage</Code> answer in structured data. So
-            roughly 1,600 pages that would otherwise be near-identical templates each carry unique
+            pages that would otherwise be near-identical templates each carry unique
             text answering the literal thing people search for, and the reader and the crawler are
             served by one sentence rather than two systems.
           </p>
@@ -448,11 +448,11 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section
           eyebrow="Beyond the vote"
           title="Reasons to come back, and somewhere else to be"
-          dek="Twenty badges to earn, public profiles, and comment threads on every game where the best replies get voted to the top. A Discord bot covers the rest, so an argument in a group chat gets settled without anyone opening the site."
+          dek="Thirty-eight badges to earn, public profiles, and comment threads on every game where the best replies get voted to the top. A Discord bot covers the rest, so an argument in a group chat gets settled without anyone opening the site."
         >
           <p>
-            Twenty badges across six categories are evaluated after every verdict, reaction, and
-            library change, with the first unlock arriving as a toast. Profiles are public, with a
+            Thirty-eight badges across seven categories are evaluated after every verdict, reaction,
+            and library change, with the first unlock arriving as a toast. Profiles are public, with a
             verdict history and an input-method tendency bar you can click to filter.
           </p>
           <Shot
@@ -647,8 +647,8 @@ export const caseStudies: Record<string, CaseStudy> = {
         /* Matches `git rev-list --count origin/main` after a fetch, which is
            the same count the GitHub API reports and the same thing the live
            path above renders. Not a local working copy, which drifts ahead.
-           Last checked 25 Oct 2026. */
-        value: "392",
+           Last checked 4 Nov 2026. */
+        value: "400",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -826,7 +826,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <p>
             The flip side is that mistakes arrive immediately and personally. A bad major doesn&rsquo;t
-            generate issues, it breaks four apps I was going to work on that weekend. That is a
+            generate issues, it breaks eight apps I was going to work on that weekend. That is a
             tighter feedback loop than most libraries get, and it is the only reason a packaging bug
             that had been quietly wrong for months finally got found.
           </p>
