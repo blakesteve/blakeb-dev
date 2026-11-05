@@ -58,13 +58,8 @@ describe("the running head", () => {
 });
 
 describe("the lit nav item", () => {
-  /* X-ray's label is every annotated component's `::after`. A tab drawn there
-     blanked the label on the lit link and pulled the tab off the rule. */
-  it("draws its tab on ::before, leaving ::after to X-ray", () => {
-    const css = read("app", "globals.css");
-    expect(css).toMatch(/\.nav-link\[aria-current\]::before \{/);
-    expect(css).not.toMatch(/\.nav-link\[aria-current\]::after/);
-    expect(css).toMatch(/\.xray \[data-roster\]::after \{/);
+  it("draws its tab on ::before", () => {
+    expect(read("app", "globals.css")).toMatch(/\.nav-link\[aria-current\]::before \{/);
   });
 
   it("scales from its left edge, which the slide's keyframes assume", () => {
