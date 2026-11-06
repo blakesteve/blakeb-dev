@@ -1,0 +1,340 @@
+/* Ink swap. Loaded by this route alone. */
+
+.ink-swap {
+  container: ink / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.ink-tile {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 26px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+.ink-tile i {
+  flex: 1;
+}
+
+.ink-wrap {
+  position: relative;
+  margin: 0;
+}
+
+.ink-reg,
+.ink-crop {
+  display: none;
+  position: absolute;
+}
+.ink-reg-top {
+  top: -17px;
+  left: calc(50% - 8px);
+}
+.ink-reg-bottom {
+  bottom: -17px;
+  left: calc(50% - 8px);
+}
+.ink-reg-left {
+  top: calc(50% - 8px);
+  left: -17px;
+}
+.ink-reg-right {
+  top: calc(50% - 8px);
+  right: -17px;
+}
+/* Landed: the same snap as the mark, from the same easing. */
+.ink-snap .reg-plate {
+  transform: translate(0, 0);
+}
+
+.ink-crop {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+.ink-crop::before,
+.ink-crop::after {
+  content: "";
+  position: absolute;
+  background: var(--ink-faint);
+}
+.ink-crop::before {
+  width: 14px;
+  height: 1px;
+}
+.ink-crop::after {
+  width: 1px;
+  height: 14px;
+}
+.ink-crop-1 {
+  top: -18px;
+  left: -18px;
+}
+.ink-crop-1::before {
+  bottom: 0;
+  left: 0;
+}
+.ink-crop-1::after {
+  top: 0;
+  right: 0;
+}
+.ink-crop-2 {
+  top: -18px;
+  right: -18px;
+}
+.ink-crop-2::before {
+  right: 0;
+  bottom: 0;
+}
+.ink-crop-2::after {
+  top: 0;
+  left: 0;
+}
+.ink-crop-3 {
+  bottom: -18px;
+  left: -18px;
+}
+.ink-crop-3::before {
+  top: 0;
+  left: 0;
+}
+.ink-crop-3::after {
+  right: 0;
+  bottom: 0;
+}
+.ink-crop-4 {
+  right: -18px;
+  bottom: -18px;
+}
+.ink-crop-4::before {
+  top: 0;
+  right: 0;
+}
+.ink-crop-4::after {
+  bottom: 0;
+  left: 0;
+}
+
+.ink-sheet {
+  position: relative;
+  overflow: hidden;
+  background: var(--job-ground);
+  color: var(--job-ink);
+  font-family: var(--job-ui);
+  view-transition-name: ink-sheet;
+}
+
+.ink-colorbar {
+  display: flex;
+  height: 10px;
+}
+.ink-colorbar i {
+  flex: 1;
+}
+
+.ink-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  padding: 22px 16px 16px;
+}
+
+.ink-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.ink-sheet .ink-eyebrow {
+  color: var(--job-soft);
+}
+.ink-title {
+  margin: 12px 0 0.16em;
+  color: var(--job-ink);
+  font-family: var(--job-display);
+  font-size: clamp(3rem, 10.5cqw, 7.4rem);
+  line-height: 0.92;
+  text-wrap: balance;
+}
+.ink-lede {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--job-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.ink-gap {
+  margin-top: 16px;
+}
+/* Three long tab names don't fit a 320px phone. */
+.ink-tabs {
+  overflow-x: auto;
+}
+.ink-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.ink-card {
+  padding: 15px;
+  overflow: visible;
+}
+.ink-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ink-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.ink-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 26px;
+  margin: 0;
+}
+.ink-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ink-sheet .ink-when {
+  color: var(--job-soft);
+}
+.ink-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+}
+
+.ink-slug {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+  padding: 9px 16px;
+  border-top: 1px solid var(--job-rule);
+  color: var(--job-soft);
+  font-family: var(--font-util);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.ink-slug-end {
+  margin-left: auto;
+}
+
+/* Parked just off the sheet's left edge, where its `overflow: hidden` hides it. It
+   can't rest at `opacity: 0`: the wipe animates a snapshot, and a transparent
+   element snapshots as nothing. */
+.ink-press-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -3px;
+  width: 3px;
+  background: linear-gradient(var(--process-c), var(--process-m), var(--process-y));
+  view-transition-name: ink-press-line;
+}
+
+@media (min-width: 640px) {
+  .ink-wrap {
+    margin: 20px 18px;
+  }
+  .ink-reg,
+  .ink-crop {
+    display: block;
+  }
+}
+
+@media (min-width: 760px) {
+  .ink-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 18px;
+    padding: 30px 30px 24px;
+  }
+  .ink-hero {
+    grid-column: span 8;
+  }
+  .ink-schedule,
+  .ink-form,
+  .ink-stack {
+    grid-column: span 4;
+  }
+}
+
+/* The wipe. Everything else on the page holds still, and the bar and X-ray's
+   controls stay above it instead of being painted over for a second. Each name
+   is one element: two with the same name abort the transition. */
+[data-top-bar] {
+  view-transition-name: ink-bar;
+}
+button[data-xray-ui] {
+  view-transition-name: ink-xray-button;
+}
+aside[data-xray-ui] {
+  view-transition-name: ink-xray-legend;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-old(ink-sheet) {
+  z-index: 1;
+  animation: none;
+}
+::view-transition-new(ink-sheet) {
+  z-index: 2;
+  animation: ink-wipe 0.95s cubic-bezier(0.62, 0.04, 0.22, 1) both;
+}
+::view-transition-new(ink-press-line) {
+  z-index: 3;
+  animation: ink-press-run 0.95s cubic-bezier(0.62, 0.04, 0.22, 1) both;
+}
+::view-transition-old(ink-press-line) {
+  display: none;
+}
+::view-transition-group(ink-bar),
+::view-transition-group(ink-xray-button),
+::view-transition-group(ink-xray-legend) {
+  z-index: 5;
+}
+::view-transition-old(ink-bar),
+::view-transition-old(ink-xray-button),
+::view-transition-old(ink-xray-legend) {
+  display: none;
+}
+::view-transition-new(ink-bar),
+::view-transition-new(ink-xray-button),
+::view-transition-new(ink-xray-legend) {
+  animation: none;
+}
+
+@keyframes ink-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes ink-press-run {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  96% {
+    opacity: 1;
+  }
+  to {
+    transform: translateX(var(--ink-sheet-width, 900px));
+    opacity: 0;
+  }
+}

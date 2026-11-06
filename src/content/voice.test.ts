@@ -17,7 +17,7 @@ import { describe, expect, it } from "vitest";
  * churn in files nobody reads for style.
  */
 
-const FILES = ["case-studies.tsx", "posts.tsx"] as const;
+const FILES = ["case-studies.tsx", "posts.tsx", "jobs.ts"] as const;
 
 /**
  * The prose, with the code stripped out.
@@ -249,7 +249,7 @@ describe("prose voice", () => {
         .toBeGreaterThan(0.55);
     }
 
-    const [[, caseStudies], [, posts]] = PROSE;
+    const [[, caseStudies], [, posts], [, jobs]] = PROSE;
 
     /* Opening of each file, and then the closing paragraph of its last
        section. Both ends have to survive. */
@@ -260,6 +260,9 @@ describe("prose voice", () => {
     /* The tail anchor moves with each new post: it has to be the file's last
        paragraph, or a stripper that ate the newest post would still pass. */
     expect(posts).toContain("Most of your answers will probably come back no. The sky on the night");
+
+    expect(jobs).toContain("Same plates");
+    expect(jobs).toContain("Every week's table, after it closes.");
 
     /* Both files open with a block comment; neither phrase should survive. */
     expect(caseStudies).not.toContain("Read from source: the bodies are JSX");

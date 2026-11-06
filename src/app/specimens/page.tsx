@@ -1,21 +1,32 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
-import { REyebrow, RLabeledDivider, RDescriptionList, storyHref } from "@/lib/roster-ui";
+import { REyebrow, RLabeledDivider, storyHref } from "@/lib/roster-ui";
 import { SPECIMENS_PAGE } from "@/lib/nav";
+import { getProject } from "@/lib/projects";
 import {
+  ROSTER_APPS,
   getRosterComponents,
+  getRosterMeta,
   getRosterRamp,
+  getRosterShippedTokens,
   getRosterTokenFamilies,
   getRosterVersion,
 } from "@/lib/roster";
-import { Specimens } from "./specimens";
+import { JOB_TOKENS_COPIED, buildJobs } from "@/content/jobs";
+import { InkSwap } from "./ink-swap";
+import { JOB_FONTS } from "./job-fonts";
 
 export const metadata = {
   title: SPECIMENS_PAGE.label,
-  description:
-    "The component library this site is built from, read from the installed package: every token, every component, and the two palettes they render in.",
+  description: `One set of components, ${ROSTER_APPS.words} apps. Pick a job and the sheet reprints in that product's own tokens, with every part of the library below it.`,
 };
+
+/** A project's site, for a job's slug line, from the one list of them. */
+function hostOf(slug: string, fallback: string) {
+  const live = getProject(slug)?.links.find((link) => link.kind === "live");
+  return live ? new URL(live.href).host : fallback;
+}
 
 const TIER_ORDER = ["atoms", "molecules", "organisms"] as const;
 
@@ -23,6 +34,21 @@ export default function SpecimensPage() {
   const version = getRosterVersion();
   const components = getRosterComponents();
   const families = getRosterTokenFamilies();
+
+  const shipped = getRosterShippedTokens();
+  const jobs = buildJobs({
+    version,
+    components: components.length,
+    tiers: Object.fromEntries(
+      TIER_ORDER.map((tier) => [tier, components.filter((item) => item.tier === tier).length]),
+    ),
+    tests: getRosterMeta()?.tests ?? null,
+    hosts: {
+      gv: hostOf("game-verdict", "gameverdict.app"),
+      retrospect: hostOf("retrospect", "retrospect-seven.vercel.app"),
+      megasquad: hostOf("megasquad", "megasquad.org"),
+    },
+  });
 
   const byTier = TIER_ORDER.map((tier) => ({
     tier,
@@ -40,78 +66,32 @@ export default function SpecimensPage() {
           {SPECIMENS_PAGE.label}
         </h1>
         <p className="m-0 max-w-[56ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
-          Everything below is read from the installed copy of{" "}
-          <code className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">
-            @blakesteve/roster
-          </code>{" "}
-          at build time. The component list, the token ramps, and the specimens are
-          the library itself, not a description of it.
+          One set of components, {ROSTER_APPS.words} apps. Pick a job and this sheet reprints in
+          that product&rsquo;s own tokens. Nothing below is a picture.
         </p>
-
-        <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4">
-          <RDescriptionList
-            layout="stacked"
-            size="md"
-            className="gap-x-10 sm:flex-row"
-            items={[
-              { term: "Version", description: version },
-              { term: "Components", description: String(components.length) },
-              { term: "Color families", description: String(families.length) },
-              { term: "Production states", description: "2" },
-            ]}
-          />
-        </dl>
       </header>
 
-      {/* ---- Tokens ---- */}
-      <section className="mx-auto w-full max-w-[1180px] px-6 pt-10 sm:px-8">
-        <RLabeledDivider
-          label="Tokens"
-          trailing={`${families.length} families`}
-          className="pb-1 [&>[role=presentation]]:bg-rule"
-        />
-        <p className="m-0 max-w-[64ch] pb-5 pt-3 text-[0.96875rem] leading-[1.62] text-ink-soft">
-          Each swatch is shown twice. The top half is the hex Roster ships; the
-          bottom half is what{" "}
-          <code className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">
-            var(--roster-*)
-          </code>{" "}
-          resolves to on this page, after this site remaps it. Where the two
-          halves differ, that is an override doing its job: same library, this
-          site&rsquo;s palette, no fork. Toggle the state above and the lower half
-          repaints while the upper half holds still.
+      {/* ---- Ink swap ---- */}
+      <section className={`mx-auto w-full max-w-[1180px] px-6 pt-8 sm:px-8 ${JOB_FONTS}`}>
+        <InkSwap jobs={jobs} shipped={shipped} fonts={JOB_FONTS} />
+        <p className="m-0 max-w-[64ch] pt-6 text-[0.96875rem] leading-[1.62] text-ink-soft">
+          Press{" "}
+          <kbd className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">⌥X</kbd> and
+          every one of them is outlined and named, which is also how you can check that this page
+          is not drawing pictures of buttons.
         </p>
-
-        <div className="flex flex-col gap-4">
-          {families.map((family) => (
-            <div key={family} className="flex flex-col gap-[6px]">
-              <REyebrow>{family}</REyebrow>
-              <div className="flex overflow-hidden rounded-[3px] border border-rule">
-                {getRosterRamp(family).map(({ step, shipped }) => (
-                  <div key={step} className="flex flex-1 flex-col">
-                    {/* Shipped: a literal hex, unaffected by this site. */}
-                    <div className="h-7" style={{ backgroundColor: shipped }} />
-                    {/* Resolved: whatever this site's state maps it to. */}
-                    <div
-                      className="h-7"
-                      style={{ backgroundColor: `var(--roster-${family}-${step})` }}
-                    />
-                    <span className="bg-panel py-1 text-center font-[family-name:var(--font-util)] text-[8.5px] text-ink-faint">
-                      {step}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <p className="m-0 max-w-[64ch] pt-3 font-[family-name:var(--font-util)] text-[11px] leading-[1.6] text-ink-faint">
+          Tokens copied from each app&rsquo;s stylesheet, {JOB_TOKENS_COPIED}. Words invented in
+          each product&rsquo;s register. The numbers in a reprint are samples, not that app&rsquo;s
+          real figures.
+        </p>
       </section>
 
       {/* ---- Catalog ---- */}
       <section className="mx-auto w-full max-w-[1180px] px-6 pt-12 sm:px-8">
         <RLabeledDivider
           label="Catalog"
-          trailing={`${components.length} components`}
+          trailing={`${components.length} components · v${version}`}
           className="pb-1 [&>[role=presentation]]:bg-rule"
         />
         <p className="m-0 max-w-[64ch] pb-5 pt-3 text-[0.96875rem] leading-[1.62] text-ink-soft">
@@ -155,23 +135,48 @@ export default function SpecimensPage() {
         </div>
       </section>
 
-      {/* ---- Specimens ---- */}
-      <section className="mx-auto w-full max-w-[1180px] px-6 pt-12 sm:px-8">
+      {/* ---- Tokens ---- */}
+      <section className="mx-auto w-full max-w-[1180px] px-6 pt-10 sm:px-8">
         <RLabeledDivider
-          label="Specimens"
-          trailing="live"
+          label="Tokens"
+          trailing={`${families.length} families`}
           className="pb-1 [&>[role=presentation]]:bg-rule"
         />
         <p className="m-0 max-w-[64ch] pb-5 pt-3 text-[0.96875rem] leading-[1.62] text-ink-soft">
-          Real components, rendered here rather than screenshotted. Press{" "}
-          <kbd className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">
-            ⌥X
-          </kbd>{" "}
-          and every one of them is outlined and named, which is also how you can
-          check that this page is not drawing pictures of buttons.
+          Each swatch is shown twice. The top half is the hex Roster ships; the
+          bottom half is what{" "}
+          <code className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">
+            var(--roster-*)
+          </code>{" "}
+          resolves to on this page, after this site remaps it. Where the two
+          halves differ, that is an override doing its job: same library, this
+          site&rsquo;s palette, no fork. Toggle the state above and the lower half
+          repaints while the upper half holds still.
         </p>
 
-        <Specimens componentCount={components.length} />
+        <div className="flex flex-col gap-4">
+          {families.map((family) => (
+            <div key={family} className="flex flex-col gap-[6px]">
+              <REyebrow>{family}</REyebrow>
+              <div className="flex overflow-hidden rounded-[3px] border border-rule">
+                {getRosterRamp(family).map(({ step, shipped }) => (
+                  <div key={step} className="flex flex-1 flex-col">
+                    {/* Shipped: a literal hex, unaffected by this site. */}
+                    <div className="h-7" style={{ backgroundColor: shipped }} />
+                    {/* Resolved: whatever this site's state maps it to. */}
+                    <div
+                      className="h-7"
+                      style={{ backgroundColor: `var(--roster-${family}-${step})` }}
+                    />
+                    <span className="bg-panel py-1 text-center font-[family-name:var(--font-util)] text-[8.5px] text-ink-faint">
+                      {step}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <SiteFooter

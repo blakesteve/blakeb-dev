@@ -79,9 +79,8 @@ from it, and Roster doesn't read it.
 
 ### Panels are Roster Cards
 
-The press sheet's panels (the typefaces and colophon on `/about`, the specimen
-cells on `/specimens`, a case study's sidebar, the palette comparison, the release
-history) and its image frames (`Shot`, `Clip`) are `RCard`s, so X-ray outlines
+The press sheet's panels (the typefaces and colophon on `/about`, a case study's
+sidebar, the palette comparison, the release history) and its image frames (`Shot`, `Clip`) are `RCard`s, so X-ray outlines
 them as the Roster components they are. Their colors come from
 `--roster-card-bg` and `--roster-card-border`, set on `:root` to `--panel` and
 `--rule`. The 3px corner comes from `press-card`, a class `RCard` adds that sets
@@ -229,9 +228,9 @@ overrides need no `!important` — the `utilities` layer already outranks
 - `/` — folio, hero, live system strip, project cards
 - `/work` — the contents page: one dense row per project, no preamble
 - `/work/[slug]` — case studies, statically generated per project
-- `/specimens` — the library itself: token ramps shown shipped-versus-remapped,
-  the full catalog linked into Storybook, and live component specimens. Its label
-  and path are one constant in `lib/nav.ts`, and `/system` answers 308 to it
+- `/specimens` — Ink swap, then the library itself: the full catalog linked into
+  Storybook, and token ramps shown shipped-versus-remapped. Its label and path are
+  one constant in `lib/nav.ts`, and `/system` answers 308 to it
 - `/about` — the arc, the two-ink portrait, and the colophon
 - `/writing` and `/writing/[slug]` — posts, as content modules
 - `/resume` — the same career data, print-shaped
@@ -394,6 +393,46 @@ The panel links each name to its Storybook story. It used to fall back to
 declaring "Storybook not deployed yet" — a claim it has no way to verify, and
 one that was false in production for as long as the URL defaulted to an empty
 string. It now reports only what it can know: whether it was given a link.
+
+## Ink swap
+
+`/specimens` opens on one sheet of live Roster components and six jobs. Pick one
+and the sheet reprints in that product's tokens, fonts and words, and the page
+around it holds still. It lives on this route and nowhere else: its components,
+CSS and fonts are the route's own. The one exception is 725 bytes on every route,
+`Select`'s chevron, which lands in Font Awesome's shared chunk.
+
+A job is Roster as shipped plus that app's overrides (`lib/ink-jobs.ts`), so this
+site's remap can't show through a family the app doesn't touch. Three things have
+to hold for that to be true:
+
+- **Semantic tokens re-derive in the sheet.** Roster resolves them at `:root`, so
+  overriding a ramp misses them. The sheet sets `data-roster-scope`, and `.dark`
+  with it on a dark job, because a scope with no `.dark` resets to light.
+- **A light job on the blueline turns its ramps over.** `.dark` on `<html>` can't
+  be undone below it, so `dark:` variants fire regardless. The sheet takes `.dark`
+  too and the ramps reverse, so those variants land on light values.
+- **Popups carry the job.** `Select`, `Dialog` and the rest render at `<body>`, so
+  the job is copied onto Headless UI's portal root while the sheet has the pointer
+  or focus. That root is an internal, and a test fails if it goes.
+
+The tokens are a copy, on purpose: `node scripts/copy-job-tokens.mjs` reads each
+app's production branch from the sibling repos, which Vercel doesn't have, and
+writes `content/job-tokens.json` with the date. The page prints that date. Re-run
+it when an app's palette moves, then check contrast again in a browser, every text
+run against its composited background: 0 pairs under AA on every job in both states
+is a gate, not an aim. `tools/audit.cjs` in the press check's prototype is the
+method. There's no script for it here, because this repo doesn't carry Playwright.
+
+The words are in `content/jobs.ts`, in each product's own vocabulary, and every
+figure on a reprint is a sample, which the page says. The two jobs about Roster
+read their numbers live. The server hands the jobs to the client as a prop, so
+their words and tokens never reach a client chunk.
+
+The product fonts are `preload: false`, so a visitor who never picks a job never
+downloads one. Bragging Rocks' two are local Latin slices (`app/specimens/fonts/`,
+under the OFL), because `next/font/google` brings every unicode slice's
+`@font-face` for a Japanese face, whatever `subsets` says: 368 KB of CSS.
 
 ## The CRT easter egg
 

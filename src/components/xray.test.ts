@@ -53,11 +53,13 @@ describe("what gets a label", () => {
   });
 
   it("leaves out X-ray's own chrome and portaled popups", () => {
-    expect(scan).toContain('"[data-xray-ui],[data-xray-layer],#headlessui-portal-root"');
+    expect(scan).toContain('export const PORTAL_ROOT = "headlessui-portal-root";');
+    expect(scan).toContain("`[data-xray-ui],[data-xray-layer],#${PORTAL_ROOT}`");
   });
 
   /* It's a Headless UI internal. If Roster's copy renames it, popups get
-     labeled and counted, and this is the line that says so. */
+     labeled and counted, Ink swap's popups open in the page's ink, and this is
+     the line that says so. */
   it("reads a portal root Roster's Headless UI still creates", () => {
     const portal = readFileSync(
       "node_modules/@blakesteve/roster/dist/node_modules/@headlessui/react/dist/components/portal/portal.js",

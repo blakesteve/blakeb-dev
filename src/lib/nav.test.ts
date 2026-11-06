@@ -79,7 +79,7 @@ describe("links to the page", () => {
   it("include the link across from Roster's case study, and only that one", () => {
     expect(
       source.find(({ path }) => path === "app/work/[slug]/page.tsx")?.text.replace(/\s+/g, " "),
-    ).toMatch(/slug === "roster" && \( <RCta [^>]*> See every part: \{SPECIMENS_PAGE\.label\} →/);
+    ).toMatch(/slug === "roster" && \( <RCta [^>]*> Don&rsquo;t read about it\. Go play with it: \{SPECIMENS_PAGE\.label\} →/);
   });
 });
 
