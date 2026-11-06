@@ -88,6 +88,25 @@ export default function AboutPage() {
               days the lane runs deeper than it used to: most weeks the problem
               worth solving is underneath the interface rather than on it.
             </p>
+            <ul className="m-0 grid list-none grid-cols-2 gap-2 p-0 pt-5 sm:flex sm:flex-wrap sm:gap-x-3">
+              {[
+                { label: "Email", href: `mailto:${CONTACT.email}`, external: false },
+                { label: "GitHub", href: CONTACT.github, external: true },
+                { label: "LinkedIn", href: CONTACT.linkedin, external: true },
+                { label: "Résumé", href: "/resume", external: false },
+              ].map(({ label, href, external }) => (
+                <li key={label}>
+                  <RCta href={href} external={external} showExternalIcon={false} tint="var(--ink)">
+                    {label} →
+                  </RCta>
+                </li>
+              ))}
+            </ul>
+            <p className="m-0 max-w-[54ch] pt-4 text-[1.0625rem] leading-[1.58] text-ink-soft">
+              Open to talking about front end leadership, design systems, and
+              anything where the interface and the thing underneath it are the same
+              job.
+            </p>
           </div>
 
           <Portrait
@@ -301,32 +320,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ---- Contact ---- */}
-      <section className="mx-auto w-full max-w-[1180px] px-6 pt-14 sm:px-8">
-        <RLabeledDivider label="Reach me" className="pb-1 [&>[role=presentation]]:bg-rule" />
-        <div className="flex flex-wrap items-end justify-between gap-6 pt-5">
-          <p className="m-0 max-w-[46ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
-            Open to talking about front end leadership, design systems, and
-            anything where the interface and the thing underneath it are the same
-            job.
-          </p>
-          <ul className="m-0 flex list-none flex-wrap gap-x-3 gap-y-2 p-0">
-            {[
-              { label: "Email", href: `mailto:${CONTACT.email}`, external: false },
-              { label: "GitHub", href: CONTACT.github, external: true },
-              { label: "LinkedIn", href: CONTACT.linkedin, external: true },
-              { label: "Résumé", href: "/resume", external: false },
-            ].map(({ label, href, external }) => (
-              <li key={label}>
-                <RCta href={href} external={external} showExternalIcon={false}>
-                  {label} →
-                </RCta>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       <SiteFooter
         pageLinks={
           <>
@@ -335,6 +328,9 @@ export default function AboutPage() {
             </Link>
             <Link href={SPECIMENS_PAGE.href} className="no-underline">
               <REyebrow className="transition-colors hover:!text-spot">{SPECIMENS_PAGE.label} →</REyebrow>
+            </Link>
+            <Link href="/resume" className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">Résumé →</REyebrow>
             </Link>
           </>
         }
