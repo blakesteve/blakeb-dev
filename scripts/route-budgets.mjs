@@ -20,7 +20,7 @@
  *
  * Measured 5 November 2026 on Next 16.4.2 and Roster 5.19.0, a clean copy with
  * `.env.local` beside it. Against `main` at f564b7a on Roster 5.19.0, Ink swap
- * moved `/specimens` up by 102,701 bytes, which is its components, and every other
+ * moved `/specimens` up by 104,759 bytes, which is its components, and every other
  * route but `/_global-error` by 725: one Font Awesome chevron. `Select` is the
  * first thing on any route to use it, and Turbopack keeps a shared module's exports
  * for the whole build, so it lands in the icons' shared chunk.
@@ -35,7 +35,7 @@ export const ROUTE_FIRST_LOAD = {
   "/_not-found": 643_265,
   "/about": 658_104,
   "/resume": 643_600,
-  "/specimens": 836_443,
+  "/specimens": 838_501,
   "/work": 660_710,
   "/work/[slug]": 664_585,
   "/writing": 660_710,

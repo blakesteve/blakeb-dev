@@ -398,7 +398,9 @@ string. It now reports only what it can know: whether it was given a link.
 
 `/specimens` opens on one sheet of live Roster components and six jobs. Pick one
 and the sheet reprints in that product's tokens, fonts and words, and the page
-around it holds still. It lives on this route and nowhere else: its components,
+around it holds still, apart from the sheet's registration marks, which snap into
+register while a tile or the sheet is under the pointer or holding focus, and again
+when a reprint lands. It lives on this route and nowhere else: its components,
 CSS and fonts are the route's own. The one exception is 725 bytes on every route,
 `Select`'s chevron, which lands in Font Awesome's shared chunk.
 
@@ -418,7 +420,9 @@ to hold for that to be true:
 
 The tokens are a copy, on purpose: `node scripts/copy-job-tokens.mjs` reads each
 app's production branch from the sibling repos, which Vercel doesn't have, and
-writes `content/job-tokens.json` with the date. The page prints that date. Re-run
+writes `content/job-tokens.json` with the date, and `app/specimens/ink-print.css`:
+the cut edges, grain and vermilion Bragging Rocks prints its buttons, pills and
+timeline seals with, which that app's generators draw. The page prints the date. Re-run
 it when an app's palette moves, then check contrast again in a browser, every text
 run against its composited background: 0 pairs under AA on every job in both states
 is a gate, not an aim. `tools/audit.cjs` in the press check's prototype is the

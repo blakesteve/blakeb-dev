@@ -33,9 +33,14 @@ import { RegistrationMark } from "@/components/registration-mark";
 import { jobInk, type Job, type JobInk } from "@/lib/ink-jobs";
 import { RButton, REyebrow, RStat } from "@/lib/roster-ui";
 import { PORTAL_ROOT } from "@/lib/xray-scan";
+import { JobSeal } from "./job-seal";
 import "./ink-swap.css";
+import "./ink-print.css";
 
 const SNAP_MS = 620;
+
+/* A hand-set seal never sits square, and no two in a row sit alike. */
+const SEAL_TILTS = [-3, 2, -2, 3];
 
 function subscribeToPage(onChange: () => void) {
   const observer = new MutationObserver(onChange);
@@ -56,6 +61,7 @@ function usePortalInk(
   ink: JobInk,
   font: string,
   fonts: string,
+  job: string,
 ) {
   const inSheet = useRef(false);
 
@@ -63,6 +69,7 @@ function usePortalInk(
     const clear = (root: HTMLElement) => {
       root.removeAttribute("style");
       root.removeAttribute("data-roster-scope");
+      root.removeAttribute("data-job");
       root.removeAttribute("class");
     };
 
@@ -75,6 +82,7 @@ function usePortalInk(
          portal is outside of too. */
       root.className = ink.dark ? `dark ${fonts}` : fonts;
       root.setAttribute("data-roster-scope", "");
+      root.setAttribute("data-job", job);
       for (const [name, value] of Object.entries(ink.vars)) root.style.setProperty(name, value);
       root.style.fontFamily = font;
     };
@@ -100,7 +108,7 @@ function usePortalInk(
       const root = document.getElementById(PORTAL_ROOT);
       if (root) clear(root);
     };
-  }, [sheet, ink, font, fonts]);
+  }, [sheet, ink, font, fonts, job]);
 }
 
 /* Not every Roster component forwards `data-roster`, so X-ray's stamp goes on a
@@ -130,7 +138,7 @@ function ColorBar() {
 
 function JobSheet({ job, ink, fonts }: { job: Job; ink: JobInk; fonts: string }) {
   const sheet = useRef<HTMLElement>(null);
-  usePortalInk(sheet, ink, job.ui, fonts);
+  usePortalInk(sheet, ink, job.ui, fonts, job.id);
 
   const [tab, setTab] = useState("0");
   const [picked, setPicked] = useState<string | number>(job.select.options[0]);
@@ -156,7 +164,13 @@ function JobSheet({ job, ink, fonts }: { job: Job; ink: JobInk; fonts: string })
           <div className="ink-kicker">
             <REyebrow className="ink-eyebrow">{job.kicker}</REyebrow>
             <Stamp name="Pill">
-              <Pill dot pulse colorScheme="primary" size="sm">
+              <Pill
+                dot={!job.printed}
+                pulse={!job.printed}
+                colorScheme={job.printed ? "neutral" : "primary"}
+                size="sm"
+                className={job.printed ? "ink-print-wash" : undefined}
+              >
                 {job.pill}
               </Pill>
             </Stamp>
@@ -179,8 +193,17 @@ function JobSheet({ job, ink, fonts }: { job: Job; ink: JobInk; fonts: string })
             />
           </Stamp>
           <div className="ink-actions">
-            <RButton onClick={() => setDialogOpen(true)}>{job.primary}</RButton>
-            <RButton variant="soft" colorScheme="primary">
+            <RButton
+              onClick={() => setDialogOpen(true)}
+              className={job.printed ? "ink-print-ink" : undefined}
+            >
+              {job.primary}
+            </RButton>
+            <RButton
+              variant="soft"
+              colorScheme={job.printed ? "neutral" : "primary"}
+              className={job.printed ? "ink-print-wash" : undefined}
+            >
               {job.secondary}
             </RButton>
           </div>
@@ -199,8 +222,16 @@ function JobSheet({ job, ink, fonts }: { job: Job; ink: JobInk; fonts: string })
             <Timeline
               label={job.timeline}
               current={Number(tab) + 1}
+              className={job.printed ? "ink-print-timeline" : undefined}
               whenClassName="ink-when"
-              steps={job.steps.map(({ title, when }, at) => ({ id: String(at), title, when }))}
+              steps={job.steps.map(({ title, when }, at) => ({
+                id: String(at),
+                title,
+                when,
+                ...(job.printed && {
+                  marker: <JobSeal text={String(at + 1)} tilt={SEAL_TILTS[at % SEAL_TILTS.length]} />,
+                }),
+              }))}
             />
           </Stamp>
         </Card>
@@ -295,7 +326,11 @@ function JobSheet({ job, ink, fonts }: { job: Job; ink: JobInk; fonts: string })
         description={job.lede}
       >
         <div className="ink-dialog-actions">
-          <RButton size="sm" onClick={() => setDialogOpen(false)}>
+          <RButton
+            size="sm"
+            onClick={() => setDialogOpen(false)}
+            className={job.printed ? "ink-print-ink" : undefined}
+          >
             Close
           </RButton>
         </div>
@@ -349,9 +384,11 @@ export function InkSwap({
       reprints.current += 1;
       const mine = reprints.current;
 
-      const whose = jobs.find((candidate) => candidate.id === next)?.whose;
+      /* The last pick, not this one: a replaced transition's update can run after
+         the one that replaced it. */
       const update = () => {
-        setId(next);
+        const whose = jobs.find((candidate) => candidate.id === wanted.current)?.whose;
+        setId(wanted.current);
         setSaid(`Reprinted in ${whose} tokens.`);
       };
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

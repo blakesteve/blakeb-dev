@@ -29,10 +29,12 @@ const APPS = {
   br: { repo: "bragging-rocks", file: "src/app/globals.css" },
 };
 
-const css = ({ repo, file }) =>
+const raw = ({ repo }, file) =>
   execFileSync("git", ["-C", join(workspace, repo), "show", `origin/main:${file}`], {
     encoding: "utf8",
-  }).replace(/\/\*[\s\S]*?\*\//g, "");
+  });
+
+const css = (app) => raw(app, app.file).replace(/\/\*[\s\S]*?\*\//g, "");
 
 /* The app's root declarations, and its dark block for the one app that needs
    it: a job is one state of the app, and the other dark jobs' roots already are
@@ -79,6 +81,33 @@ const jobs = Object.fromEntries(
 writeFileSync(
   join(root, "src/content/job-tokens.json"),
   `${JSON.stringify({ copied: date, jobs }, null, 2)}\n`,
+);
+
+/* Bragging Rocks prints its buttons with a cut edge and a grain, and carves its
+   seals in vermilion. Those are that app's own, so they're copied too, scoped to its
+   job. */
+const PRINT = [
+  "--edge-ctl-tl",
+  "--edge-ctl-br",
+  "--edge-ink-tl",
+  "--br-grain-soft",
+  "--br-vermilion",
+];
+const printSource =
+  raw(APPS.br, "src/app/print-edges.css") + raw(APPS.br, "src/app/globals.css");
+const declarations = PRINT.map((name) => {
+  const line = printSource.split("\n").find((text) => text.trim().startsWith(`${name}:`));
+  if (!line) throw new Error(`Bragging Rocks no longer declares ${name}`);
+  return line;
+});
+
+writeFileSync(
+  join(root, "src/app/specimens/ink-print.css"),
+  `/* Copied from Bragging Rocks by scripts/copy-job-tokens.mjs. Don't edit by hand. */
+[data-job="br"] {
+${declarations.join("\n")}
+}
+`,
 );
 
 for (const [id, tokens] of Object.entries(jobs)) console.log(id, Object.keys(tokens).length);

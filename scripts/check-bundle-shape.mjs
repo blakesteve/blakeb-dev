@@ -106,9 +106,10 @@ const PKG = "@blakesteve/roster";
  * Ceiling on emitted client CSS, same walk, every .css under `static`.
  *
  * Raised 5 November 2026 for Ink swap, from 261,563. `main` at f564b7a on Roster
- * 5.19.0 measures 252,474. Ink swap's route stylesheet and `@font-face` rules take
- * that to 262,132, 569 over. It's wanted, and it's on `/specimens` alone: no
- * other route loads it. 274,613 keeps the 4.7614% slack.
+ * 5.19.0 measures 252,474. Ink swap's route stylesheet, Bragging Rocks' printed edges and the `@font-face`
+ * rules take
+ * that to 272,774, 11,211 over. It's wanted, and it's on `/specimens` alone: no
+ * other route loads it. 285,762 keeps the 4.7614% slack.
  *
  * Raised 4 November 2026 for Roster 5.18.0, from 248,011. The same tree
  * measured 243,859 on 5.15.0 (c4d7fe7) and 249,675 on 5.18.0, 1,664 over. All
@@ -157,7 +158,7 @@ const PKG = "@blakesteve/roster";
  *
  * This is the ceiling that reports the day Roster's stylesheet changes shape.
  */
-const CLIENT_CSS_CEILING = 274_613;
+const CLIENT_CSS_CEILING = 285_762;
 
 const problems = [];
 

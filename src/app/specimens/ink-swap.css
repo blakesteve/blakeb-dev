@@ -45,9 +45,17 @@
   top: calc(50% - 8px);
   right: -17px;
 }
-/* Landed: the same snap as the mark, from the same easing. */
-.ink-snap .reg-plate {
+/* Landed: the same snap as the mark, from the same easing. A job under the pointer
+   or holding focus seats the marks too, the way hovering one does: any tile, and the
+   sheet the selected job is printed on. */
+.ink-snap .reg-plate,
+.ink-swap:has([role="radio"]:focus-visible, .ink-sheet :focus-visible) .ink-reg .reg-plate {
   transform: translate(0, 0);
+}
+@media (hover: hover) {
+  .ink-swap:has([role="radio"]:hover, .ink-sheet:hover) .ink-reg .reg-plate {
+    transform: translate(0, 0);
+  }
 }
 
 .ink-crop {
@@ -212,6 +220,101 @@
   display: flex;
   justify-content: flex-end;
   padding-top: 12px;
+}
+
+/* Bragging Rocks' printed controls, as that app draws them: the fill moves to a
+   `::before` behind the label, cut by its printed edge, so the words and the focus
+   ring stay crisp. Ink is grained, wash has the edge alone. */
+.ink-print-ink,
+.ink-print-wash {
+  position: relative;
+  isolation: isolate;
+  border-color: transparent;
+  background-color: transparent;
+}
+.ink-print-ink {
+  color: var(--job-print-on-ink);
+}
+.ink-print-wash {
+  color: var(--job-print-on-wash);
+}
+.ink-print-ink::before,
+.ink-print-wash::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -1px -2px;
+  pointer-events: none;
+  transition: background-color 200ms;
+  -webkit-mask-image: var(--print-edge-top), var(--edge-ctl-br);
+  mask-image: var(--print-edge-top), var(--edge-ctl-br);
+  -webkit-mask-position:
+    left top,
+    right bottom;
+  mask-position:
+    left top,
+    right bottom;
+  -webkit-mask-size:
+    640px 72px,
+    640px 72px;
+  mask-size:
+    640px 72px,
+    640px 72px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.ink-print-ink::before {
+  --print-edge-top: var(--edge-ink-tl);
+  background-color: var(--job-print-ink);
+  background-image: var(--br-grain-soft);
+}
+.ink-print-wash::before {
+  --print-edge-top: var(--edge-ctl-tl);
+  background-color: var(--job-print-wash);
+}
+@media (hover: hover) {
+  .ink-print-ink:hover,
+  button.ink-print-wash:hover {
+    background-color: transparent;
+  }
+  .ink-print-ink:hover::before {
+    background-color: var(--job-print-ink-hover);
+  }
+  button.ink-print-wash:hover::before {
+    background-color: var(--job-print-wash-hover);
+  }
+}
+/* Every mask and printed fill goes, and the system draws the edge. */
+@media (forced-colors: active) {
+  .ink-print-ink::before,
+  .ink-print-wash::before {
+    display: none;
+  }
+  .ink-print-ink,
+  .ink-print-wash {
+    border: 1px solid ButtonText;
+  }
+}
+
+/* And its timeline: seals on a dotted line. */
+.ink-print-timeline {
+  --roster-timeline-now: var(--br-vermilion);
+}
+.ink-seal {
+  display: block;
+  flex: none;
+}
+@media (forced-colors: none) {
+  .ink-print-timeline [data-timeline-rail] {
+    width: 1px;
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--job-ink) 35%, transparent) 0 9px,
+      transparent 9px 13px
+    );
+  }
 }
 
 .ink-slug {

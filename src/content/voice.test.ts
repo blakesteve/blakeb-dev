@@ -262,7 +262,7 @@ describe("prose voice", () => {
     expect(posts).toContain("Most of your answers will probably come back no. The sky on the night");
 
     expect(jobs).toContain("Same plates");
-    expect(jobs).toContain("Every week's table, after it closes.");
+    expect(jobs).toContain("Every member keeps a cabinet of their rocks.");
 
     /* Both files open with a block comment; neither phrase should survive. */
     expect(caseStudies).not.toContain("Read from source: the bodies are JSX");

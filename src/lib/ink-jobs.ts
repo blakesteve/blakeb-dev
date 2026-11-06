@@ -27,6 +27,8 @@ export type Job = {
   display: string;
   ui: string;
   mono: string;
+  /** Bragging Rocks prints its buttons and pills with a cut edge and a grain. */
+  printed?: boolean;
   displayCase: "uppercase" | "none";
   displayTrack: string;
   displayWeight: number;
@@ -135,9 +137,22 @@ export function jobInk(job: Job, shipped: Record<string, string>, pageDark: bool
   if (job.scheme === "page") return { vars: surfaces, dark: false, scoped: false };
 
   const tokens = { ...shipped, ...job.tokens };
+  /* From the ramps as the app wrote them. A printed fill is the app's own at any
+     page state, so it can't read a ramp that's been turned over. */
+  const printed: Record<string, string> = job.printed
+    ? {
+        "--job-print-ink": tokens["--roster-primary-600"],
+        "--job-print-ink-hover": tokens["--roster-primary-700"],
+        "--job-print-on-ink": tokens["--roster-white"],
+        "--job-print-on-wash": tokens["--roster-gray-700"],
+        "--job-print-wash": tokens["--roster-gray-100"],
+        "--job-print-wash-hover": tokens["--roster-gray-200"],
+      }
+    : {};
   return {
     vars: {
       ...(pageDark && job.scheme === "light" ? turnOver(tokens, job) : tokens),
+      ...printed,
       "--roster-card-bg": job.card,
       "--roster-font-ui": job.ui,
       "--roster-font-mono": job.mono,

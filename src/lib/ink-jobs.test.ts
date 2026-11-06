@@ -114,8 +114,23 @@ describe("jobInk", () => {
     );
   });
 
+  it("gives every job a card that hides the timeline's line behind a step", () => {
+    for (const { id, card } of jobs) expect(card, id).not.toBe("transparent");
+  });
+
   it("sets the job's card surface, which not every app declares as a token", () => {
     expect(jobInk(job("shipped"), shipped, false).vars["--roster-card-bg"]).toBe("#fafaf9");
+  });
+
+  it("keeps a printed job's fills as the app wrote them, in either state", () => {
+    for (const pageDark of [false, true]) {
+      const { vars } = jobInk(job("br"), shipped, pageDark);
+      expect(vars["--job-print-ink"]).toBe("#332c26");
+      expect(vars["--job-print-on-ink"]).toBe("#f5ead5");
+      expect(vars["--job-print-wash"]).toBe("#e8dcca");
+      expect(vars["--job-print-on-wash"]).toBe("#4f463f");
+    }
+    expect(jobInk(job("gv"), shipped, false).vars["--job-print-ink"]).toBeUndefined();
   });
 
   it("scopes every job but the sheet at rest", () => {
@@ -209,6 +224,29 @@ describe("the sheet", () => {
   it("tells a screen reader what it reprinted", () => {
     expect(source).toMatch(/role="status"/);
     expect(source).toContain("Reprinted in ${whose} tokens.");
+  });
+
+  it("seats the registration marks while a job has the pointer or the keyboard", () => {
+    const css = readFileSync("src/app/specimens/ink-swap.css", "utf8");
+    expect(css).toMatch(
+      /@media \(hover: hover\) \{\s+\.ink-swap:has\(\[role="radio"\]:hover, \.ink-sheet:hover\) \.ink-reg \.reg-plate/,
+    );
+    expect(css).toContain(
+      '.ink-swap:has([role="radio"]:focus-visible, .ink-sheet :focus-visible) .ink-reg .reg-plate',
+    );
+  });
+
+  /* Roster's ring is a box-shadow, and an unlayered `box-shadow: none` beats it. */
+  it("leaves a printed control its focus ring", () => {
+    const css = readFileSync("src/app/specimens/ink-swap.css", "utf8");
+    const printed = css.slice(css.indexOf(".ink-print-ink,"), css.indexOf("/* And its timeline"));
+    expect(printed).toContain("isolation: isolate;");
+    expect(printed).not.toContain("box-shadow");
+  });
+
+  it("gives only a printed job its seals", () => {
+    expect(source).toContain("...(job.printed && {");
+    expect(source).toContain("<JobSeal");
   });
 
   it("stays out of every other route", () => {
