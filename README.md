@@ -423,10 +423,15 @@ app's production branch from the sibling repos, which Vercel doesn't have, and
 writes `content/job-tokens.json` with the date, and `app/specimens/ink-print.css`:
 the cut edges, grain and vermilion Bragging Rocks prints its buttons, pills and
 timeline seals with, which that app's generators draw. The page prints the date. Re-run
-it when an app's palette moves, then check contrast again in a browser, every text
-run against its composited background: 0 pairs under AA on every job in both states
-is a gate, not an aim. `tools/audit.cjs` in the press check's prototype is the
-method. There's no script for it here, because this repo doesn't carry Playwright.
+it when an app's palette moves, then check contrast again in a browser: 0 pairs under
+AA on every job in the page's light and dark states is a gate, not an aim. Read every
+visible text run on the sheet, each tab, the open accordion, `Select` and `Dialog`, at
+375 and 1280, `aria-hidden` text included, because it's still read by eye. Composite
+its color with the element's and every ancestor's `opacity` multiplied in, over its
+stacked backgrounds, a printed control's `::before` among them. Reading color alone
+passes text that's faded. `tools/audit.cjs` in the press check's prototype is where
+this started, but it reads the prototype's pages and has none of that. There's no
+script here, because this repo doesn't carry Playwright.
 
 The words are in `content/jobs.ts`, in each product's own vocabulary, and every
 figure on a reprint is a sample, which the page says. The two jobs about Roster

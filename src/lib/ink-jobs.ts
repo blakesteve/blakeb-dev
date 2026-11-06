@@ -134,7 +134,15 @@ export function jobInk(job: Job, shipped: Record<string, string>, pageDark: bool
     "--job-ui": job.ui,
     "--roster-tabs-text": job.soft,
   };
-  if (job.scheme === "page") return { vars: surfaces, dark: false, scoped: false };
+  if (job.scheme === "page") {
+    /* Timeline's upcoming digits sit on the skeleton, which this site's remap darkens
+       to under 4.5:1 in both states. The rail keeps its color: it's set at `:root`. */
+    return {
+      vars: { ...surfaces, "--roster-skeleton": "var(--paper)" },
+      dark: false,
+      scoped: false,
+    };
+  }
 
   const tokens = { ...shipped, ...job.tokens };
   /* From the ramps as the app wrote them. A printed fill is the app's own at any

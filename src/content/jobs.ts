@@ -304,11 +304,11 @@ export function buildJobs({ version, components, tiers, tests, hosts }: Live): J
       pill: "9 of 12 picked",
       alert: { title: "3 games need a pick", body: "Unpicked games count as losses." },
       tabs: ["Schedule", "My Picks", "My Squads"],
-      timeline: "This week",
+      timeline: "Weeks",
       steps: [
-        { title: "Thursday", when: "2 of 3 correct" },
-        { title: "Sunday", when: "Locks in: 2d 4h" },
-        { title: "Monday", when: "Not picked" },
+        { title: "Week 9", when: "9 of 12 picked" },
+        { title: "Week 10", when: "Not picked" },
+        { title: "Week 11", when: "Not picked" },
       ],
       input: { label: "Squad Name", value: "The Blitz Pickles" },
       select: {

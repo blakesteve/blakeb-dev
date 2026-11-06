@@ -90,12 +90,13 @@ describe("the jobs", () => {
 });
 
 describe("jobInk", () => {
-  it("sets nothing of Roster's for the sheet at rest", () => {
+  it("sets only two of Roster's tokens for the sheet at rest", () => {
     const { vars, dark, scoped } = jobInk(job("site"), shipped, true);
     expect(dark).toBe(false);
     expect(scoped).toBe(false);
     expect(Object.keys(vars).filter((name) => name.startsWith("--roster-"))).toEqual([
       "--roster-tabs-text",
+      "--roster-skeleton",
     ]);
   });
 
@@ -242,6 +243,17 @@ describe("the sheet", () => {
     const printed = css.slice(css.indexOf(".ink-print-ink,"), css.indexOf("/* And its timeline"));
     expect(printed).toContain("isolation: isolate;");
     expect(printed).not.toContain("box-shadow");
+  });
+
+  it("sets SegmentBar's legend at full strength, on the sheet alone", () => {
+    expect(readFileSync("src/app/specimens/ink-swap.css", "utf8")).toMatch(
+      /\.ink-sheet \[data-testid="segment-bar-legend"\] > span > span:last-child \{[^}]*opacity: 1;/,
+    );
+    const legend = readFileSync(
+      "node_modules/@blakesteve/roster/dist/components/atoms/SegmentBar/SegmentBar.js",
+      "utf8",
+    );
+    expect(legend).toContain("segment-bar-legend");
   });
 
   it("gives only a printed job its seals", () => {

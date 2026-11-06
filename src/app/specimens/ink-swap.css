@@ -181,6 +181,12 @@
 .ink-tabs {
   overflow-x: auto;
 }
+/* SegmentBar sets its legend's percents at 60% opacity, which misses AA on every
+   job. The job's soft ink at full strength clears it. */
+.ink-sheet [data-testid="segment-bar-legend"] > span > span:last-child {
+  color: var(--job-soft);
+  opacity: 1;
+}
 .ink-actions {
   display: flex;
   flex-wrap: wrap;
