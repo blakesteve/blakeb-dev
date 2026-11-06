@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { REyebrow, RInlineCode, RLink, RPullquote } from "@/lib/roster-ui";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import { Dek } from "@/components/dek";
 import { Shot } from "@/components/shot";
 import { FocusRingDemo } from "@/components/focus-ring-demo";
@@ -514,7 +515,7 @@ bytes actually on wire  : 10,161`}</Code>
         <P>
           Twelve of those had shipped in{" "}
           <Link
-            href="/system"
+            href={SPECIMENS_PAGE.href}
             className="text-ink underline decoration-rule underline-offset-2 transition-colors hover:decoration-spot"
           >
             Roster

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter, CONTACT } from "@/components/site-footer";
 import { Portrait } from "@/components/portrait";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import {
   RCard,
   RCta,
@@ -287,7 +288,7 @@ export default function AboutPage() {
                 { term: "Press sheet", description: "Cool stock, ink black, process magenta" },
                 { term: "Blueline", description: "The proof stage, printed in blue" },
                 /* Counted rather than spelled out: "Nine" was correct only for as long
-                   as Roster shipped nine, and /system has been reading the real number
+                   as Roster shipped nine, and /specimens has been reading the real number
                    next door the whole time. */
                 {
                   term: "Palette",
@@ -332,8 +333,8 @@ export default function AboutPage() {
             <Link href="/" className="no-underline">
               <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
             </Link>
-            <Link href="/system" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">The system →</REyebrow>
+            <Link href={SPECIMENS_PAGE.href} className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">{SPECIMENS_PAGE.label} →</REyebrow>
             </Link>
           </>
         }

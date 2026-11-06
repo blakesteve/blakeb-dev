@@ -90,7 +90,7 @@ export const projects: Project[] = [
         kind: "package",
       },
       {
-        /* Same deployment /system links component names into. */
+        /* Same deployment /specimens links component names into. */
         label: "Storybook",
         href: STORYBOOK_URL,
         kind: "docs",

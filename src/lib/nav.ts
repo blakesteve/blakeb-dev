@@ -7,11 +7,12 @@
 
 /**
  * The second nav item's label and path, in one place, because the name is
- * provisional. The rename to Specimens changes this and nothing else in the
- * bar. A new label has to fit the row at 375, 360, 340 and 320: nine characters
- * does, with under a pixel spare from 340 to 382, and ten doesn't.
+ * provisional. Everything that links to the page reads this. A rename changes
+ * this and the route's folder, and adds the old path to the redirects in
+ * `next.config.ts`. A new label has to fit the row at 375, 360, 340 and 320: nine
+ * characters does, with under a pixel spare from 340 to 382, and ten doesn't.
  */
-export const SPECIMENS_PAGE = { label: "System", href: "/system" } as const;
+export const SPECIMENS_PAGE = { label: "Specimens", href: "/specimens" } as const;
 
 export type NavSection = "work" | "specimens" | "about" | "writing";
 

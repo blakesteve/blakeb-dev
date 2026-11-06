@@ -61,7 +61,7 @@
      Each family now gets a single anchor, and the 50-950 ramp is derived from
      it by mixing toward the two poles below. Move an anchor and its whole ramp
      moves with it, which is the difference between a palette and a list of
-     hexes. /system prints both halves of every step so the remap is visible.
+     hexes. /specimens prints both halves of every step so the remap is visible.
 
      The anchors are the print shop: process cyan, magenta, and yellow are the
      inks this whole design is named after, so they take info, primary, and

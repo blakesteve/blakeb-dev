@@ -80,7 +80,7 @@ from it, and Roster doesn't read it.
 ### Panels are Roster Cards
 
 The press sheet's panels (the typefaces and colophon on `/about`, the specimen
-cells on `/system`, a case study's sidebar, the palette comparison, the release
+cells on `/specimens`, a case study's sidebar, the palette comparison, the release
 history) and its image frames (`Shot`, `Clip`) are `RCard`s, so X-ray outlines
 them as the Roster components they are. Their colors come from
 `--roster-card-bg` and `--roster-card-border`, set on `:root` to `--panel` and
@@ -100,7 +100,7 @@ the panels and frames are now outlined and labeled as Card, which is the point.
 
 Still hand-rolled, each for a reason: the live system strip on `/` (a
 `<section>`, and Card only renders a `div`), and the token swatches, the
-post code block, the ramp step labels on `/system`, and the X-ray and CRT popovers
+post code block, the ramp step labels on `/specimens`, and the X-ray and CRT popovers
 and buttons, which aren't cards.
 
 `RBreadcrumbs` sets the trail in the folio mono with plain utilities. It used
@@ -229,8 +229,9 @@ overrides need no `!important` — the `utilities` layer already outranks
 - `/` — folio, hero, live system strip, project cards
 - `/work` — the contents page: one dense row per project, no preamble
 - `/work/[slug]` — case studies, statically generated per project
-- `/system` — the library itself: token ramps shown shipped-versus-remapped, the
-  full catalog linked into Storybook, and live component specimens
+- `/specimens` — the library itself: token ramps shown shipped-versus-remapped,
+  the full catalog linked into Storybook, and live component specimens. Its label
+  and path are one constant in `lib/nav.ts`, and `/system` answers 308 to it
 - `/about` — the arc, the two-ink portrait, and the colophon
 - `/writing` and `/writing/[slug]` — posts, as content modules
 - `/resume` — the same career data, print-shaped
@@ -265,7 +266,7 @@ It exists because that rule was broken twice by hand, both times by assigning a
 step according to what a color was *for* rather than how light it is: once with
 `--ink-faint` at 300 and `--ink-soft` at 400, and once with a border color left
 at 200 where it sat darker than 700 between two near-white neighbors. Both were
-caught by a person looking at `/system`, which is not a process.
+caught by a person looking at `/specimens`, which is not a process.
 
 `npm run check:bundle` fails if any of Roster's barrels got pinned as a client
 reference, if a Roster key turns up in a shape it does not recognize, if a
@@ -486,7 +487,9 @@ quietly returns fewer components, and a fixture would keep passing through
 exactly that. So they assert shapes and invariants rather than an exact count,
 which every minor bump would break for no reason. One of them checks that
 `DataTable` is found and that `index.d.ts` does not contain it, which is the
-whole argument for reading the second entry point.
+whole argument for reading the second entry point. The exception is on purpose:
+one test goes red on a new major, because the Roster case study counts them in
+typed words, and a person has to read that sentence again.
 
 The CRT reveal tests are written against extracted predicates rather than the
 component, which is why they run in the node environment with everything else.

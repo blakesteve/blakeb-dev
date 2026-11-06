@@ -4,7 +4,8 @@ import { join } from "node:path";
 /**
  * Reads the installed @blakesteve/roster package at build time, so the numbers
  * and swatches on the page are the library's own rather than a copy of them.
- * Publish a component, and this page counts it on the next deploy.
+ * The lockfile pins the version, so a new release reaches the page when the
+ * dependency is bumped, not when it's published.
  *
  * These are plain file reads rather than `require.resolve` on purpose: Roster's
  * exports map does not expose package.json, and Turbopack cannot place a CSS
@@ -127,8 +128,8 @@ export function getRosterTokens(names: string[]): { name: string; value: string 
 
 /**
  * Every color family the shipped tokens.css declares, in the order Roster
- * declares them. Read rather than listed, so a new family appears on /system
- * the next time this site builds.
+ * declares them. Read rather than listed, so a new family appears on /specimens
+ * with the dependency bump that brings it.
  */
 export function getRosterTokenFamilies(): string[] {
   const css = read("dist", "tokens.css");

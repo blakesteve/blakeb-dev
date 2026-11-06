@@ -37,7 +37,7 @@ export { STORYBOOK_URL } from "./storybook";
  * `ErrorState` becomes `errorstate`, not `error-state`.
  *
  * This used to insert the dash, which quietly broke every multi-word component
- * link in both the X-ray panel and /system. Storybook is a single-page app and
+ * link in both the X-ray panel and /specimens. Storybook is a single-page app and
  * answers 200 to any path, rendering "story not found" client-side, so a bad id
  * looks fine to anything that only checks the status code. Verified against the
  * deployed `index.json` instead.
@@ -61,7 +61,7 @@ export function RCard({ className, ...props }: ComponentProps<typeof Card>) {
  * The site's controls are mono caps — the running head, the state
  * toggle, the X-ray and CRT toggles, the CTAs. That is the press-sheet
  * vocabulary, so a Button in the site's own sans would be the odd one out, and
- * the specimens on /system would be advertising a button this site never
+ * the specimens on /specimens would be advertising a button this site never
  * actually renders.
  *
  * This is a design decision, not the workaround it replaces. That one existed

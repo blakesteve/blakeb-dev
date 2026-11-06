@@ -26,6 +26,30 @@ import {
 const dts = (entry: string) =>
   readFileSync(join(process.cwd(), "node_modules", "@blakesteve", "roster", "dist", entry), "utf8");
 
+/* Typed words about the library, which nothing else ties to the installed copy.
+   A bump past this major fails here, on purpose: "Shipping in public" in the
+   Roster case study has to be read again, and "Four" may not be five. */
+describe("what the pages claim about Roster", () => {
+  const read = (...path: string[]) => readFileSync(join(process.cwd(), "src", ...path), "utf8");
+
+  it("counts the installed major", () => {
+    expect(read("content", "case-studies.tsx")).toContain(
+      "Roster is on its fifth major. Four of those went out roughly as planned.",
+    );
+    expect(getRosterVersion().split(".")[0]).toBe("5");
+  });
+
+  /* The lockfile pins the version, so a publish doesn't reach a deploy. Spaces
+     collapsed, because a sentence wraps wherever the source does. */
+  it.each([
+    ["the page", ["app", "specimens", "page.tsx"]],
+    ["the reader", ["lib", "roster.ts"]],
+  ])("doesn't promise a new release reaches %s by itself", (_, path) => {
+    const words = read(...path).replace(/\s+\*?\s*/g, " ");
+    expect(words).not.toMatch(/next (deploy|build|time)/i);
+  });
+});
+
 describe("getRosterVersion", () => {
   it("reads a semver off the installed package", () => {
     expect(getRosterVersion()).toMatch(/^\d+\.\d+\.\d+/);

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { SPECIMENS_PAGE } from "./src/lib/nav";
 
 const nextConfig: NextConfig = {
   /**
@@ -12,6 +13,12 @@ const nextConfig: NextConfig = {
    * agent's dev or build while the installed Next has a known advisory.
    */
   agentRules: false,
+
+  /* The page was `/system` until the press check. If it's renamed again, add
+     `/specimens` here too, so both go straight to the new path with no chain. */
+  async redirects() {
+    return [{ source: "/system", destination: SPECIMENS_PAGE.href, permanent: true }];
+  },
 
   /**
    * Roster's type declarations, forced into the serverless bundle.
