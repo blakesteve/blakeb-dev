@@ -4,6 +4,7 @@ import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { AlsoSeparately } from "@/components/also-separately";
 import { REyebrow, RLabeledDivider, RCta } from "@/lib/roster-ui";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import { projects } from "@/lib/projects";
 import { caseStudies } from "@/content/case-studies";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
@@ -147,8 +148,8 @@ export default async function WorkIndexPage() {
             <Link href="/" className="no-underline">
               <REyebrow className="transition-colors hover:!text-spot">← Home</REyebrow>
             </Link>
-            <Link href="/system" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">The system →</REyebrow>
+            <Link href={SPECIMENS_PAGE.href} className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">{SPECIMENS_PAGE.label} →</REyebrow>
             </Link>
           </>
         }

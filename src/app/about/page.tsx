@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter, CONTACT } from "@/components/site-footer";
 import { Portrait } from "@/components/portrait";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import {
   RCard,
   RCta,
@@ -86,6 +87,25 @@ export default function AboutPage() {
               details worth fighting for, and still know where my lane ends. These
               days the lane runs deeper than it used to: most weeks the problem
               worth solving is underneath the interface rather than on it.
+            </p>
+            <ul className="m-0 grid list-none grid-cols-2 gap-2 p-0 pt-5 sm:flex sm:flex-wrap sm:gap-x-3">
+              {[
+                { label: "Email", href: `mailto:${CONTACT.email}`, external: false },
+                { label: "GitHub", href: CONTACT.github, external: true },
+                { label: "LinkedIn", href: CONTACT.linkedin, external: true },
+                { label: "Résumé", href: "/resume", external: false },
+              ].map(({ label, href, external }) => (
+                <li key={label}>
+                  <RCta href={href} external={external} showExternalIcon={false} tint="var(--ink)">
+                    {label} →
+                  </RCta>
+                </li>
+              ))}
+            </ul>
+            <p className="m-0 max-w-[54ch] pt-4 text-[1.0625rem] leading-[1.58] text-ink-soft">
+              Open to talking about front end leadership, design systems, and
+              anything where the interface and the thing underneath it are the same
+              job.
             </p>
           </div>
 
@@ -287,7 +307,7 @@ export default function AboutPage() {
                 { term: "Press sheet", description: "Cool stock, ink black, process magenta" },
                 { term: "Blueline", description: "The proof stage, printed in blue" },
                 /* Counted rather than spelled out: "Nine" was correct only for as long
-                   as Roster shipped nine, and /system has been reading the real number
+                   as Roster shipped nine, and /specimens has been reading the real number
                    next door the whole time. */
                 {
                   term: "Palette",
@@ -300,40 +320,17 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ---- Contact ---- */}
-      <section className="mx-auto w-full max-w-[1180px] px-6 pt-14 sm:px-8">
-        <RLabeledDivider label="Reach me" className="pb-1 [&>[role=presentation]]:bg-rule" />
-        <div className="flex flex-wrap items-end justify-between gap-6 pt-5">
-          <p className="m-0 max-w-[46ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
-            Open to talking about front end leadership, design systems, and
-            anything where the interface and the thing underneath it are the same
-            job.
-          </p>
-          <ul className="m-0 flex list-none flex-wrap gap-x-3 gap-y-2 p-0">
-            {[
-              { label: "Email", href: `mailto:${CONTACT.email}`, external: false },
-              { label: "GitHub", href: CONTACT.github, external: true },
-              { label: "LinkedIn", href: CONTACT.linkedin, external: true },
-              { label: "Résumé", href: "/resume", external: false },
-            ].map(({ label, href, external }) => (
-              <li key={label}>
-                <RCta href={href} external={external} showExternalIcon={false}>
-                  {label} →
-                </RCta>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       <SiteFooter
         pageLinks={
           <>
             <Link href="/" className="no-underline">
               <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
             </Link>
-            <Link href="/system" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">The system →</REyebrow>
+            <Link href={SPECIMENS_PAGE.href} className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">{SPECIMENS_PAGE.label} →</REyebrow>
+            </Link>
+            <Link href="/resume" className="no-underline">
+              <REyebrow className="transition-colors hover:!text-spot">Résumé →</REyebrow>
             </Link>
           </>
         }

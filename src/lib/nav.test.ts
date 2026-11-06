@@ -1,5 +1,9 @@
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
+import nextConfig from "../../next.config";
 import {
   NAV_ITEMS,
   SPECIMENS_PAGE,
@@ -24,8 +28,58 @@ describe("the nav items", () => {
     ]);
   });
 
+  it("name the page as a route that exists", () => {
+    expect(SPECIMENS_PAGE).toEqual({ label: "Specimens", href: "/specimens" });
+    expect(existsSync(`src/app${SPECIMENS_PAGE.href}/page.tsx`)).toBe(true);
+  });
+
+  /* `permanent` is what makes it a 308. */
+  it("send the old path straight to the page", async () => {
+    expect(await nextConfig.redirects?.()).toEqual([
+      { source: "/system", destination: "/specimens", permanent: true },
+    ]);
+  });
+
   it("leave the résumé out", () => {
     expect(NAV_ITEMS.map(({ href }) => href)).not.toContain("/resume");
+  });
+});
+
+/* The name is provisional, so nothing may type it. The list is what proves the
+   scan reached the links: a file that stops reading the constant fails too. */
+describe("links to the page", () => {
+  const source = readdirSync("src", { recursive: true, encoding: "utf8" })
+    .filter((path) => /\.tsx?$/.test(path) && !path.includes(".test."))
+    .map((path) => ({ path, text: readFileSync(join("src", path), "utf8") }));
+
+  it("come from every place that has one", () => {
+    expect(
+      source
+        .filter(({ text }) => text.includes("SPECIMENS_PAGE.href"))
+        .map(({ path }) => path)
+        .sort(),
+    ).toEqual([
+      "app/about/page.tsx",
+      "app/not-found.tsx",
+      "app/work/[slug]/page.tsx",
+      "app/work/page.tsx",
+      "content/case-studies.tsx",
+      "content/posts.tsx",
+    ]);
+  });
+
+  it("never type the path or the old label", () => {
+    const typed = source.filter(({ path, text }) => {
+      if (path === "lib/nav.ts") return false;
+      return /(href=|")\/?["{]?\/(system|specimens)\b|The system →/.test(text);
+    });
+    expect(typed.map(({ path }) => path)).toEqual([]);
+  });
+
+  it("include the link across from Roster's case study, and only that one", () => {
+    expect(
+      source.find(({ path }) => path === "app/work/[slug]/page.tsx")?.text.replace(/\s+/g, " "),
+    ).toMatch(/slug === "roster" && \( <RCta [^>]*> See every part: \{SPECIMENS_PAGE\.label\} →/);
   });
 });
 

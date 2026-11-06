@@ -13,6 +13,7 @@ import {
 import { CrtEasterEgg } from "@/components/crt-easter-egg";
 import { TldrToggle } from "@/components/tldr-toggle";
 import { caseStudies } from "@/content/case-studies";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import { getProject, projects } from "@/lib/projects";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
 import { getCommitCount } from "@/lib/github";
@@ -154,6 +155,12 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               />
             ))}
           </dl>
+
+          {slug === "roster" && (
+            <RCta href={SPECIMENS_PAGE.href} tint="var(--world)" className="mt-7">
+              See every part: {SPECIMENS_PAGE.label} →
+            </RCta>
+          )}
         </div>
       </header>
 

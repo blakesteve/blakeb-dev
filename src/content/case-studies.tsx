@@ -9,8 +9,10 @@ import {
   RButton,
   REyebrow,
   RInlineCode,
+  RLink,
   RPullquote,
 } from "@/lib/roster-ui";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import { getRosterComponentCount, getRosterComponents, getRosterMeta } from "@/lib/roster";
 
 /* Counted from the installed package's own type definitions, so the tier
@@ -393,7 +395,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           />
           <p>
             The same string is also emitted as the <Code>FAQPage</Code> answer in structured data. So
-            pages that would otherwise be near-identical templates each carry unique
+            roughly 880 pages that would otherwise be near-identical templates each carry unique
             text answering the literal thing people search for, and the reader and the crawler are
             served by one sentence rather than two systems.
           </p>
@@ -758,7 +760,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           dek="I published a release that broke every app that installed it, replaced it hours later, and left the public warning up rather than quietly deleting the evidence."
         >
           <p>
-            Roster is on its fourth major. Three of those went out roughly as planned. One did not:
+            Roster is on its fifth major. Four of those went out roughly as planned. One did not:
             3.0.0 shipped with <Code>DataTable</Code> exported from the main entry while statically
             importing <Code>@tanstack/react-table</Code>, an optional peer. Every consumer that had
             not installed TanStack, which was most of them, would fail to build on import.
@@ -836,7 +838,14 @@ export const caseStudies: Record<string, CaseStudy> = {
           </Pull>
           <p>
             Two things this page deliberately doesn&rsquo;t do: it doesn&rsquo;t list the components, because{" "}
-            <Code>/system</Code> reads them live from the installed package along with every token
+            <RLink
+              href={SPECIMENS_PAGE.href}
+              underline="always"
+              className="text-[length:inherit] leading-[inherit]"
+            >
+              {SPECIMENS_PAGE.label}
+            </RLink>{" "}
+            reads them live from the installed package along with every token
             ramp and a set of working specimens. And it doesn&rsquo;t walk through the CSS packaging
             failure in detail, because that one earned its own post.
           </p>

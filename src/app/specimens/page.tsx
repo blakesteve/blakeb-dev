@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { REyebrow, RLabeledDivider, RDescriptionList, storyHref } from "@/lib/roster-ui";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 import {
   getRosterComponents,
   getRosterRamp,
@@ -11,14 +12,14 @@ import {
 import { Specimens } from "./specimens";
 
 export const metadata = {
-  title: "The system",
+  title: SPECIMENS_PAGE.label,
   description:
-    "The component library this site is built from, read live from the installed package: every token, every component, and the two palettes they render in.",
+    "The component library this site is built from, read from the installed package: every token, every component, and the two palettes they render in.",
 };
 
 const TIER_ORDER = ["atoms", "molecules", "organisms"] as const;
 
-export default function SystemPage() {
+export default function SpecimensPage() {
   const version = getRosterVersion();
   const components = getRosterComponents();
   const families = getRosterTokenFamilies();
@@ -36,7 +37,7 @@ export default function SystemPage() {
 
       <header className="mx-auto w-full max-w-[1180px] px-6 pb-2 pt-11 sm:px-8">
         <h1 className="m-0 pb-[14px] font-[family-name:var(--font-display)] text-[clamp(2.125rem,6vw,4rem)] font-bold uppercase leading-[0.94] tracking-[-0.04em]">
-          The system
+          {SPECIMENS_PAGE.label}
         </h1>
         <p className="m-0 max-w-[56ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
           Everything below is read from the installed copy of{" "}
@@ -44,8 +45,7 @@ export default function SystemPage() {
             @blakesteve/roster
           </code>{" "}
           at build time. The component list, the token ramps, and the specimens are
-          the library itself, not a description of it. When a new version is
-          published, this page reports it on the next deploy.
+          the library itself, not a description of it.
         </p>
 
         <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4">

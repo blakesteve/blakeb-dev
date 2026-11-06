@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { REyebrow, RCta } from "@/lib/roster-ui";
+import { SPECIMENS_PAGE } from "@/lib/nav";
 
 export const metadata = {
   title: "Out of register",
@@ -80,8 +81,8 @@ export default function NotFound() {
             </p>
             <div className="flex flex-wrap gap-2">
               <RCta href="/">Back to work →</RCta>
-              <RCta href="/system" tint="var(--second)">
-                The system →
+              <RCta href={SPECIMENS_PAGE.href} tint="var(--second)">
+                {SPECIMENS_PAGE.label} →
               </RCta>
             </div>
           </div>
