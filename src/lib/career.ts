@@ -1,3 +1,5 @@
+import { ROSTER_APPS } from "./roster";
+
 /**
  * Sixteen years, structured once.
  *
@@ -279,7 +281,7 @@ export const SKILLS: { group: string; items: string[] }[] = [
 export function summary(): string {
   return (
     `Front end leader with a design degree and ${yearsShippingWords()} years shipping software, ` +
-    "from IBM's cloud dashboards to a component library four production apps run on. " +
+    `from IBM's cloud dashboards to a component library ${ROSTER_APPS.words} apps run on. ` +
     "Comfortable owning the whole path: schema and caching underneath, tokens and " +
     "type on top, and the argument with design in the middle."
   );

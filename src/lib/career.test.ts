@@ -219,4 +219,11 @@ describe("summary", () => {
     atMonth("2026-08");
     expect(summary()).toContain("sixteen years shipping software");
   });
+
+  /* It said four for months after the site counted eight. The count is
+     ROSTER_APPS, the one the pages read, so this fails the day it changes and
+     the sentence gets read again. */
+  it("takes the apps on Roster from the site's one count", () => {
+    expect(summary()).toContain("a component library eight apps run on");
+  });
 });
