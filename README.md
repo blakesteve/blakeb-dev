@@ -154,7 +154,7 @@ another app hiccuped, but it should not quietly stop updating either.
 
 ## Where the case-study screenshots come from
 
-`src/images/<app>/` holds 75 frames across three apps, and until 14 Sept 2026
+`src/images/<app>/` holds 94 frames across five apps, and until 14 Sept 2026
 exactly one app had a repeatable way to refresh them.
 
 MegaSquad's are captured by `scripts/capture-case-study.mjs` **in the mega-squad
@@ -173,7 +173,11 @@ handle slot, and a real employer's name in a squad description. All three had
 already shipped. None of them is a name the guards look for, which is the whole
 reason they passed.
 
-game-verdict's 26 frames and retrospect's 14 have no such script yet. They will
+Bragging Rocks' four show no real member, rock or theme. They're drawn from that
+app's own views in a browser test, with invented names and procedurally drawn
+rocks, because it launched silently and nothing real belongs on this page.
+
+game-verdict's 26 frames and retrospect's 22 have no such script yet. They will
 go stale the same way MegaSquad's did, which is to say silently, two days after
 somebody changes a color. Generalizing that script is on the portfolio roadmap.
 Retrospect's were reshot by hand on 4 October 2026, after its redesign, from

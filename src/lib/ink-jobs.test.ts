@@ -14,7 +14,7 @@ const jobs = buildJobs({
   components: 70,
   tiers: { atoms: 30, molecules: 30, organisms: 10 },
   tests: 3000,
-  hosts: { gv: "gameverdict.app", retrospect: "retrospect.test", megasquad: "megasquad.org" },
+  hosts: { gv: "gameverdict.app", retrospect: "retrospect.test", megasquad: "megasquad.org", br: "bragging.rocks" },
 });
 const job = (id: string) => {
   const found = jobs.find((candidate) => candidate.id === id);
@@ -48,7 +48,7 @@ describe("the jobs", () => {
       components: 70,
       tiers: {},
       tests: null,
-      hosts: { gv: "a", retrospect: "b", megasquad: "c" },
+      hosts: { gv: "a", retrospect: "b", megasquad: "c", br: "d" },
     });
     expect(site.stats.map(({ label }) => label)).toEqual(["Components", "Apps"]);
   });

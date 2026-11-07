@@ -47,6 +47,7 @@ export default function SpecimensPage() {
       gv: hostOf("game-verdict", "gameverdict.app"),
       retrospect: hostOf("retrospect", "retrospect-seven.vercel.app"),
       megasquad: hostOf("megasquad", "megasquad.org"),
+      br: hostOf("bragging-rocks", "bragging.rocks"),
     },
   });
 

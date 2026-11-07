@@ -162,6 +162,25 @@ export const projects: Project[] = [
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },
+  {
+    slug: "bragging-rocks",
+    name: "Bragging Rocks",
+    tagline: "Show your rocks to collectors around the world.",
+    blurb:
+      "Each member keeps a cabinet of their rocks, and each week the hosts set a theme and everyone may bring one to the table.",
+    status: "Live",
+    host: "bragging.rocks",
+    /* Private repo, so nothing here links to it. */
+    links: [{ label: "bragging.rocks", href: "https://bragging.rocks", kind: "live" }],
+    world: { press: "#ba220d", blueline: "#f0654a" },
+    props: [
+      { label: "Stack", value: "Next 16 · Supabase · Cloudflare R2" },
+      /* Read from its CI at 0.15.0, 6 Nov 2026. No member figures here, on
+         purpose: it launched silently, and the first table is 16 Nov. */
+      { label: "Scale", value: "2,562 tests · 15 migrations", accent: true },
+      { label: "Note", value: "First table opens 16 November" },
+    ],
+  },
 ];
 
 export function getProject(slug: string) {

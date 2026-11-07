@@ -45,10 +45,11 @@ const FOLDER: Record<string, string> = {
   roster: "roster",
   retrospect: "retrospect",
   megasquad: "megasquad",
+  "bragging-rocks": "bragging-rocks",
 };
 
 /** Studies that really do ship screenshots, and so must render some. */
-const ILLUSTRATED = ["game-verdict", "retrospect", "megasquad"];
+const ILLUSTRATED = ["game-verdict", "retrospect", "megasquad", "bragging-rocks"];
 
 function slices(): { key: string; body: string }[] {
   /* Keys are a mix of bare and quoted - `roster:` but `"game-verdict":` -

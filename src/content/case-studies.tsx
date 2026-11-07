@@ -28,6 +28,10 @@ const rosterTiers = getRosterComponents().reduce<Record<string, number>>(
   {},
 );
 
+import brFirstTable from "@/images/bragging-rocks/bragging-rocks-first-table.png";
+import brPhone from "@/images/bragging-rocks/bragging-rocks-table-mobile.png";
+import brRock from "@/images/bragging-rocks/bragging-rocks-rock.png";
+import brWall from "@/images/bragging-rocks/bragging-rocks-wall.png";
 import rsLanding from "@/images/retrospect/retrospect-landing.png";
 import rsLandingMobile from "@/images/retrospect/retrospect-landing-mobile.png";
 import rsReveal from "@/images/retrospect/retrospect-reveal-mobile.png";
@@ -1394,6 +1398,181 @@ export const caseStudies: Record<string, CaseStudy> = {
             contract it doesn&rsquo;t control, which is its own discipline: the app polls invitations
             every 30 seconds but stops after five minutes of inactivity, so a tab left open for three
             days isn&rsquo;t quietly hammering his server.
+          </p>
+        </Section>
+      </>
+    ),
+  },
+
+  "bragging-rocks": {
+    lede: "A community where rock collectors around the world show off their collections. Each member keeps a cabinet of their rocks, and each week the hosts set a theme and everyone may bring one rock to the table. Built in a month and live without an announcement, with its first table on 16 November.",
+    stats: [
+      { value: "2,562", label: "Tests", source: "CI at 0.15.0, 6 Nov snapshot" },
+      { value: "18", label: "Releases", source: "0.1.0 to 0.15.0 in 28 days" },
+      { value: "142 ms", label: "Hero paint", source: "production build, 4x throttle, 29 Oct" },
+      { value: "35", label: "Roster components", source: "counted at 0.15.0" },
+    ],
+    stack: [
+      { k: "Framework", v: "Next.js 16, App Router" },
+      { k: "Runtime", v: "React 19" },
+      { k: "Data", v: "Supabase Postgres, 15 migrations" },
+      { k: "Sign-in", v: "Emailed code or Google" },
+      { k: "Photos", v: "Cloudflare R2, sharp" },
+      { k: "UI", v: "@blakesteve/roster" },
+      { k: "Tests", v: "Vitest, Playwright, PGlite" },
+      { k: "Deploy", v: "Vercel, staged by GitHub Actions" },
+    ],
+    also: [
+      { k: "Words", v: "In catalogs, never typed into a view" },
+      { k: "Checks", v: "A pseudo-locale renders every view" },
+      { k: "Bundle", v: "Five rules on what ships to a browser" },
+    ],
+    body: (
+      <>
+        <Section
+          eyebrow="The idea"
+          title="A table, not a feed"
+          dek="A feed scrolls a rock away and rewards whoever posts most. This gives each member a cabinet that stays put, and one weekly table that everyone brings a single rock to."
+        >
+          <p>
+            A feed rewards whoever posts most. A table doesn&rsquo;t. Each member keeps a cabinet of
+            their rocks, and each week the hosts set a theme and everyone may bring one. One rock
+            means choosing: you go through the cabinet and decide which rock answers the week.
+          </p>
+          <Shot
+            press={brFirstTable}
+            alt="The Bragging Rocks home page before the first week: a printed landscape of hills over bands of rock with a geode in them, and a slip reading The first table opens Monday, November 16."
+            caption="The home page, waiting for Week 1"
+          />
+          <Shot
+            press={brWall}
+            alt="A table of six rocks on printed tiles, each with its name and a carved red seal of its owner's initials: Little Lighthouse, Kitchen Agate, Big Blue, Black Glass, The Pink One and Old Spiral."
+            caption="A table, with invented rocks and invented members"
+          />
+          <p>
+            Nothing here ranks anyone. There are no follower counts, nothing trending, and no streaks.
+            The app doesn&rsquo;t name your mineral for you either. What it knows about a rock is what
+            its owner chose to say.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Midnight, wherever you are"
+          dek="A week closes at midnight in each member's own time zone, so there isn't one moment it ends. For about a day two weeks are open at once, and the rules have to hold for everyone."
+        >
+          <p>
+            A week runs from Monday to Monday in each member&rsquo;s own zone. That sounds like a
+            detail and turns out to be the whole design: for up to about 26 hours, two weeks are open
+            at once, and a week only counts as past when it has closed at UTC&minus;12. A member who
+            moves zones keeps their current week and changes at the later of the two midnights, so
+            nobody can land in a week that has already ended for them.
+          </p>
+          <p>
+            One rock per person per week is a primary key on the theme and the member, so the database
+            refuses a second one whatever the app does. The close is the server&rsquo;s job, because
+            it depends on the member&rsquo;s zone. And what the public sees never reads a zone or a
+            time at all: a wall&rsquo;s order is a place number, so nothing on a table says when
+            someone was awake.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Privacy"
+          title="Nothing travels with the photo"
+          dek="A photo from a phone can carry the exact spot it was taken, and here a member decides how much of a rock's origin anyone sees. So every photo is redrawn from its pixels, then checked again."
+        >
+          <p>
+            A member decides how much of where a rock is from anyone sees, and a phone photo can quietly
+            overrule that with GPS. So the server doesn&rsquo;t clean metadata out of a file. It decodes
+            the upload to raw pixels and encodes every version from those, which leaves nothing to
+            carry a location over.
+          </p>
+          <p>
+            Then it doesn&rsquo;t trust that. Every file the server writes is read back through two
+            separate readers and refused if it has EXIF, XMP or IPTC in it, and that check sits inside
+            the server&rsquo;s storage writer, so none of its code can step around it. A lint rule and a source
+            scan refuse the image library&rsquo;s calls that keep metadata, and the test fixtures embed
+            fake GPS on purpose.
+          </p>
+          <Pull cite="The rule behind it">
+            It&rsquo;s a stronger promise to have nothing to remove than to remember to remove it.
+          </Pull>
+        </Section>
+
+        <Section
+          eyebrow="Holding it to its word"
+          title="A privacy page that can fail the build"
+          dek="A privacy page is a list of claims about the code, and code changes. Twenty-five tests pin what the page says to what the app does, so one can't move without the other."
+        >
+          <p>
+            Privacy pages go stale quietly, because nothing connects the sentence to the code. Here
+            25 tests pin the page&rsquo;s facts to the code they describe: what analytics runs, how a
+            photo is redrawn, how long a sign-in code lasts. Change one of those and the suite fails until
+            the page says the new truth. It can&rsquo;t prove the page is complete, but it does stop
+            a true page from drifting false without anyone being told.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Shipping"
+          title="Staged, then promoted"
+          dek="A release is built and tested on production's own setup before anyone can see it, then promoted and checked again, so a bad build fails where nobody is looking."
+        >
+          <p>
+            Merging a change doesn&rsquo;t reach production by itself. Every push runs CI, then migrates
+            staging, deploys it and smoke-tests it. A release migrates production, builds it staged
+            with no domain, smoke-tests that, promotes it, then smoke-tests the live site and checks
+            it&rsquo;s serving that exact build. Release 0.15.0 passed 22 of 22 checks staged and 23
+            of 23 live, a real round trip through photo storage among them.
+          </p>
+          <p>
+            Migrations run before promotion, so the build still live has to work with the new schema.
+            That one fact means every migration is written to add rather than replace.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The look"
+          title="Printed, not filtered"
+          dek="The site looks block printed, with edges a hand-cut block didn't quite hold. Those edges are drawn as real shapes, because the easy way looked different in one browser."
+        >
+          <p>
+            Buttons, photos and slips all have a printed edge, a rectangle that a hand-cut block
+            didn&rsquo;t quite hold. The first version used a displacement filter, and WebKit drew it
+            straight once a mask was stretched. So the tremor is now a seeded outline in the mask
+            itself, one unit to one CSS pixel and never stretched, in two corner layers. Both engines
+            draw the same edge.
+          </p>
+          <Shot
+            press={brRock}
+            alt="A rock's page: a printed photo of a purple geode beside its name, Little Lighthouse, its owner's carved seal, a short story and where it came from."
+            caption="A rock's page, with an invented rock"
+          />
+          <Shot
+            press={brPhone}
+            frame="phone"
+            alt="An invented week on a phone: a printed landscape with a made-up theme on a slip, and a block printed Bring a rock button."
+            caption="A week on a phone, every word and number invented"
+          />
+          <p>
+            The landscapes are generated too, seeded and drawn on the server, and a bundle check keeps
+            the generator out of the browser. It&rsquo;s the biggest thing on the page, and on
+            29 October it painted in 142 ms, the median of five traces of a production build in
+            Chromium at 4x CPU throttling. That&rsquo;s a stand-in for a phone rather than a phone.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Quiet on purpose"
+          title="Live, and not busy yet"
+          dek="The site is up with no announcement, and the first table is 16 November. Comments, reactions and notifications aren't here yet, and this page doesn't pretend they are."
+        >
+          <p>
+            A community with nothing in it is a bad first impression, so this went up silently. The
+            site went live on 3 November, and the first table opens on 16 November. Comments,
+            reactions, identification and notifications are planned and not built. I&rsquo;d rather
+            say so here than print a number that makes it look busier than it is.
           </p>
         </Section>
       </>

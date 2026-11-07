@@ -254,7 +254,7 @@ describe("prose voice", () => {
     /* Opening of each file, and then the closing paragraph of its last
        section. Both ends have to survive. */
     expect(caseStudies).toContain("Multi-sport pick");
-    expect(caseStudies).toContain("That makes the front end a consumer of a");
+    expect(caseStudies).toContain("than print a number that makes it look busier");
 
     expect(posts).toContain("Tailwind v4 generates utilities from theme tokens");
     /* The tail anchor moves with each new post: it has to be the file's last

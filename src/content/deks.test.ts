@@ -42,9 +42,8 @@ const JARGON = [
 
 describe("section deks", () => {
   it("exist in both content files", () => {
-    /* 29 since the Retrospect redesign: its study went from seven sections
-       to ten. */
-    expect(deksIn("case-studies.tsx").length).toBe(29);
+    /* 36 since Bragging Rocks, with seven. */
+    expect(deksIn("case-studies.tsx").length).toBe(36);
     /* 40 since "Every song has a sky", which carries ten. */
     expect(deksIn("posts.tsx").length).toBe(40);
   });
