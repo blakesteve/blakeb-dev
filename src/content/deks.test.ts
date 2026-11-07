@@ -42,8 +42,8 @@ const JARGON = [
 
 describe("section deks", () => {
   it("exist in both content files", () => {
-    /* 36 since Bragging Rocks, with seven. */
-    expect(deksIn("case-studies.tsx").length).toBe(36);
+    /* 41 since Bragging Rocks and Tehon, with seven and five. */
+    expect(deksIn("case-studies.tsx").length).toBe(41);
     /* 40 since "Every song has a sky", which carries ten. */
     expect(deksIn("posts.tsx").length).toBe(40);
   });

@@ -46,6 +46,8 @@ const FOLDER: Record<string, string> = {
   retrospect: "retrospect",
   megasquad: "megasquad",
   "bragging-rocks": "bragging-rocks",
+  /* A folder that doesn't exist, as Roster's: it's too early for Tehon's screens. */
+  tehon: "tehon",
 };
 
 /** Studies that really do ship screenshots, and so must render some. */

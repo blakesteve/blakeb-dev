@@ -175,7 +175,8 @@ reason they passed.
 
 Bragging Rocks' four show no real member, rock or theme. They're drawn from that
 app's own views in a browser test, with invented names and procedurally drawn
-rocks, because it launched silently and nothing real belongs on this page.
+rocks, because it launched silently and nothing real belongs on this page. Tehon
+has none, because it's too early for its screens.
 
 game-verdict's 26 frames and retrospect's 22 have no such script yet. They will
 go stale the same way MegaSquad's did, which is to say silently, two days after

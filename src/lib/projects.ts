@@ -181,6 +181,24 @@ export const projects: Project[] = [
       { label: "Note", value: "First table opens 16 November" },
     ],
   },
+  {
+    slug: "tehon",
+    name: "Tehon",
+    tagline: "A notebook for writing Japanese by hand.",
+    blurb:
+      "Stroke by stroke, a page a day, on the phone. Every stroke is graded as it ends, against a model to copy. It isn't out yet.",
+    status: "In progress",
+    host: "Not out yet",
+    /* Unreleased and in a private repo, so there's nowhere to send anyone. */
+    links: [],
+    world: { press: "#23604a", blueline: "#ecd68c" },
+    props: [
+      { label: "Stack", value: "Expo 58 · React Native · Skia" },
+      /* Read from its CI at 2398819, 4 Nov 2026. */
+      { label: "Scale", value: "960 tests · 46 hiragana", accent: true },
+      { label: "Note", value: "Three of twelve build steps done" },
+    ],
+  },
 ];
 
 export function getProject(slug: string) {

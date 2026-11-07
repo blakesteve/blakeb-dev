@@ -122,6 +122,8 @@ export type CaseStudy = {
   stats: CaseStudyStat[];
   stack: Row[];
   also: Row[];
+  /** The `also` panel's heading, for a project that hasn't shipped anything. */
+  alsoLabel?: string;
   body: ReactNode;
 };
 
@@ -1573,6 +1575,138 @@ export const caseStudies: Record<string, CaseStudy> = {
             site went live on 3 November, and the first table opens on 16 November. Comments,
             reactions, identification and notifications are planned and not built. I&rsquo;d rather
             say so here than print a number that makes it look busier than it is.
+          </p>
+        </Section>
+      </>
+    ),
+  },
+
+  tehon: {
+    lede: "A notebook for writing Japanese by hand, stroke by stroke, a page a day, on the phone. Tehon 手本 means the model you copy. It isn’t released: three of its twelve build steps are done, and this page says which parts exist and which are still a plan.",
+    stats: [
+      { value: "960", label: "Tests", source: "CI at 2398819, 4 Nov snapshot" },
+      { value: "0.57–2.9 ms", label: "Grading a stroke", source: "median, on three devices" },
+      { value: "46", label: "Hiragana", source: "104 strokes" },
+      { value: "1,114 B", label: "A box of strokes", source: "packed, my real writing" },
+    ],
+    stack: [
+      { k: "Framework", v: "Expo 58, expo-router" },
+      { k: "Runtime", v: "React Native 0.88, React 19" },
+      { k: "Ink", v: "Skia, Reanimated, Gesture Handler" },
+      { k: "Storage", v: "expo-sqlite" },
+      { k: "Tests", v: "Jest" },
+      { k: "CI", v: "GitHub Actions" },
+      { k: "UI", v: "Its own, no Roster" },
+    ],
+    alsoLabel: "So far",
+    also: [
+      { k: "Status", v: "Not released. Step 4 of 12 is next" },
+      { k: "Fonts", v: "286 KB of subsets from 22.9 MB" },
+      {
+        k: "Stroke models",
+        v: "KanjiVG, by Ulrich Apel, CC BY-SA 3.0",
+      },
+      { k: "Measured on", v: "Pixel 9 Pro, iPad Pro, iPhone 12 Pro" },
+    ],
+    body: (
+      <>
+        <Section
+          eyebrow="The question"
+          title="Is ink in React Native good enough?"
+          dek="Writing Japanese on a phone only works if the ink keeps up with your finger. Before building anything, I built a small prototype to find out whether it could, and measured it on three devices."
+        >
+          <p>
+            Everything about this app depends on one feeling: ink that keeps up with your hand. If it
+            lags, you stop writing and start waiting. So it began as a prototype called fude 筆 that
+            asked one question: does drawing ink in React Native feel good enough to build a Japanese
+            handwriting app on? If not, the fallback was a native module for the writing pad, never a
+            whole native app.
+          </p>
+          <p>
+            I wrote the 46 base hiragana on three devices and read the numbers. The Pixel 9 Pro held
+            119.9 frames a second on its 120 Hz screen and missed about 1 frame in 400. The iPhone 12
+            Pro held about 60 on its 60 Hz screen. The iPad Pro 9.7 was the weakest, at 57.3 and about 1
+            in 20. All of that was in Expo Go on development bundles, written by one person, and I
+            ruled it good enough on 29 October. It doesn&rsquo;t prove it matches native. I never ran
+            that comparison.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Ink that React never sees"
+          dek="If every touch went through the app's normal update cycle, the ink would lag behind your finger. So the drawing happens on its own fast path, and the app hears about a stroke only once it ends."
+        >
+          <p>
+            Touch samples go from the gesture handler to a Skia path in worklets on the UI thread.
+            React doesn&rsquo;t see anything until the stroke ends, which is when it gets graded.
+            That keeps React out of the way of the ink, and it means the interesting bugs live below
+            where React&rsquo;s tools can see.
+          </p>
+          <p>
+            Device logs turned up three numbers on my own debug overlay that were misreading on the
+            Pixel, which is a good way to learn not to trust an overlay. And on iOS a finger&rsquo;s
+            first 10 to 27 points of travel went unsampled, so a stroke began after it had really started.
+            Sampling the raw touches fixed that, though that fix and two others are still to be
+            confirmed on a device.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The architecture"
+          title="Two things are hard to change"
+          dek="Everything the app shows about your progress is worked out from a log of what you wrote. Only the log and how strokes are stored are hard to change, so anything else can be rethought later."
+        >
+          <p>
+            The notebook is a log. Records are never updated or deleted, and database triggers refuse
+            it, across twelve guarded tables. Everything shown about progress is derived from that log,
+            so the rules for what counts can change later and the app just reworks it. Only two things
+            can&rsquo;t change without migrating people&rsquo;s notebooks: the log&rsquo;s shape and the
+            stroke encoding.
+          </p>
+          <p>
+            That encoding packs each sample into 6 or 7 bytes, 6.43 on real strokes, which comes to
+            1,114 bytes for a box of my hiragana. All 356 of my real strokes grade the same after a
+            round trip, and a coarser twin that packs a coordinate into one byte changes a verdict and
+            fails the test. A year of writing comes to about 18 to 23 MB, depending on the size of the
+            boxes.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Grading"
+          title="A model, not a recognizer"
+          dek="Tehon doesn't guess what you wrote. It already knows the character, so it compares each stroke to a model as your finger lifts, in a few milliseconds, and keeps the rules that graded it."
+        >
+          <p>
+            This isn&rsquo;t handwriting recognition. The app knows which character you&rsquo;re
+            writing, so each stroke is resampled to 32 points and checked against KanjiVG&rsquo;s
+            reference for direction, shape, placement, size and order. It runs as the stroke ends: a
+            median of 2.9 ms on the Pixel, 0.57 on the iPad and 0.79 on the iPhone.
+          </p>
+          <p>
+            The thresholds are data, and every attempt stores the set that graded it, so a verdict
+            already given never changes when the thresholds do. The limits are real, too. The defaults
+            come from synthetic strokes, and no usable threshold separates my bowed ら tick from a
+            half circle: 0.1276 against 0.1282. My own wrong stroke-order habits still fail, by my own
+            ruling.
+          </p>
+          <p>
+            Stroke order and models come from KanjiVG, by Ulrich Apel, under CC BY-SA 3.0.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Where it stands"
+          title="Three steps of twelve"
+          dek="The log, the look and writing a new line are done. Reviewing what you've learned, katakana, kanji and the rest are still to come, so it isn't out, and there's nothing to download."
+        >
+          <p>
+            Today&rsquo;s page, the notebook and writing a new line work, with the hiragana. Next is
+            held lines, where you write from memory and the grading stays silent until you hand it in,
+            and until those exist a learner can&rsquo;t review. After that come stroke data, content,
+            the rest of the book, and the work a store launch needs. There are no screenshots here
+            because it&rsquo;s too early for them.
           </p>
         </Section>
       </>

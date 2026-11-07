@@ -164,17 +164,27 @@ export default async function Home() {
                   {/* z-10 keeps this above the stretched card link below.
                       Eyebrow IS the anchor: `as` carries the element's own
                       props, so this needs no wrapper and no group. */}
-                  <REyebrow
-                    as="a"
-                    href={project.links[0]?.href}
-                    className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world)]"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="inline-block size-[5px] rounded-full bg-[var(--world)]"
-                    />
-                    {project.host}
-                  </REyebrow>
+                  {project.links[0] ? (
+                    <REyebrow
+                      as="a"
+                      href={project.links[0].href}
+                      className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world)]"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="inline-block size-[5px] rounded-full bg-[var(--world)]"
+                      />
+                      {project.host}
+                    </REyebrow>
+                  ) : (
+                    <REyebrow className="inline-flex items-center gap-[5px]">
+                      <span
+                        aria-hidden="true"
+                        className="inline-block size-[5px] rounded-full bg-[var(--world)]"
+                      />
+                      {project.host}
+                    </REyebrow>
+                  )}
                 </div>
 
                 <h2 className="m-0 font-[family-name:var(--font-display)] text-2xl font-bold uppercase leading-none tracking-[-0.03em]">

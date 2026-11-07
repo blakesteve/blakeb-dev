@@ -174,7 +174,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
 
         <aside className="flex flex-col gap-3">
           <SidebarPanel label="Stack" rows={study.stack} />
-          <SidebarPanel label="Also shipped" rows={study.also} />
+          <SidebarPanel label={study.alsoLabel ?? "Also shipped"} rows={study.also} />
 
           {project.links.map((link, i) => (
             <RCta
