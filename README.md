@@ -338,10 +338,13 @@ thing in the top-left corner.
 
 `src/app/icon.svg` carries its own colors and its own `prefers-color-scheme`
 swap, because a favicon is a separate document and can't see the page's
-tokens. `src/app/opengraph-image.tsx` generates the share card at build time
-from color, crop marks, and the process bar rather than a typeface — loading a
-font would put a network dependency on the one artifact with no fallback if the
-fetch fails.
+tokens. `src/app/opengraph-image.tsx` generates the share card at build time, in
+the site's own Archivo and IBM Plex Mono. They're static WOFF files committed in
+`src/assets/fonts` with their OFL licenses and read from disk, because a fetch
+would put a network dependency on the one artifact with no fallback, and Satori
+takes neither WOFF2 nor a variable font. The files reach the build and no page's
+first load. A test renders the card and fails if the headline runs past the
+margin: in the real heavy face it did, at the old size.
 
 ## X-ray
 
