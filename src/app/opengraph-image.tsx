@@ -1,13 +1,17 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 /**
  * The share card, generated at build time.
  *
- * Composed rather than typeset: ImageResponse ships no fonts of its own, and
- * pulling Archivo down at build would put a network dependency on the one
- * artifact that has no fallback if the fetch fails. Color, the process bar,
- * crop marks, and the mark carry the identity instead of the typeface, so this
- * reads as the site even in a system sans.
+ * Set in the site's own faces: Archivo for the headline, IBM Plex Mono for the
+ * small lines. Without them ImageResponse falls back to the one face it bundles,
+ * Geist Regular, so the headline's 800 had nothing to draw with. The files are committed, static instances with their OFL
+ * licenses in `src/assets/fonts`, and read from disk at build: a network fetch
+ * would make the one artifact with no fallback depend on a server being up.
+ * Satori takes TTF, OTF or WOFF, never WOFF2, and throws on a variable font,
+ * which is why these aren't the files `next/font` serves the pages.
  *
  * The mark is off register here too, since it cannot snap in a still image and
  * the misalignment is the whole point of it.
@@ -16,6 +20,10 @@ import { ImageResponse } from "next/og";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Blake Ball — engineer, fluent in designer";
+
+const FONTS = join(process.cwd(), "src", "assets", "fonts");
+const DISPLAY = "Archivo";
+const UTILITY = "IBM Plex Mono";
 
 const PAPER = "#e7e8e3";
 const INK = "#14150f";
@@ -35,7 +43,12 @@ function CropMark({ style }: { style: React.CSSProperties }) {
   );
 }
 
-export default function Image() {
+export default async function Image() {
+  const [archivo, plexMono] = await Promise.all([
+    readFile(join(FONTS, "archivo-latin-800-normal.woff")),
+    readFile(join(FONTS, "ibm-plex-mono-latin-400-normal.woff")),
+  ]);
+
   return new ImageResponse(
     (
       <div
@@ -43,6 +56,7 @@ export default function Image() {
           width: "100%",
           height: "100%",
           background: PAPER,
+          fontFamily: UTILITY,
           display: "flex",
           flexDirection: "column",
           position: "relative",
@@ -105,7 +119,8 @@ export default function Image() {
 
           <div
             style={{
-              fontSize: 104,
+              fontFamily: DISPLAY,
+              fontSize: 92,
               fontWeight: 800,
               letterSpacing: -3.5,
               lineHeight: 1,
@@ -119,7 +134,8 @@ export default function Image() {
           </div>
           <div
             style={{
-              fontSize: 104,
+              fontFamily: DISPLAY,
+              fontSize: 92,
               fontWeight: 800,
               letterSpacing: -3.5,
               lineHeight: 1,
@@ -129,11 +145,12 @@ export default function Image() {
             }}
           >
             {/* The word space is a sized box, and it must not be shrinkable.
-                This line set as "FLUENT INDESIGNER." because at 118px it
+                This line once set as "FLUENT INDESIGNER." because it
                 overflowed the content box, and flexbox took the whole
                 shortfall out of the only child that could give: the space.
                 Satori ignores `gap`, so a box is the mechanism, and the type
-                is sized to fit rather than to be squeezed. */}
+                is sized to fit rather than to be squeezed. In Archivo it fits
+                at 92px, 13px inside the margin; at 104px it ran off the card. */}
             <div style={{ display: "flex", flexShrink: 0, color: INK }}>
               Fluent in
             </div>
@@ -163,6 +180,12 @@ export default function Image() {
         </div>
       </div>
     ),
-    size,
+    {
+      ...size,
+      fonts: [
+        { name: DISPLAY, data: archivo, weight: 800, style: "normal" },
+        { name: UTILITY, data: plexMono, weight: 400, style: "normal" },
+      ],
+    },
   );
 }
