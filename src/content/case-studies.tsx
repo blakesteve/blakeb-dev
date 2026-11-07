@@ -13,7 +13,12 @@ import {
   RPullquote,
 } from "@/lib/roster-ui";
 import { SPECIMENS_PAGE } from "@/lib/nav";
-import { getRosterComponentCount, getRosterComponents, getRosterMeta } from "@/lib/roster";
+import {
+  ROSTER_APPS,
+  getRosterComponentCount,
+  getRosterComponents,
+  getRosterMeta,
+} from "@/lib/roster";
 
 /* Counted from the installed package's own type definitions, so the tier
    breakdown in the Roster sidebar cannot drift from the count in its stat row.
@@ -638,7 +643,7 @@ export const caseStudies: Record<string, CaseStudy> = {
   },
 
   roster: {
-    lede: "The component library this site is built out of, with exactly one real customer: me. Eight apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.",
+    lede: `The component library this site is built out of, with exactly one real customer: me. ${ROSTER_APPS.words[0].toUpperCase()}${ROSTER_APPS.words.slice(1)} apps, one substrate, published to npm and versioned like the dependency it is, which turns out to be a different engineering problem than shipping one to strangers.`,
     stats: [
       {
         value: String(getRosterComponentCount()),
@@ -669,7 +674,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           : { value: "2,701", label: "Tests", source: "roster @ 5.18.0" })(
         getRosterMeta(),
       ),
-      { value: "8", label: "Apps consuming it", source: "including this one" },
+      { value: String(ROSTER_APPS.count), label: "Apps consuming it", source: "including this one" },
     ],
     stack: [
       { k: "Runtime", v: "React 19" },
@@ -828,7 +833,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <p>
             The flip side is that mistakes arrive immediately and personally. A bad major doesn&rsquo;t
-            generate issues, it breaks eight apps I was going to work on that weekend. That is a
+            generate issues, it breaks {ROSTER_APPS.words} apps I was going to work on that weekend. That is a
             tighter feedback loop than most libraries get, and it is the only reason a packaging bug
             that had been quietly wrong for months finally got found.
           </p>
@@ -846,7 +851,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               {SPECIMENS_PAGE.label}
             </RLink>{" "}
             reads them live from the installed package along with every token
-            ramp and a set of working specimens. And it doesn&rsquo;t walk through the CSS packaging
+            ramp, and reprints itself in the palettes of the apps it runs in. And it doesn&rsquo;t walk through the CSS packaging
             failure in detail, because that one earned its own post.
           </p>
           <p>

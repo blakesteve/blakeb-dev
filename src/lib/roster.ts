@@ -13,6 +13,13 @@ import { join } from "node:path";
  * entirely and stays a build-time-only concern.
  */
 
+/**
+ * How many apps consume Roster, which nothing can read from here: a scan of every
+ * `package.json` in the workspace found eight on 4 Nov 2026, counting mega-squad
+ * and its marketing site apart. Typed once, so the pages can't disagree.
+ */
+export const ROSTER_APPS = { count: 8, words: "eight" } as const;
+
 const ROSTER_DIR = join(process.cwd(), "node_modules", "@blakesteve", "roster");
 
 function read(...segments: string[]): string {

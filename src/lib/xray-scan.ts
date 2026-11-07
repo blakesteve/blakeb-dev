@@ -20,7 +20,9 @@ export type Scan = {
  * X-ray's own chrome, and popups. A popup counts as part of its trigger, and
  * Headless UI puts every one in this root at the end of `<body>`.
  */
-const NOT_THE_PAGE = "[data-xray-ui],[data-xray-layer],#headlessui-portal-root";
+export const PORTAL_ROOT = "headlessui-portal-root";
+
+const NOT_THE_PAGE = `[data-xray-ui],[data-xray-layer],#${PORTAL_ROOT}`;
 
 /* Clipped to nothing, but its text keeps a full rect, so it would hold labels
    off space that looks empty. */

@@ -158,7 +158,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
 
           {slug === "roster" && (
             <RCta href={SPECIMENS_PAGE.href} tint="var(--world)" className="mt-7">
-              See every part: {SPECIMENS_PAGE.label} →
+              Don&rsquo;t read about it. Go play with it: {SPECIMENS_PAGE.label} →
             </RCta>
           )}
         </div>

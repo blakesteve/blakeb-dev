@@ -18,26 +18,28 @@
  * real growth could hide behind a chunk that happened to merge. A route's
  * first load is what its visitor pays, whichever way the chunks fall.
  *
- * Measured 5 November 2026 on Next 16.4.2 and Roster 5.18.0, a clean copy with
- * `.env.local` beside it. X-ray's placed labels, in the layout and so on every
- * route, moved these up by 5,933 bytes from `main` at 35f42e9, and the longer
- * path in the nav by 6 more.
+ * Measured 6 November 2026 on Next 16.4.2 and Roster 5.19.0, a clean copy with
+ * `.env.local` beside it. Against `main` at f564b7a on Roster 5.19.0, Ink swap
+ * moved `/specimens` up by 104,799 bytes, which is its components, and every other
+ * route but `/_global-error` by 725: one Font Awesome chevron. `Select` is the
+ * first thing on any route to use it, and Turbopack keeps a shared module's exports
+ * for the whole build, so it lands in the icons' shared chunk.
  *
  * Re-measure when you change one: a figure carried forward from an older tree
  * stops being a measurement. Run `npm run check:bundle` on a fresh build; it
  * prints every route's first load.
  */
 export const ROUTE_FIRST_LOAD = {
-  "/": 642_540,
+  "/": 643_265,
   "/_global-error": 457_352,
-  "/_not-found": 642_540,
-  "/about": 657_379,
-  "/resume": 642_875,
-  "/specimens": 733_742,
-  "/work": 659_985,
-  "/work/[slug]": 663_860,
-  "/writing": 659_985,
-  "/writing/[slug]": 659_985,
+  "/_not-found": 643_265,
+  "/about": 658_104,
+  "/resume": 643_600,
+  "/specimens": 838_541,
+  "/work": 660_710,
+  "/work/[slug]": 664_585,
+  "/writing": 660_710,
+  "/writing/[slug]": 660_710,
 };
 
 /**
