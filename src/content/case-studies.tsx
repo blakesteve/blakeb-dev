@@ -28,6 +28,10 @@ const rosterTiers = getRosterComponents().reduce<Record<string, number>>(
   {},
 );
 
+import brFirstTable from "@/images/bragging-rocks/bragging-rocks-first-table.png";
+import brPhone from "@/images/bragging-rocks/bragging-rocks-table-mobile.png";
+import brRock from "@/images/bragging-rocks/bragging-rocks-rock.png";
+import brWall from "@/images/bragging-rocks/bragging-rocks-wall.png";
 import rsLanding from "@/images/retrospect/retrospect-landing.png";
 import rsLandingMobile from "@/images/retrospect/retrospect-landing-mobile.png";
 import rsReveal from "@/images/retrospect/retrospect-reveal-mobile.png";
@@ -118,6 +122,8 @@ export type CaseStudy = {
   stats: CaseStudyStat[];
   stack: Row[];
   also: Row[];
+  /** The `also` panel's heading, for a project that hasn't shipped anything. */
+  alsoLabel?: string;
   body: ReactNode;
 };
 
@@ -1394,6 +1400,313 @@ export const caseStudies: Record<string, CaseStudy> = {
             contract it doesn&rsquo;t control, which is its own discipline: the app polls invitations
             every 30 seconds but stops after five minutes of inactivity, so a tab left open for three
             days isn&rsquo;t quietly hammering his server.
+          </p>
+        </Section>
+      </>
+    ),
+  },
+
+  "bragging-rocks": {
+    lede: "A community where rock collectors around the world show off their collections. Each member keeps a cabinet of their rocks, and each week the hosts set a theme and everyone may bring one rock to the table. Built in a month and live without an announcement, with its first table on 16 November.",
+    stats: [
+      { value: "2,562", label: "Tests", source: "CI at 0.15.0, 6 Nov snapshot" },
+      { value: "18", label: "Releases", source: "0.1.0 to 0.15.0 in 28 days" },
+      { value: "142 ms", label: "Hero paint", source: "production build, 4x throttle, 29 Oct" },
+      { value: "35", label: "Roster components", source: "counted at 0.15.0" },
+    ],
+    stack: [
+      { k: "Framework", v: "Next.js 16, App Router" },
+      { k: "Runtime", v: "React 19" },
+      { k: "Data", v: "Supabase Postgres, 15 migrations" },
+      { k: "Sign-in", v: "Emailed code or Google" },
+      { k: "Photos", v: "Cloudflare R2, sharp" },
+      { k: "UI", v: "@blakesteve/roster" },
+      { k: "Tests", v: "Vitest, Playwright, PGlite" },
+      { k: "Deploy", v: "Vercel, staged by GitHub Actions" },
+    ],
+    also: [
+      { k: "Words", v: "In catalogs, never typed into a view" },
+      { k: "Checks", v: "A pseudo-locale renders every view" },
+      { k: "Bundle", v: "Five rules on what ships to a browser" },
+    ],
+    body: (
+      <>
+        <Section
+          eyebrow="The idea"
+          title="A table, not a feed"
+          dek="A feed scrolls a rock away and rewards whoever posts most. This gives each member a cabinet that stays put, and one weekly table that everyone brings a single rock to."
+        >
+          <p>
+            A feed rewards whoever posts most. A table doesn&rsquo;t. Each member keeps a cabinet of
+            their rocks, and each week the hosts set a theme and everyone may bring one. One rock
+            means choosing: you go through the cabinet and decide which rock answers the week.
+          </p>
+          <Shot
+            press={brFirstTable}
+            alt="The Bragging Rocks home page before the first week: a printed landscape of hills over bands of rock with a geode in them, and a slip reading The first table opens Monday, November 16."
+            caption="The home page, waiting for Week 1"
+          />
+          <Shot
+            press={brWall}
+            alt="A table of six rocks on printed tiles, each with its name and a carved red seal of its owner's initials: Little Lighthouse, Kitchen Agate, Big Blue, Black Glass, The Pink One and Old Spiral."
+            caption="A table, with invented rocks and invented members"
+          />
+          <p>
+            Nothing here ranks anyone. There are no follower counts, nothing trending, and no streaks.
+            The app doesn&rsquo;t name your mineral for you either. What it knows about a rock is what
+            its owner chose to say.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Midnight, wherever you are"
+          dek="A week closes at midnight in each member's own time zone, so there isn't one moment it ends. For about a day two weeks are open at once, and the rules have to hold for everyone."
+        >
+          <p>
+            A week runs from Monday to Monday in each member&rsquo;s own zone. That sounds like a
+            detail and turns out to be the whole design: for up to about 26 hours, two weeks are open
+            at once, and a week only counts as past when it has closed at UTC&minus;12. A member who
+            moves zones keeps their current week and changes at the later of the two midnights, so
+            nobody can land in a week that has already ended for them.
+          </p>
+          <p>
+            One rock per person per week is a primary key on the theme and the member, so the database
+            refuses a second one whatever the app does. The close is the server&rsquo;s job, because
+            it depends on the member&rsquo;s zone. And what the public sees never reads a zone or a
+            time at all: a wall&rsquo;s order is a place number, so nothing on a table says when
+            someone was awake.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Privacy"
+          title="Nothing travels with the photo"
+          dek="A photo from a phone can carry the exact spot it was taken, and here a member decides how much of a rock's origin anyone sees. So every photo is redrawn from its pixels, then checked again."
+        >
+          <p>
+            A member decides how much of where a rock is from anyone sees, and a phone photo can quietly
+            overrule that with GPS. So the server doesn&rsquo;t clean metadata out of a file. It decodes
+            the upload to raw pixels and encodes every version from those, which leaves nothing to
+            carry a location over.
+          </p>
+          <p>
+            Then it doesn&rsquo;t trust that. Every file the server writes is read back through two
+            separate readers and refused if it has EXIF, XMP or IPTC in it, and that check sits inside
+            the server&rsquo;s storage writer, so none of its code can step around it. A lint rule and a source
+            scan refuse the image library&rsquo;s calls that keep metadata, and the test fixtures embed
+            fake GPS on purpose.
+          </p>
+          <Pull cite="The rule behind it">
+            It&rsquo;s a stronger promise to have nothing to remove than to remember to remove it.
+          </Pull>
+        </Section>
+
+        <Section
+          eyebrow="Holding it to its word"
+          title="A privacy page that can fail the build"
+          dek="A privacy page is a list of claims about the code, and code changes. Twenty-five tests pin what the page says to what the app does, so one can't move without the other."
+        >
+          <p>
+            Privacy pages go stale quietly, because nothing connects the sentence to the code. Here
+            25 tests pin the page&rsquo;s facts to the code they describe: what analytics runs, how a
+            photo is redrawn, how long a sign-in code lasts. Change one of those and the suite fails until
+            the page says the new truth. It can&rsquo;t prove the page is complete, but it does stop
+            a true page from drifting false without anyone being told.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Shipping"
+          title="Staged, then promoted"
+          dek="A release is built and tested on production's own setup before anyone can see it, then promoted and checked again, so a bad build fails where nobody is looking."
+        >
+          <p>
+            Merging a change doesn&rsquo;t reach production by itself. Every push runs CI, then migrates
+            staging, deploys it and smoke-tests it. A release migrates production, builds it staged
+            with no domain, smoke-tests that, promotes it, then smoke-tests the live site and checks
+            it&rsquo;s serving that exact build. Release 0.15.0 passed 22 of 22 checks staged and 23
+            of 23 live, a real round trip through photo storage among them.
+          </p>
+          <p>
+            Migrations run before promotion, so the build still live has to work with the new schema.
+            That one fact means every migration is written to add rather than replace.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The look"
+          title="Printed, not filtered"
+          dek="The site looks block printed, with edges a hand-cut block didn't quite hold. Those edges are drawn as real shapes, because the easy way looked different in one browser."
+        >
+          <p>
+            Buttons, photos and slips all have a printed edge, a rectangle that a hand-cut block
+            didn&rsquo;t quite hold. The first version used a displacement filter, and WebKit drew it
+            straight once a mask was stretched. So the tremor is now a seeded outline in the mask
+            itself, one unit to one CSS pixel and never stretched, in two corner layers. Both engines
+            draw the same edge.
+          </p>
+          <Shot
+            press={brRock}
+            alt="A rock's page: a printed photo of a purple geode beside its name, Little Lighthouse, its owner's carved seal, a short story and where it came from."
+            caption="A rock's page, with an invented rock"
+          />
+          <Shot
+            press={brPhone}
+            frame="phone"
+            alt="An invented week on a phone: a printed landscape with a made-up theme on a slip, and a block printed Bring a rock button."
+            caption="A week on a phone, every word and number invented"
+          />
+          <p>
+            The landscapes are generated too, seeded and drawn on the server, and a bundle check keeps
+            the generator out of the browser. It&rsquo;s the biggest thing on the page, and on
+            29 October it painted in 142 ms, the median of five traces of a production build in
+            Chromium at 4x CPU throttling. That&rsquo;s a stand-in for a phone rather than a phone.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Quiet on purpose"
+          title="Live, and not busy yet"
+          dek="The site is up with no announcement, and the first table is 16 November. Comments, reactions and notifications aren't here yet, and this page doesn't pretend they are."
+        >
+          <p>
+            A community with nothing in it is a bad first impression, so this went up silently. The
+            site went live on 3 November, and the first table opens on 16 November. Comments,
+            reactions, identification and notifications are planned and not built. I&rsquo;d rather
+            say so here than print a number that makes it look busier than it is.
+          </p>
+        </Section>
+      </>
+    ),
+  },
+
+  tehon: {
+    lede: "A notebook for writing Japanese by hand, stroke by stroke, a page a day, on the phone. Tehon 手本 means the model you copy. It isn’t released: three of its twelve build steps are done, and this page says which parts exist and which are still a plan.",
+    stats: [
+      { value: "960", label: "Tests", source: "CI at 2398819, 4 Nov snapshot" },
+      { value: "0.57–2.9 ms", label: "Grading a stroke", source: "median, on three devices" },
+      { value: "46", label: "Hiragana", source: "104 strokes" },
+      { value: "1,114 B", label: "A box of strokes", source: "packed, my real writing" },
+    ],
+    stack: [
+      { k: "Framework", v: "Expo 58, expo-router" },
+      { k: "Runtime", v: "React Native 0.88, React 19" },
+      { k: "Ink", v: "Skia, Reanimated, Gesture Handler" },
+      { k: "Storage", v: "expo-sqlite" },
+      { k: "Tests", v: "Jest" },
+      { k: "CI", v: "GitHub Actions" },
+      { k: "UI", v: "Its own, no Roster" },
+    ],
+    alsoLabel: "So far",
+    also: [
+      { k: "Status", v: "Not released. Step 4 of 12 is next" },
+      { k: "Fonts", v: "286 KB of subsets from 22.9 MB" },
+      {
+        k: "Stroke models",
+        v: "KanjiVG, by Ulrich Apel, CC BY-SA 3.0",
+      },
+      { k: "Measured on", v: "Pixel 9 Pro, iPad Pro, iPhone 12 Pro" },
+    ],
+    body: (
+      <>
+        <Section
+          eyebrow="The question"
+          title="Is ink in React Native good enough?"
+          dek="Writing Japanese on a phone only works if the ink keeps up with your finger. Before building anything, I built a small prototype to find out whether it could, and measured it on three devices."
+        >
+          <p>
+            Everything about this app depends on one feeling: ink that keeps up with your hand. If it
+            lags, you stop writing and start waiting. So it began as a prototype called fude 筆 that
+            asked one question: does drawing ink in React Native feel good enough to build a Japanese
+            handwriting app on? If not, the fallback was a native module for the writing pad, never a
+            whole native app.
+          </p>
+          <p>
+            I wrote the 46 base hiragana on three devices and read the numbers. The Pixel 9 Pro held
+            119.9 frames a second on its 120 Hz screen and missed about 1 frame in 400. The iPhone 12
+            Pro held about 60 on its 60 Hz screen. The iPad Pro 9.7 was the weakest, at 57.3 and about 1
+            in 20. All of that was in Expo Go on development bundles, written by one person, and I
+            ruled it good enough on 29 October. It doesn&rsquo;t prove it matches native. I never ran
+            that comparison.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Ink that React never sees"
+          dek="If every touch went through the app's normal update cycle, the ink would lag behind your finger. So the drawing happens on its own fast path, and the app hears about a stroke only once it ends."
+        >
+          <p>
+            Touch samples go from the gesture handler to a Skia path in worklets on the UI thread.
+            React doesn&rsquo;t see anything until the stroke ends, which is when it gets graded.
+            That keeps React out of the way of the ink, and it means the interesting bugs live below
+            where React&rsquo;s tools can see.
+          </p>
+          <p>
+            Device logs turned up three numbers on my own debug overlay that were misreading on the
+            Pixel, which is a good way to learn not to trust an overlay. And on iOS a finger&rsquo;s
+            first 10 to 27 points of travel went unsampled, so a stroke began after it had really started.
+            Sampling the raw touches fixed that, though that fix and two others are still to be
+            confirmed on a device.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The architecture"
+          title="Two things are hard to change"
+          dek="Everything the app shows about your progress is worked out from a log of what you wrote. Only the log and how strokes are stored are hard to change, so anything else can be rethought later."
+        >
+          <p>
+            The notebook is a log. Records are never updated or deleted, and database triggers refuse
+            it, across twelve guarded tables. Everything shown about progress is derived from that log,
+            so the rules for what counts can change later and the app just reworks it. Only two things
+            can&rsquo;t change without migrating people&rsquo;s notebooks: the log&rsquo;s shape and the
+            stroke encoding.
+          </p>
+          <p>
+            That encoding packs each sample into 6 or 7 bytes, 6.43 on real strokes, which comes to
+            1,114 bytes for a box of my hiragana. All 356 of my real strokes grade the same after a
+            round trip, and a coarser twin that packs a coordinate into one byte changes a verdict and
+            fails the test. A year of writing comes to about 18 to 23 MB, depending on the size of the
+            boxes.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Grading"
+          title="A model, not a recognizer"
+          dek="Tehon doesn't guess what you wrote. It already knows the character, so it compares each stroke to a model as your finger lifts, in a few milliseconds, and keeps the rules that graded it."
+        >
+          <p>
+            This isn&rsquo;t handwriting recognition. The app knows which character you&rsquo;re
+            writing, so each stroke is resampled to 32 points and checked against KanjiVG&rsquo;s
+            reference for direction, shape, placement, size and order. It runs as the stroke ends: a
+            median of 2.9 ms on the Pixel, 0.57 on the iPad and 0.79 on the iPhone.
+          </p>
+          <p>
+            The thresholds are data, and every attempt stores the set that graded it, so a verdict
+            already given never changes when the thresholds do. The limits are real, too. The defaults
+            come from synthetic strokes, and no usable threshold separates my bowed ら tick from a
+            half circle: 0.1276 against 0.1282. My own wrong stroke-order habits still fail, by my own
+            ruling.
+          </p>
+          <p>
+            Stroke order and models come from KanjiVG, by Ulrich Apel, under CC BY-SA 3.0.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Where it stands"
+          title="Three steps of twelve"
+          dek="The log, the look and writing a new line are done. Reviewing what you've learned, katakana, kanji and the rest are still to come, so it isn't out, and there's nothing to download."
+        >
+          <p>
+            Today&rsquo;s page, the notebook and writing a new line work, with the hiragana. Next is
+            held lines, where you write from memory and the grading stays silent until you hand it in,
+            and until those exist a learner can&rsquo;t review. After that come stroke data, content,
+            the rest of the book, and the work a store launch needs. There are no screenshots here
+            because it&rsquo;s too early for them.
           </p>
         </Section>
       </>

@@ -162,6 +162,43 @@ export const projects: Project[] = [
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },
+  {
+    slug: "bragging-rocks",
+    name: "Bragging Rocks",
+    tagline: "Show your rocks to collectors around the world.",
+    blurb:
+      "Each member keeps a cabinet of their rocks, and each week the hosts set a theme and everyone may bring one to the table.",
+    status: "Live",
+    host: "bragging.rocks",
+    /* Private repo, so nothing here links to it. */
+    links: [{ label: "bragging.rocks", href: "https://bragging.rocks", kind: "live" }],
+    world: { press: "#ba220d", blueline: "#f0654a" },
+    props: [
+      { label: "Stack", value: "Next 16 · Supabase · Cloudflare R2" },
+      /* Read from its CI at 0.15.0, 6 Nov 2026. No member figures here, on
+         purpose: it launched silently, and the first table is 16 Nov. */
+      { label: "Scale", value: "2,562 tests · 15 migrations", accent: true },
+      { label: "Note", value: "First table opens 16 November" },
+    ],
+  },
+  {
+    slug: "tehon",
+    name: "Tehon",
+    tagline: "A notebook for writing Japanese by hand.",
+    blurb:
+      "Stroke by stroke, a page a day, on the phone. Every stroke is graded as it ends, against a model to copy. It isn't out yet.",
+    status: "In progress",
+    host: "Not out yet",
+    /* Unreleased and in a private repo, so there's nowhere to send anyone. */
+    links: [],
+    world: { press: "#23604a", blueline: "#ecd68c" },
+    props: [
+      { label: "Stack", value: "Expo 58 · React Native · Skia" },
+      /* Read from its CI at 2398819, 4 Nov 2026. */
+      { label: "Scale", value: "960 tests · 46 hiragana", accent: true },
+      { label: "Note", value: "Three of twelve build steps done" },
+    ],
+  },
 ];
 
 export function getProject(slug: string) {

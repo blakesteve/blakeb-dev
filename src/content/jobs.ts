@@ -28,7 +28,7 @@ type Live = {
   components: number;
   tiers: Record<string, number>;
   tests: number | null;
-  hosts: { gv: string; retrospect: string; megasquad: string };
+  hosts: { gv: string; retrospect: string; megasquad: string; br: string };
 };
 
 export function buildJobs({ version, components, tiers, tests, hosts }: Live): Job[] {
@@ -330,7 +330,7 @@ export function buildJobs({ version, components, tiers, tests, hosts }: Live): J
       id: "br",
       whose: "Bragging Rocks'",
       name: "Bragging Rocks",
-      host: "bragging.rocks",
+      host: hosts.br,
       scheme: "light",
       source: overrides(br),
       printed: true,
