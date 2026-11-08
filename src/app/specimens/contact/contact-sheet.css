@@ -1,0 +1,433 @@
+/* Contact sheet. Loaded by this route alone. */
+
+.cs-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+
+/* The Tabs scroll inside their own box. The page never scrolls sideways. */
+.cs-tabs {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cs-skip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.cs-skip:focus-visible {
+  position: static;
+  display: inline-block;
+  width: auto;
+  height: auto;
+  clip-path: none;
+  margin-bottom: 10px;
+  font-family: var(--font-util);
+  font-size: 11px;
+  color: var(--spot);
+}
+
+.cs-past {
+  display: block;
+  outline: none;
+}
+
+/* Ruled like the home page's token strip: a 1px gap over --rule. */
+.cs-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+  .cs-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 980px) {
+  .cs-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.cs-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--panel);
+}
+
+/* Room for the specimens, kept from the server render on, so a tier landing
+   doesn't move the rows below it. Each figure is the tallest specimen at rest in
+   that band at the band's narrowest width, measured 8 Nov 2026; `size` in the
+   index marks the tall ones. Opening one (an Accordion, a Disclosure) can still
+   grow its row, because that's the reader's doing. */
+.cs-frame {
+  min-height: 206px;
+}
+.cs-frame[data-size="md"] {
+  min-height: 238px;
+}
+.cs-frame[data-size="lg"] {
+  min-height: 245px;
+}
+.cs-frame[data-size="xl"] {
+  min-height: 364px;
+}
+@media (min-width: 640px) and (max-width: 979.98px) {
+  .cs-frame {
+    min-height: 212px;
+  }
+  .cs-frame[data-size="xl"] {
+    min-height: 368px;
+  }
+}
+
+.cs-cap {
+  appearance: none;
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px 6px;
+  background: var(--panel);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.cs-cap:focus-visible {
+  outline: 2px solid var(--spot);
+  outline-offset: -2px;
+}
+.cs-num {
+  font-family: var(--font-util);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--spot);
+}
+.cs-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-util);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.cs-loupe {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+@media (hover: hover) {
+  .cs-cap:hover .cs-name,
+  .cs-cap:hover .cs-loupe {
+    color: var(--spot);
+  }
+}
+
+.cs-live {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+}
+.cs-live > * {
+  max-width: 100%;
+}
+.cs-wait {
+  width: 100%;
+}
+
+/* Navbar is drawn for a whole page, so it's set smaller, and it's a picture of
+   a bar here: the loupe is where it works. */
+.cs-live-nav > * {
+  zoom: 0.78;
+  width: calc(100% / 0.78);
+  max-width: none;
+}
+
+/* WCAG 2.2.2: nothing on the sheet moves forever. A frame's motion runs while
+   it has the pointer or focus, and the loupe runs freely. */
+.cs-live,
+.cs-live * {
+  animation-play-state: paused;
+}
+.cs-frame:focus-within .cs-live,
+.cs-frame:focus-within .cs-live * {
+  animation-play-state: running;
+}
+@media (hover: hover) {
+  .cs-frame:hover .cs-live,
+  .cs-frame:hover .cs-live * {
+    animation-play-state: running;
+  }
+}
+
+/* At phone width a frame is a thumbnail: scaled, not interactive, and the
+   whole frame opens the loupe, which is where you play. */
+@media (max-width: 639.98px) {
+  .cs-frame {
+    min-height: 150px;
+  }
+  .cs-frame[data-size="md"] {
+    min-height: 180px;
+  }
+  .cs-frame[data-size="lg"] {
+    min-height: 180px;
+  }
+  .cs-frame[data-size="xl"] {
+    min-height: 268px;
+  }
+  .cs-live {
+    padding: 8px;
+    zoom: 0.72;
+    pointer-events: none;
+  }
+  /* The caption stops being the containing block, so its ::after covers the
+     whole frame. */
+  .cs-cap {
+    position: static;
+  }
+  .cs-cap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+  }
+}
+
+/* The grease pencil. A system handwriting stack, no web font. */
+.cs-grease {
+  position: absolute;
+  inset: 26px 2px 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 28px);
+  overflow: visible;
+  pointer-events: none;
+  z-index: 2;
+}
+.cs-grease path {
+  fill: none;
+  stroke: #c8102e;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  opacity: 0.78;
+  vector-effect: non-scaling-stroke;
+}
+.cs-grease-x path {
+  stroke-width: 2.4;
+}
+.cs-grease-note {
+  position: absolute;
+  right: 8px;
+  bottom: 5px;
+  z-index: 3;
+  transform: rotate(-3deg);
+  pointer-events: none;
+  /* Handwriting where the system has one (macOS and iOS, Windows), and this
+     site's own face where it doesn't. Never a generic `cursive`: Chrome on
+     Windows and Linux resolves that to Comic Sans. */
+  font-family: "Bradley Hand", "Segoe Print", var(--font-util);
+  font-size: 13px;
+  color: #c8102e;
+}
+.dark .cs-grease path {
+  stroke: #ffb300;
+}
+.dark .cs-grease-note {
+  color: #ffb300;
+}
+
+/* What the frames are set in. */
+.cs-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.cs-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cs-lab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.cs-body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.cs-say {
+  margin: 0;
+  font-family: var(--font-util);
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.cs-story {
+  color: var(--spot);
+}
+.cs-card-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+.cs-card-body {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.cs-quote {
+  font-size: 14px;
+  color: var(--ink);
+}
+.cs-tile {
+  display: block;
+  width: 100%;
+  height: 22px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+.cs-swatch {
+  height: 56px;
+  border-radius: 3px;
+}
+
+/* The loupe. Out of the box the Dialog is a white, heavily rounded box. */
+.loupe-panel {
+  --roster-radius-2xl: 3px;
+  --roster-popover-bg: var(--panel);
+  --roster-popover-border: var(--rule);
+  --roster-popover-text: var(--ink);
+}
+.loupe {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 12px;
+}
+.loupe-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 28px;
+  border: 1px solid var(--rule);
+  background: var(--paper)
+    radial-gradient(color-mix(in oklab, var(--ink) 16%, transparent) 0.6px, transparent 0.7px) 0 0 / 12px 12px;
+}
+.loupe-live {
+  display: flex;
+  justify-content: center;
+  width: min(100%, 460px);
+}
+.loupe-live > * {
+  max-width: 100%;
+}
+.loupe-knobs {
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .loupe-knobs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.loupe-knob {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.loupe-knob .cs-row {
+  justify-content: flex-start;
+}
+.loupe-code {
+  margin: 0;
+  padding: 8px 10px;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font-family: var(--font-util);
+  font-size: 12px;
+}
+.loupe-meta,
+.loupe-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.loupe-story {
+  font-family: var(--font-util);
+  font-size: 11px;
+}
+
+/* Contrast on this site's palette, spec 7.9, through Roster's own tokens where
+   it has one. Scoped to the sheet and the loupe, which is where these pairs
+   occur. What's left is Roster's fixed grays (AvatarStrip's overflow count,
+   MatchupCard's separator and losing score, Stat's source line), reported
+   rather than painted over. */
+.cs,
+.loupe-panel {
+  --roster-tabs-text: var(--ink-soft);
+  --roster-lt-text-inactive: var(--ink-soft);
+  /* Footer's links sit at opacity .7 over this, so it starts from full ink. */
+  --roster-footer-text: var(--ink);
+  /* White on the press sheet's green: 5.11, where the shipped near-black is 3.86. */
+  --roster-success-500-ink: #fff;
+}
+.dark .cs,
+.dark .loupe-panel {
+  /* Paper on the blueline's violet: 4.69, where white is 4.17. */
+  --roster-primary-500-ink: var(--paper);
+  /* The liquid strip's own fill is lighter than the frame, which put an
+     unselected tab's count mark at 4.11. On the panel, the border draws it. */
+  --roster-lt-bg: var(--panel);
+}
+/* An upcoming step's digit sits on --roster-skeleton, as on Ink swap's own sheet. */
+.cs [data-roster="Timeline"],
+.cs [data-roster="StepProgress"],
+.loupe-panel [data-roster="Timeline"],
+.loupe-panel [data-roster="StepProgress"] {
+  --roster-skeleton: var(--paper);
+}
+/* SegmentBar's percents are opacity .6, which Ink swap overrides the same way.
+   Keyed on Roster's test id, so it can go when Roster's fix lands. */
+.cs [data-testid="segment-bar-legend"] > span > span:last-child,
+.loupe-panel [data-testid="segment-bar-legend"] > span > span:last-child {
+  color: var(--ink-soft);
+  opacity: 1;
+}
