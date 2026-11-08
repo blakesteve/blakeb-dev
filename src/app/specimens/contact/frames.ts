@@ -24,7 +24,7 @@ export type FrameMeta = {
   /** Takes input: kept by "Only what plays". */
   plays?: boolean;
   /** The app it came out of, where the record says so. Blake confirmed the list on
-      7 Nov 2026; FileUpload's is the architect's reading of the record, pending him. */
+      7 Nov 2026, and FileUpload's, BB's Grove, on 8 Nov. */
   from?: "Game Verdict" | "this site" | "MegaSquad" | "Bragging Rocks" | "BB's Grove";
   knobs?: Knobs;
   /** A knob that only means something beside another knob's value, as
@@ -118,7 +118,7 @@ export const FRAME_INDEX = [
   { n: "DescriptionList", t: "molecules" },
   { n: "EmptyState", t: "molecules", knobs: { variant: ["simple", "dashed"] } },
   { n: "ErrorState", t: "molecules", size: "xl", plays: true },
-  { n: "FileUpload", t: "molecules", size: "md", plays: true, from: "Bragging Rocks" },
+  { n: "FileUpload", t: "molecules", size: "md", plays: true, from: "BB's Grove" },
   { n: "LiquidTabs", t: "molecules", plays: true, from: "Game Verdict" },
   { n: "MatchupCard", t: "molecules", plays: true, from: "MegaSquad" },
   { n: "MediaPreview", t: "molecules" },
