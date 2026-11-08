@@ -89,7 +89,7 @@ describe("the Contact sheet's frames", () => {
     }
   });
 
-  /* Spec 7.3's provenance: Blake confirmed it on 7 Nov 2026, FileUpload's pending him. */
+  /* Spec 7.3's provenance: Blake confirmed it on 7 Nov 2026, and FileUpload's, BB's Grove, on 8 Nov. */
   it("say where a component came from only where the record does", () => {
     const from = Object.fromEntries(
       FRAME_INDEX.filter((f) => "from" in f).map((f) => [f.n, (f as { from: string }).from]),
@@ -101,9 +101,9 @@ describe("the Contact sheet's frames", () => {
       Eyebrow: "this site",
       MatchupCard: "MegaSquad",
       Slider: "MegaSquad",
-      FileUpload: "Bragging Rocks",
       RadioTileGroup: "Bragging Rocks",
       Timeline: "Bragging Rocks",
+      FileUpload: "BB's Grove",
       ModerationQueue: "BB's Grove",
     });
   });
