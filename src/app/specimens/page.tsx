@@ -15,6 +15,9 @@ import {
 } from "@/lib/roster";
 import { JOB_TOKENS_COPIED, buildJobs } from "@/content/jobs";
 import { InkSwap } from "./ink-swap";
+import { ContactSheet, type SheetFrame } from "./contact/contact-sheet";
+import { TIERS as TIER_ORDER, frameMeta, type Tier } from "./contact/frames";
+import { greaseFor } from "./contact/grease";
 import { JOB_FONTS } from "./job-fonts";
 
 export const metadata = {
@@ -27,8 +30,6 @@ function hostOf(slug: string, fallback: string) {
   const live = getProject(slug)?.links.find((link) => link.kind === "live");
   return live ? new URL(live.href).host : fallback;
 }
-
-const TIER_ORDER = ["atoms", "molecules", "organisms"] as const;
 
 export default function SpecimensPage() {
   const version = getRosterVersion();
@@ -50,12 +51,28 @@ export default function SpecimensPage() {
     },
   });
 
-  const byTier = TIER_ORDER.map((tier) => ({
-    tier,
-    items: components
+  /* Tier, then alphabetical. A frame's number is its place in this order, so it
+     moves when Roster adds a component. */
+  const frames: SheetFrame[] = TIER_ORDER.flatMap((tier) =>
+    components
       .filter((component) => component.tier === tier)
       .sort((a, b) => a.name.localeCompare(b.name)),
-  }));
+  ).map(({ name, tier }, i) => {
+    const meta = frameMeta(name);
+    return {
+      n: name,
+      t: tier as Tier,
+      num: String(i + 1).padStart(2, "0"),
+      plays: meta?.plays ?? false,
+      from: meta?.from ?? null,
+      knobs: meta?.knobs ?? null,
+      needs: meta?.needs ?? null,
+      grease: greaseFor(name),
+      story: storyHref(name, tier),
+      known: meta?.t === tier,
+      size: meta?.size ?? null,
+    };
+  });
 
   return (
     <main className="flex min-h-full flex-col">
@@ -87,52 +104,19 @@ export default function SpecimensPage() {
         </p>
       </section>
 
-      {/* ---- Catalog ---- */}
+      {/* ---- Every part ---- */}
       <section className="mx-auto w-full max-w-[1180px] px-6 pt-12 sm:px-8">
         <RLabeledDivider
-          label="Catalog"
+          label="Every part"
           trailing={`${components.length} components · v${version}`}
           className="pb-1 [&>[role=presentation]]:bg-rule"
         />
         <p className="m-0 max-w-[64ch] pb-5 pt-3 text-[0.96875rem] leading-[1.62] text-ink-soft">
-          Parsed from the package&rsquo;s own type definitions, so nothing here is
-          transcribed. Names link to their Storybook page where one is deployed.
+          The list is parsed from the package&rsquo;s own type definitions, so a new component
+          arrives with the bump that brings it. Each frame is the live component, except where a
+          frame says why it can&rsquo;t be. Open one under the loupe to play with it.
         </p>
-
-        <div className="grid gap-7 sm:grid-cols-3">
-          {byTier.map(({ tier, items }) => (
-            <div key={tier} className="flex flex-col gap-[10px]">
-              <RLabeledDivider
-                label={tier}
-                trailing={String(items.length)}
-                className="[&>[role=presentation]]:bg-rule"
-              />
-              <ul className="m-0 flex list-none flex-col gap-[3px] p-0">
-                {items.map(({ name }) => {
-                  const href = storyHref(name, tier);
-                  return (
-                    <li key={name}>
-                      {href ? (
-                        <a
-                          href={href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="font-[family-name:var(--font-util)] text-[11px] text-ink no-underline transition-colors hover:text-spot"
-                        >
-                          {name}
-                        </a>
-                      ) : (
-                        <span className="font-[family-name:var(--font-util)] text-[11px] text-ink">
-                          {name}
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <ContactSheet frames={frames} />
       </section>
 
       {/* ---- Tokens ---- */}

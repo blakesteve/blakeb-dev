@@ -228,8 +228,8 @@ overrides need no `!important` — the `utilities` layer already outranks
 - `/` — folio, hero, live system strip, project cards
 - `/work` — the contents page: one dense row per project, no preamble
 - `/work/[slug]` — case studies, statically generated per project
-- `/specimens` — Ink swap, then the library itself: the full catalog linked into
-  Storybook, and token ramps shown shipped-versus-remapped. Its label and path are
+- `/specimens` — Ink swap, then every part of the library live on a Contact
+  sheet, and token ramps shown shipped-versus-remapped. Its label and path are
   one constant in `lib/nav.ts`, and `/system` answers 308 to it
 - `/about` — the arc, the two-ink portrait, and the colophon
 - `/writing` and `/writing/[slug]` — posts, as content modules
@@ -446,6 +446,80 @@ downloads one. Bragging Rocks' two are local Latin slices (`app/specimens/fonts/
 under the OFL), because `next/font/google` brings every unicode slice's
 `@font-face` for a Japanese face, whatever `subsets` says: 368 KB of CSS.
 
+## Contact sheet
+
+Below Ink swap, every component Roster ships, one frame each, on a ruled
+sheet: tier, then alphabetical. A frame's number is its place in that order, so
+it moves when Roster adds a component, and nothing should cite one. Press a
+caption and the frame opens under the loupe, larger, with knobs where it has
+them. Each frame is the live component, except DataTable, which needs a peer
+this site doesn't install, and ThemeToggle, which would fight the one in the bar.
+
+The list is the installed package's, through `getRosterComponents()`, and the
+frames are written by hand in `app/specimens/contact/`:
+
+- `frames.ts` is the index: name, tier, whether it takes input, where it came
+  from, its knobs. No React, so the server prints every caption. A knob that
+  only means something beside another's value, like Tabs' `liquidStyle` beside
+  `variant="liquid"`, says so in `needs`, and `turnKnob` keeps the pair legal,
+  so the props on the loupe's code line are always a combination the
+  component's types accept.
+- `atoms.tsx`, `molecules.tsx` and `organisms.tsx` hold the specimens, one chunk
+  per tier, each typed `satisfies Record<FrameName<tier>, FrameSpec>`, so a name
+  in the index without a specimen fails `tsc`.
+- `frames.test.ts` holds the index to the package. A Roster release that adds,
+  drops or moves a component fails it until the frame exists. If one ships
+  anyway, the page prints a caption and a Storybook link, never a gap.
+- `grease.ts` is the grease pencil's record: the newest release that added a
+  component, and what's deprecated. Roster publishes no per-component "since",
+  and a comment in its source is no record. `grease.test.ts` fails when the
+  library's count moves, so the circles move with the next addition.
+
+The tall frames keep their room from the server render on (`size` in the index,
+measured at rest), so a tier landing doesn't push the rows below it. The tiers
+load when a frame of theirs comes within 600px of the screen, or at
+once when a filter asks for one, and the loupe on the first tier or the first
+press. The server render has the captions and empty live areas. On 8 Nov 2026
+that put the sheet at 26,568 bytes on the route's first load: about 8.9 kB for
+the sheet itself, and the rest because Turbopack keeps one copy of a shared module
+for the whole build, with every export any chunk uses. Font Awesome's icons,
+floating-ui and Headless UI were already on this route, and the tiers' extra
+exports from them ride along. The spec put all of Roster on one route at about
+301 kB. For the same reason as Ink swap's chevron, it puts 3,198 bytes on every
+other route but `/_global-error`, 2,883 of them Font Awesome icons the frames'
+components draw.
+
+`Toaster` mounts on the first toast, once, for the grid and the loupe both.
+ModerationQueue's one decision empties it, so a reset puts the proof back and
+focuses it. Tabs shows both variants, since the liquid one is what LiquidTabs'
+cross points to.
+
+Motion on the sheet is paused until a frame has the pointer or focus (WCAG
+2.2.2), and the loupe runs freely. Countdown ticks on a timer CSS can't pause,
+so on the sheet it rests on its finished state and starts on the same cue,
+read from the pointer and focus events themselves: Firefox hasn't updated
+`:hover` when `pointerenter` fires. A tap holds it running until a press lands
+elsewhere, as touch `:hover` does. The grease pencil's note is in the system's
+handwriting where there is one (Bradley Hand, Segoe Print) and Plex Mono where
+there isn't, never a generic `cursive`, which Chrome resolves to Comic Sans on
+Windows and Linux. At phone width a frame is a thumbnail, zoomed
+to .72 and inert, and the whole frame opens the loupe, which is a `Sheet` there
+and a `Dialog` elsewhere.
+
+**Contrast.** The audit is Ink swap's, above, over every frame at 375 and 1280 in
+both states, and the loupe with a Chip selected. Fixed through Roster's tokens,
+scoped to the sheet and the loupe in `contact-sheet.css`: Tabs' and LiquidTabs'
+inactive text, Footer's text, `--roster-success-500-ink` on the press sheet,
+`--roster-primary-500-ink` and the liquid strip's fill on the blueline, and the paper skeleton behind
+upcoming Timeline and StepProgress digits that Ink swap's own sheet uses. Navbar
+takes `themeMode="auto"`. Four are Roster's fixed grays, left for Roster rather
+than painted over: AvatarStrip's overflow count (4.46, 4.29), MatchupCard's
+separator on the blueline (3.36) and losing score on the press sheet (3.38, at
+`opacity-50`), and Stat's source line (3.10, 3.19). The selected liquid
+tab (LiquidTabs' "Verdict", Tabs' "Plates"), and Countdown's digits while it
+runs, read 1:1 because the color behind them is a
+sibling's, which the audit can't see.
+
 ## The CRT easter egg
 
 The Game Verdict case study describes an easter egg you get to keep, so the page
@@ -517,6 +591,8 @@ buys nothing.
 | `components/top-bar.test.ts` | that a hidden bar control is `invisible` rather than transparent, so it leaves the tab order, and that no page draws a breadcrumb of its own |
 | `lib/storybook.ts` | that the Storybook URL falls back to a real deployment rather than an empty string, which is only observable in a build without `.env.local` |
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
+| `app/specimens/contact/frames.test.ts` | that the Contact sheet's frames are exactly the installed package's components, each in its tier, with a specimen in its tier's chunk and a bench behind every knob, that a knob's `needs` names a knob and value the frame has and `turnKnob` keeps every pair legal, chains included, that the comparison catches an addition, a removal and a move, and the provenance as Blake confirmed it, FileUpload's pending him |
+| `app/specimens/contact/grease.test.ts` | that the grease pencil names only real components, that its record matches the installed library's count, and the marks as literals: circles on 5.18.0's two, a cross on LiquidTabs, and that the note's font stack ends on this site's face, never Comic Sans or a generic `cursive` |
 | `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", and that the extractor feeding both checks is still reading all of it |
 
 Six things are worth knowing about how these are written.
