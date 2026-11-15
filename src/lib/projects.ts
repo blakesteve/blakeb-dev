@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { getRosterComponentCount } from "./roster";
 import { STORYBOOK_URL } from "./storybook";
 import type { GameVerdictStats } from "./game-verdict-stats";
@@ -7,6 +8,14 @@ import type { GameVerdictStats } from "./game-verdict-stats";
  * across the top of its card on the home page, and takes over the whole field
  * on its case-study page. Two values because a color that reads well on paper
  * usually needs to lift on the blueline.
+ *
+ * The `*Ink` pair is the same world for text, at its own OKLCH hue, darker on
+ * the press sheet and lighter on the blueline until it reads at 4.5:1 or more
+ * on the paper, the panel, RCta's 10% wash and the case-study header at 15%
+ * world (the most any header text sits on, measured 15 Nov 2026 at 320 to
+ * 1280: 13.7%). Large text uses it too, so one token serves both. Rules, dots,
+ * the card's top edge and the header's gradient keep the world itself. Where
+ * the world already read, the ink is the same value.
  */
 /**
  * Where a project can be reached. Several have more than one front door:
@@ -26,12 +35,15 @@ export type Project = {
   slug: string;
   name: string;
   tagline: string;
+  /** The résumé's line, where the tagline only makes sense on this site. The
+      résumé is printed and read away from here, so "this site" means nothing. */
+  resumeLine?: string;
   blurb: string;
   status: string;
   /** Short label for the primary link, used on cards where space is tight. */
   host: string;
   links: ProjectLink[];
-  world: { press: string; blueline: string };
+  world: { press: string; blueline: string; pressInk: string; bluelineInk: string };
   props: {
     label: string;
     value: string;
@@ -57,7 +69,7 @@ export const projects: Project[] = [
     links: [
       { label: "gameverdict.app", href: "https://gameverdict.app", kind: "live" },
     ],
-    world: { press: "#4b45c7", blueline: "#6d6bf2" },
+    world: { press: "#4b45c7", blueline: "#6d6bf2", pressInk: "#4b45c7", bluelineInk: "#7879ff" },
     props: [
       { label: "Stack", value: "Next 16 · Supabase · Upstash" },
       /* Commit counts live in the case study stat row, which reads them from
@@ -68,7 +80,8 @@ export const projects: Project[] = [
         /* Re-check this whenever the case study twin is re-checked. It is the
            fallback for the same live figure, and unlike that one it carries no
            date, so a stale value here asserts itself as present tense. */
-        value: "2,058 games tracked",
+        /* api.gameverdict.app/api/stats, 15 Nov 2026. */
+        value: "2,153 games tracked",
         accent: true,
         live: (stats) => `${stats.games?.toLocaleString("en-US")} games tracked`,
       },
@@ -79,6 +92,7 @@ export const projects: Project[] = [
     slug: "roster",
     name: "Roster",
     tagline: "The library this site is made of.",
+    resumeLine: "An accessible React component library, published to npm.",
     blurb:
       "A production-grade atomic component library: accessible, theme-aware, documented in Storybook, and imported by every project beside it.",
     status: "npm",
@@ -97,7 +111,7 @@ export const projects: Project[] = [
       },
       { label: "GitHub", href: "https://github.com/blakesteve/roster", kind: "source" },
     ],
-    world: { press: "#0e9b74", blueline: "#12b886" },
+    world: { press: "#0e9b74", blueline: "#12b886", pressInk: "#006b4f", bluelineInk: "#12b886" },
     props: [
       { label: "Stack", value: "React 19 · TS · Tailwind v4" },
       {
@@ -127,7 +141,7 @@ export const projects: Project[] = [
       },
       { label: "GitHub", href: "https://github.com/blakesteve/retrospect", kind: "source" },
     ],
-    world: { press: "#b98a12", blueline: "#d9a82c" },
+    world: { press: "#b98a12", blueline: "#d9a82c", pressInk: "#7a5900", bluelineInk: "#d9a82c" },
     props: [
       { label: "Stack", value: "Next 16 · astronomy-engine · R2" },
       { label: "Scale", value: "12 questions · 2,000 fake skies each", accent: true },
@@ -148,7 +162,7 @@ export const projects: Project[] = [
     links: [
       { label: "megasquad.org", href: "https://megasquad.org", kind: "live" },
     ],
-    world: { press: "#c62828", blueline: "#e23b3b" },
+    world: { press: "#c62828", blueline: "#e23b3b", pressInk: "#b50f18", bluelineInk: "#f04a47" },
     props: [
       { label: "Stack", value: "Vite · React 19 · Zustand" },
       /* This card once said ten while the case study said thirteen: it
@@ -166,4 +180,14 @@ export const projects: Project[] = [
 
 export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug);
+}
+
+/** The four values a `.world` element declares; globals.css picks by state. */
+export function worldStyle(world: Project["world"]): CSSProperties {
+  return {
+    "--world-press": world.press,
+    "--world-blueline": world.blueline,
+    "--world-ink-press": world.pressInk,
+    "--world-ink-blueline": world.bluelineInk,
+  } as CSSProperties;
 }

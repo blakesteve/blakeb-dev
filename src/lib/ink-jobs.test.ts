@@ -38,7 +38,7 @@ describe("the jobs", () => {
   it("read Roster's numbers live where they're about Roster", () => {
     expect(job("shipped").pill).toBe("9.9.9");
     expect(job("shipped").stats[0]).toEqual({ value: "70", label: "Components" });
-    expect(job("site").stats.map(({ value }) => value)).toEqual(["70", "3,000", "8"]);
+    expect(job("site").stats.map(({ value }) => value)).toEqual(["70", "3,000", "9"]);
     expect(job("site").segments.map(({ value }) => value)).toEqual([30, 30, 10]);
   });
 
@@ -138,6 +138,18 @@ describe("jobInk", () => {
     for (const { id } of jobs.slice(1)) {
       expect(jobInk(job(id), shipped, false).scoped, id).toBe(true);
     }
+  });
+
+  /* The site sets primary-500's ink for its own violet. A job that doesn't set
+     one shows Roster's, so Game Verdict's blueline keeps its own white. */
+  it("unsets the inks this site sets, unless the job sets its own", () => {
+    for (const pageDark of [false, true]) {
+      expect(jobInk(job("gv"), shipped, pageDark).vars["--roster-primary-500-ink"], `gv ${pageDark}`).toBe("initial");
+    }
+    expect(jobInk(job("shipped"), shipped, false).vars["--roster-primary-500-ink"]).toBe("initial");
+    /* A light job turned over for the blueline picks each fill's ink itself. */
+    expect(jobInk(job("shipped"), shipped, true).vars["--roster-primary-500-ink"]).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(jobInk(job("retrospect"), shipped, false).vars["--roster-primary-500-ink"]).toBe("#10142e");
   });
 
   /* A scope with no `.dark` of its own resets to light inside a dark page. */

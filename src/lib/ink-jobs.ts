@@ -7,6 +7,8 @@
  * every family the app doesn't override and the reprint wouldn't be that app's.
  */
 
+import { SITE_ROSTER_INKS } from "./site-inks";
+
 export type Job = {
   id: string;
   name: string;
@@ -157,16 +159,21 @@ export function jobInk(job: Job, shipped: Record<string, string>, pageDark: bool
         "--job-print-wash-hover": tokens["--roster-gray-200"],
       }
     : {};
+  const vars: Record<string, string> = {
+    ...(pageDark && job.scheme === "light" ? turnOver(tokens, job) : tokens),
+    ...printed,
+    "--roster-card-bg": job.card,
+    "--roster-font-ui": job.ui,
+    "--roster-font-mono": job.mono,
+    "--control-face": job.ui,
+    ...surfaces,
+  };
+  /* The job shows its app as shipped, so an ink this site sets for its own
+     fills, and the app doesn't, falls back to Roster's: on the blueline the
+     site's paper ink had replaced Game Verdict's white on its violet. */
+  for (const ink of SITE_ROSTER_INKS) if (!(ink in vars)) vars[ink] = "initial";
   return {
-    vars: {
-      ...(pageDark && job.scheme === "light" ? turnOver(tokens, job) : tokens),
-      ...printed,
-      "--roster-card-bg": job.card,
-      "--roster-font-ui": job.ui,
-      "--roster-font-mono": job.mono,
-      "--control-face": job.ui,
-      ...surfaces,
-    },
+    vars,
     dark: job.scheme === "dark" || pageDark,
     scoped: true,
   };

@@ -72,7 +72,7 @@ export function NavLinks(place: NavPlace) {
               aria-current={ariaCurrentFor(section, place)}
               className={
                 "nav-link relative -my-[5px] block py-[5px] font-[family-name:var(--font-util)] " +
-                "text-[11px] font-normal leading-[15px] tracking-[0.06em] text-ink transition-colors hover:text-spot " +
+                "text-[11px] font-normal leading-[15px] tracking-[0.06em] text-ink transition-colors hover:text-spot-ink " +
                 "max-[341px]:text-[10px]"
               }
             >

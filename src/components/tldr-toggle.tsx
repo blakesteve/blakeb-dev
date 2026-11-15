@@ -94,10 +94,10 @@ export function TldrToggle({ anchor = false }: { anchor?: boolean } = {}) {
           ? "Hide the plain-language summaries"
           : "Show a plain-language summary of each section"
       }
-      /* Active, it takes the project's own accent for text, border and a 10%
-         wash, the way every other figure on a case study page already does.
-         `--world` is unset on /writing, so the fallback holds it to the site
-         spot there.
+      /* Active, it takes the project's own accent for its border and a 10%
+         wash, and that accent's text ink for its words, the way every other
+         figure on a case study page does. `--world` is unset on /writing, so
+         the fallbacks hold it to the site spot and its ink there.
 
          The wash is not decoration. Text and border already carry the exact
          accent the deks and the stat row use, but at 10px against a dark ground
@@ -110,7 +110,7 @@ export function TldrToggle({ anchor = false }: { anchor?: boolean } = {}) {
         /* The mono face comes from `RButton` now; only the folio sizing is local. */
         "!text-[10px] !uppercase !tracking-[0.14em] " +
         (on
-          ? "!border-[var(--world,var(--spot))] !text-[var(--world,var(--spot))] " +
+          ? "!border-[var(--world,var(--spot))] !text-[var(--world-ink,var(--spot-ink))] " +
             "!bg-[var(--world,var(--spot))]/10"
           : "!text-ink-faint")
       }

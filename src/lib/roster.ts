@@ -14,11 +14,16 @@ import { join } from "node:path";
  */
 
 /**
- * How many apps consume Roster, which nothing can read from here: a scan of every
- * `package.json` in the workspace found eight on 4 Nov 2026, counting mega-squad
- * and its marketing site apart. Typed once, so the pages can't disagree.
+ * How many apps consume Roster, which nothing can read from here. A scan of every
+ * `package.json` in the workspace on 15 Nov 2026 (node_modules and the retired
+ * ball-pickems-api left out, Roster itself and the stray unpacked tarball in
+ * `package/` not counted), each confirmed at its origin default branch, found
+ * nine: bb-memorial-web, blakeb-dev, bragging-rocks, game-verdict, inner-squad,
+ * mega-squad, megasquad-site, retrospect and tehon-site, which joined on 14 Nov.
+ * mega-squad and its marketing site count apart. Typed once, so the pages can't
+ * disagree.
  */
-export const ROSTER_APPS = { count: 8, words: "eight" } as const;
+export const ROSTER_APPS = { count: 9, words: "nine" } as const;
 
 const ROSTER_DIR = join(process.cwd(), "node_modules", "@blakesteve", "roster");
 

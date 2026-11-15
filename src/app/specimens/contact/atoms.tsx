@@ -78,7 +78,11 @@ function ChipFrame() {
 
 function ComboboxFrame() {
   const [app, setApp] = useState<string | number | null>("Game Verdict");
-  return <Combobox options={APPS} value={app} onChange={setApp} placeholder="Search apps" size="sm" className="w-full" />;
+  /* Labeled like the Input beside it: Roster's spread props land on its
+     wrapper, not the input, so a visible label is the only name it can have. */
+  return (
+    <Combobox label="App" options={APPS} value={app} onChange={setApp} placeholder="Search apps" size="sm" className="w-full" />
+  );
 }
 
 function MultiSelectFrame() {
@@ -205,7 +209,7 @@ export const ATOMS = {
     C: () => (
       <span className="cs-body">
         Compiles to{" "}
-        <InlineCode colorScheme="current" className="text-spot">
+        <InlineCode colorScheme="current" className="text-spot-ink">
           var(--roster-*)
         </InlineCode>
       </span>

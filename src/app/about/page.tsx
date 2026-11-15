@@ -324,13 +324,13 @@ export default function AboutPage() {
         pageLinks={
           <>
             <Link href="/" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">← Back to work</REyebrow>
             </Link>
             <Link href={SPECIMENS_PAGE.href} className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">{SPECIMENS_PAGE.label} →</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">{SPECIMENS_PAGE.label} →</REyebrow>
             </Link>
             <Link href="/resume" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">Résumé →</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">Résumé →</REyebrow>
             </Link>
           </>
         }

@@ -217,13 +217,22 @@ describe("yearsShippingWords", () => {
 describe("summary", () => {
   it("spells the current count into the résumé paragraph", () => {
     atMonth("2026-08");
-    expect(summary()).toContain("sixteen years shipping software");
+    expect(summary()).toContain(". Sixteen years shipping software, from IBM");
   });
 
-  /* It said four for months after the site counted eight. The count is
-     ROSTER_APPS, the one the pages read, so this fails the day it changes and
-     the sentence gets read again. */
+  /* Blake's approved words, 15 Nov 2026: what he does for a team first, then
+     the proof. The old opening was what he is, not what he does. */
+  it("leads with what he does for a team", () => {
+    expect(summary().startsWith("Leads front-end work for product teams from design to production: ")).toBe(true);
+    expect(summary()).not.toContain("Front end leader");
+    expect(summary()).not.toContain("argument with design");
+  });
+
+  /* It said four for months after the site counted eight, and eight after
+     tehon-site made nine. The count is ROSTER_APPS, the one the pages read, so
+     this fails the day it changes and the sentence gets read again. */
   it("takes the apps on Roster from the site's one count", () => {
-    expect(summary()).toContain("a component library eight apps run on");
+    expect(summary()).toContain("a component library nine apps run on");
+    expect(summary()).not.toContain("eight apps");
   });
 });

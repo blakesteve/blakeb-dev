@@ -109,20 +109,28 @@ export function RLink(props: ComponentProps<typeof RosterLink>) {
  * project's accent.
  */
 export function RCta({
-  tint = "var(--spot)",
+  tint,
+  ink: inkProp,
   className = "",
   ...props
-}: ComponentProps<typeof RosterLink> & { tint?: string }) {
+}: ComponentProps<typeof RosterLink> & { tint?: string; ink?: string }) {
+  /* The border and wash take the tint; the words take its text ink. By default
+     those are the spot and `--spot-ink`: the spot on its own 10% wash is
+     3.54:1 on the press sheet, the ink 4.78. A world passes its own pair. */
+  const cta = tint ?? "var(--spot)";
+  const ink = inkProp ?? (tint ? tint : "var(--spot-ink)");
   return (
     <RosterLink
       data-roster="Link"
       underline="none"
-      style={{ "--cta": tint } as React.CSSProperties}
+      style={{ "--cta": cta, "--cta-ink": ink } as React.CSSProperties}
       className={
         "inline-block rounded-[3px] border border-[var(--cta)] bg-[var(--cta)]/10 " +
         "px-4 py-[10px] text-center font-[family-name:var(--font-util)] text-[10px] " +
-        "uppercase tracking-[0.14em] !text-[var(--cta)] no-underline " +
-        "transition-opacity hover:opacity-80 " +
+        "uppercase tracking-[0.14em] !text-[var(--cta-ink)] no-underline " +
+        /* Hover underlines the words rather than dimming them: at opacity
+           .8 every tint fell under 4.5:1, the spot's ink to 3.88. */
+        "underline-offset-[3px] hover:!underline " +
         className
       }
       {...props}

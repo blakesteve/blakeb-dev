@@ -49,7 +49,7 @@ export function SiteFooter({ pageLinks }: { pageLinks?: ReactNode }) {
                 as="a"
                 href={href}
                 {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-                className="no-underline transition-colors hover:!text-spot"
+                className="no-underline transition-colors hover:!text-spot-ink"
               >
                 {label}
               </REyebrow>

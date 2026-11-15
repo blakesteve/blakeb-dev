@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { SITE_ROSTER_INKS } from "@/lib/site-inks";
 import { RCard, REyebrow } from "@/lib/roster-ui";
 import { getRosterShippedFontUi, getRosterShippedTokens } from "@/lib/roster";
 
@@ -44,6 +45,11 @@ export function BothPalettes({
     "--roster-font-ui": shippedFont,
     "--control-face": shippedFont,
     "--roster-font-mono": "initial",
+    /* Roster's text-on-fill inks aren't in tokens.css: they're fallbacks in
+       its compiled CSS. So each one this site sets globally is unset here the
+       same way, or the shipped column would wear this page's ink on Roster's
+       blue (paper on #0f6498 is 3.07:1, Roster's own white 6.36). */
+    ...Object.fromEntries(SITE_ROSTER_INKS.map((ink) => [ink, "initial"])),
   } as CSSProperties;
 
   return (

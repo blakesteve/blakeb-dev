@@ -66,13 +66,13 @@ export default async function PostPage(props: PageProps<"/writing/[slug]">) {
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-5">
           <Link href="/writing" className="no-underline">
-            <REyebrow className="transition-colors hover:!text-spot">
+            <REyebrow className="transition-colors hover:!text-spot-ink">
               ← All writing
             </REyebrow>
           </Link>
           {next && (
             <Link href={`/writing/${next.slug}`} className="max-w-[52%] no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">
+              <REyebrow className="transition-colors hover:!text-spot-ink">
                 Next: {next.title} →
               </REyebrow>
             </Link>
