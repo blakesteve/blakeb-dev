@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { projects } from "@/lib/projects";
+import { projects, worldStyle } from "@/lib/projects";
 import { SITE_ROSTER_INKS } from "@/lib/site-inks";
 
 /**
@@ -208,6 +208,30 @@ describe("each world's text ink", () => {
       });
     }
   }
+
+  /* The inks are pinned above, but a value only reaches the page through
+     worldStyle() and the .world rules. A worldStyle() that put the world under
+     the ink's name passed every other test here. */
+  it("reaches the page: worldStyle declares each value under its name, and .world picks the ink by state", () => {
+    for (const project of projects) {
+      expect(worldStyle(project.world), project.slug).toEqual({
+        "--world-press": project.world.press,
+        "--world-blueline": project.world.blueline,
+        "--world-ink-press": project.world.pressInk,
+        "--world-ink-blueline": project.world.bluelineInk,
+      });
+    }
+    const rule = (selector: string) => {
+      const start = css.indexOf(`\n${selector} {`);
+      return start < 0 ? "" : css.slice(start, css.indexOf("}", start));
+    };
+    expect(rule(".world")).toContain("--world-ink: var(--world-ink-press);");
+    expect(rule(".dark .world")).toContain("--world-ink: var(--world-ink-blueline);");
+    for (const page of [["page.tsx"], ["work", "page.tsx"], ["work", "[slug]", "page.tsx"]]) {
+      const source = readFileSync(join(process.cwd(), "src", "app", ...page), "utf8");
+      expect(source, page.join("/")).toContain("style={worldStyle(project.world)}");
+    }
+  });
 
   it("is the 15 Nov set", () => {
     expect(Object.fromEntries(projects.map((p) => [p.slug, p.world]))).toEqual({
