@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  ROSTER_APPS,
   getRosterComponentCount,
   getRosterComponents,
   getRosterRamp,
@@ -244,5 +245,20 @@ describe("getRosterTokens", () => {
     for (const token of getRosterTokens(strip)) {
       expect(token.value).not.toBe("#000000");
     }
+  });
+});
+
+/* Nothing can read how many apps use Roster from here: it's a scan of the
+   workspace, written down with its date in roster.ts. Pinned, so a change is a
+   decision someone makes with a new scan, and so the number and its word can't
+   drift apart on the pages that print one or the other. */
+describe("ROSTER_APPS", () => {
+  it("is the 15 Nov 2026 scan's nine", () => {
+    expect(ROSTER_APPS).toEqual({ count: 9, words: "nine" });
+  });
+
+  it("spells its own count", () => {
+    const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+    expect(WORDS[ROSTER_APPS.count]).toBe(ROSTER_APPS.words);
   });
 });

@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
@@ -14,7 +13,7 @@ import { CrtEasterEgg } from "@/components/crt-easter-egg";
 import { TldrToggle } from "@/components/tldr-toggle";
 import { caseStudies } from "@/content/case-studies";
 import { SPECIMENS_PAGE } from "@/lib/nav";
-import { getProject, projects } from "@/lib/projects";
+import { getProject, projects, worldStyle } from "@/lib/projects";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
 import { getCommitCount } from "@/lib/github";
 import type { CaseStudyStat } from "@/content/case-studies";
@@ -101,12 +100,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
   return (
     <main
       className="world flex min-h-full flex-col"
-      style={
-        {
-          "--world-press": project.world.press,
-          "--world-blueline": project.world.blueline,
-        } as CSSProperties
-      }
+      style={worldStyle(project.world)}
     >
       <TopBar
         tldr
@@ -143,7 +137,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           {/* `current` lets each project's accent reach the figures without
               Roster knowing anything about this site's palette. The display
               face is the one thing Stat does not offer, so it rides along. */}
-          <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4 text-[var(--world)]">
+          <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4 text-[var(--world-ink)]">
             {stats.map((stat) => (
               <RStat
                 key={stat.label}
@@ -157,7 +151,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           </dl>
 
           {slug === "roster" && (
-            <RCta href={SPECIMENS_PAGE.href} tint="var(--world)" className="mt-7">
+            <RCta href={SPECIMENS_PAGE.href} tint="var(--world)" ink="var(--world-ink)" className="mt-7">
               Don&rsquo;t read about it. Go play with it: {SPECIMENS_PAGE.label} →
             </RCta>
           )}
@@ -182,7 +176,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               href={link.href}
               external
               showExternalIcon={false}
-              tint="var(--world)"
+              tint="var(--world)" ink="var(--world-ink)"
               /* The primary keeps the wash; the rest are outlines, so the
                  sidebar has one obvious destination rather than three. */
               className={i === 0 ? "" : "!bg-transparent"}
@@ -197,10 +191,10 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         pageLinks={
           <>
             <Link href="/" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">← Back to work</REyebrow>
             </Link>
             <Link href={`/work/${next.slug}`} className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">
+              <REyebrow className="transition-colors hover:!text-spot-ink">
                 Next: {next.name} →
               </REyebrow>
             </Link>

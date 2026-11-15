@@ -39,7 +39,17 @@
   --rule: #c6c8c0;
   --hair: #d5d7cf;
   --spot: #d6006d;
+  /* The spot, for text. #d6006d is 4.18:1 on the paper, under AA for small
+     text, and 3.54:1 on its own 10% wash. This is the same OKLCH hue (1.6
+     degrees against 1.5) taken darker until it reads: 5.65 on the paper, 6.24
+     on the panel, 4.78 on the wash. Rules, tabs, swatches and marks keep the
+     spot itself: they aren't text, and they're what makes the sheet look like
+     this site. */
+  --spot-ink: #b10159;
   --second: #0090ce;
+  /* The second ink, for text, the same way: #0090ce is 2.90:1 on the paper.
+     This is its hue darker: 5.12 on the paper, 4.61 on its own 10% wash. */
+  --second-ink: #016694;
   --stamp: rgb(214 0 109 / 0.1);
 
   /* Process inks for the CMYK footer rule. */
@@ -215,7 +225,12 @@
   --rule: #232936;
   --hair: #1b2029;
   --spot: #38d6e8;
+  /* The blueline's spot already reads as text: 11.13 on the paper, 8.52 on
+     its wash over the panel. */
+  --spot-ink: var(--spot);
   --second: #6d6bf2;
+  /* #6d6bf2 is 3.91:1 on its wash over the panel; lifted, 4.64. */
+  --second-ink: #7879ff;
   --stamp: rgb(56 214 232 / 0.09);
 
   --process-c: #38d6e8;
@@ -232,6 +247,11 @@
   --tint-dark: #0a0c11;
 
   --anchor-primary: #6d6bf2;
+  /* Roster's ink on a primary-500 fill (a dark-mode Button's hover, a solid
+     Chip). This site sets the fill, so it sets the ink: Roster's white on the
+     violet is 4.17:1, the paper 4.69. The contact sheet set this for itself in
+     PR 6; it holds site-wide. */
+  --roster-primary-500-ink: var(--paper);
   --anchor-info: #38d6e8;
   --anchor-amber: #f5d400;
   --anchor-success: #0e8f68;
@@ -368,6 +388,7 @@
   --color-rule: var(--rule);
   --color-hair: var(--hair);
   --color-spot: var(--spot);
+  --color-spot-ink: var(--spot-ink);
   --color-second: var(--second);
 
   --font-display: var(--font-archivo), "Helvetica Neue", Helvetica, Arial,
@@ -561,7 +582,7 @@ body {
   width: 100%;
   height: auto;
   padding: 0;
-  color: var(--spot);
+  color: var(--spot-ink);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -596,9 +617,11 @@ body {
    has to lift on the blueline. The element declares both; the state picks. */
 .world {
   --world: var(--world-press);
+  --world-ink: var(--world-ink-press);
 }
 .dark .world {
   --world: var(--world-blueline);
+  --world-ink: var(--world-ink-blueline);
 }
 
 /* The uppercase utility labels that carry the folio, the prop rows, and the
@@ -709,8 +732,9 @@ body {
   }
 }
 
-/* The dot before a case study's current item. `--world` as text is 2.86:1 for
-   Roster on the press sheet, so the color rides here and the words stay ink. */
+/* The dot before a case study's current item. `--world` as text was 2.86:1
+   for Roster on the press sheet, which is why text takes `--world-ink`; this
+   is a mark, so it keeps the world, and the words beside it stay ink. */
 .bar-slot-head-world [aria-current]::before {
   content: "";
   display: inline-block;
@@ -780,6 +804,8 @@ body {
     --rule: #9a9c94;
     --hair: #d2d4cc;
     --spot: #000000;
+    --spot-ink: #000000;
+    --second-ink: #000000;
 
     --tint-light: #ffffff;
     --tint-dark: #101010;
@@ -801,6 +827,19 @@ body {
     /* The sheet supplies its own margin through @page. */
     max-width: none;
     padding: 0;
+    /* The text faces are the system's in print, from each stack's own
+       fallbacks. Chromium embeds a variable font's instance as Type 3 glyphs,
+       and a PDF's text layer rebuilds those badly: on 15 Nov 2026 it read "I BM",
+       "A I-driven" and the name as "B ALL". These embed as TrueType and read
+       whole, which matters because the PDF goes to parsers, not only people. */
+    --font-read: Charter, "Iowan Old Style", Georgia, serif;
+    --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* The body's family was resolved on <body>, and inheritance carries the
+       family, not the variable, so the sheet sets its own. */
+    font-family: var(--font-read);
+    /* WebKit's print path wrote the fi, ff and ft ligatures as the wrong
+       characters ("soAware", "UniYed"), so in print there are none. */
+    font-variant-ligatures: none;
   }
 
   /* Chrome will happily strand a heading at the foot of a page. */

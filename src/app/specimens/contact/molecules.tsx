@@ -238,7 +238,7 @@ export const MOLECULES = {
       <Breadcrumbs
         items={[{ label: "Blake Ball", href: "/" }, { label: "Work", href: "/work" }, { label: "Roster" }]}
         separator={<span aria-hidden="true">/</span>}
-        currentClassName="text-spot"
+        currentClassName="text-spot-ink"
       />
     ),
   },

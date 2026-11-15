@@ -39,7 +39,9 @@ export function Dek({ children }: { children: ReactNode }) {
         "[&_p]:leading-none [&_p]:pt-[3px]"
       }
     >
-      <span className="block font-[family-name:var(--font-read)] text-[0.9375rem] leading-[1.6] text-ink-soft">
+      {/* Full ink: the soft ink on the accent's wash read 4.15 to 4.49:1 on the
+          press sheet (measured 15 Nov 2026), under AA on every summary. */}
+      <span className="block font-[family-name:var(--font-read)] text-[0.9375rem] leading-[1.6] text-ink">
         {children}
       </span>
     </RAlert>

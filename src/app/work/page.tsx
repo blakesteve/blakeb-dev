@@ -1,11 +1,10 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { AlsoSeparately } from "@/components/also-separately";
 import { REyebrow, RLabeledDivider, RCta } from "@/lib/roster-ui";
 import { SPECIMENS_PAGE } from "@/lib/nav";
-import { projects } from "@/lib/projects";
+import { projects, worldStyle } from "@/lib/projects";
 import { caseStudies } from "@/content/case-studies";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
 
@@ -59,18 +58,13 @@ export default async function WorkIndexPage() {
               <li
                 key={project.slug}
                 className="world border-b border-rule"
-                style={
-                  {
-                    "--world-press": project.world.press,
-                    "--world-blueline": project.world.blueline,
-                  } as CSSProperties
-                }
+                style={worldStyle(project.world)}
               >
                 <div className="grid gap-x-8 gap-y-3 py-6 lg:grid-cols-[auto_1fr_300px]">
                   {/* The folio number, set in the project's own ink. */}
                   <span
                     aria-hidden="true"
-                    className="font-[family-name:var(--font-display)] text-[2.25rem] font-bold leading-none tracking-[-0.04em] text-[var(--world)] lg:text-[2.75rem]"
+                    className="font-[family-name:var(--font-display)] text-[2.25rem] font-bold leading-none tracking-[-0.04em] text-[var(--world-ink)] lg:text-[2.75rem]"
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -80,7 +74,7 @@ export default async function WorkIndexPage() {
                       <h2 className="m-0 font-[family-name:var(--font-display)] text-[1.5rem] font-bold uppercase leading-none tracking-[-0.03em]">
                         <Link
                           href={`/work/${project.slug}`}
-                          className="text-ink no-underline transition-colors hover:text-[var(--world)]"
+                          className="text-ink no-underline transition-colors hover:text-[var(--world-ink)]"
                         >
                           {project.name}
                         </Link>
@@ -101,7 +95,7 @@ export default async function WorkIndexPage() {
                           <dd
                             className={
                               "m-0 font-[family-name:var(--font-util)] text-[10.5px] tabular-nums " +
-                              (row.accent ? "text-[var(--world)]" : "text-ink")
+                              (row.accent ? "text-[var(--world-ink)]" : "text-ink")
                             }
                           >
                             {row.live && liveStats.games !== null
@@ -117,7 +111,7 @@ export default async function WorkIndexPage() {
                       labels vary enough in width that wrapping is decided by
                       the project name, which reads as an accident. */}
                   <div className="flex flex-wrap items-start gap-2 lg:flex-col lg:items-end">
-                    <RCta href={`/work/${project.slug}`} tint="var(--world)">
+                    <RCta href={`/work/${project.slug}`} tint="var(--world)" ink="var(--world-ink)">
                       Case study →
                     </RCta>
                     {project.links.map((link) => (
@@ -126,7 +120,7 @@ export default async function WorkIndexPage() {
                         href={link.href}
                         external
                         showExternalIcon={false}
-                        tint="var(--world)"
+                        tint="var(--world)" ink="var(--world-ink)"
                         className="!bg-transparent"
                       >
                         {link.label} →
@@ -146,10 +140,10 @@ export default async function WorkIndexPage() {
         pageLinks={
           <>
             <Link href="/" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">← Home</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">← Home</REyebrow>
             </Link>
             <Link href={SPECIMENS_PAGE.href} className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">{SPECIMENS_PAGE.label} →</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">{SPECIMENS_PAGE.label} →</REyebrow>
             </Link>
           </>
         }

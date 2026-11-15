@@ -50,8 +50,14 @@ export default function ResumePage() {
             <h1 className="m-0 font-[family-name:var(--font-display)] text-[clamp(2rem,5vw,3rem)] font-bold uppercase leading-[0.92] tracking-[-0.04em]">
               Blake Ball
             </h1>
-            <p className="m-0 pt-2 font-[family-name:var(--font-util)] text-[11px] uppercase tracking-[0.14em] text-ink-faint">
-              Engineer · Austin, Texas
+            {/* What he does, as a client reads it. Its own line, so a parser
+                that lifts the line under the name as a title gets this, not a
+                city. Approved by Blake, 15 Nov 2026. */}
+            <p className="m-0 pt-2 text-[0.9375rem] font-semibold leading-[1.35] text-ink print:text-[10.5pt]">
+              Front-end engineer and design-systems lead: React, Next.js, TypeScript, component libraries
+            </p>
+            <p className="m-0 pt-1 font-[family-name:var(--font-util)] text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+              Austin, Texas
             </p>
           </div>
 
@@ -65,7 +71,7 @@ export default function ResumePage() {
               <li key={label}>
                 <a
                   href={href}
-                  className="font-[family-name:var(--font-util)] text-[10.5px] text-ink no-underline hover:text-spot"
+                  className="font-[family-name:var(--font-util)] text-[10.5px] text-ink no-underline hover:text-spot-ink"
                 >
                   {label}
                 </a>
@@ -186,10 +192,21 @@ export default function ResumePage() {
                   {project.name}
                 </dt>
                 <dd className="m-0 flex-1 text-[0.875rem] leading-[1.5] text-ink-soft print:text-[9.5pt]">
-                  {project.tagline}{" "}
-                  <span className="font-[family-name:var(--font-util)] text-[10px] text-ink-faint">
-                    {project.host}
-                  </span>
+                  {project.resumeLine ?? project.tagline}{" "}
+                  {/* The case study, then the thing itself. Absolute, because a
+                      printed relative link goes nowhere; and in print the text
+                      carries the scheme too, since a parser reading the PDF's
+                      text never sees the link behind it. */}
+                  {[`https://blakeb.dev/work/${project.slug}`, project.links[0].href].map((href) => (
+                    <a
+                      key={href}
+                      href={href}
+                      className="mr-3 inline-block font-[family-name:var(--font-util)] text-[10px] text-ink-faint no-underline hover:text-spot-ink print:text-[8pt]"
+                    >
+                      <span className="hidden print:inline">https://</span>
+                      {href.replace(/^https:\/\//, "")}
+                    </a>
+                  ))}
                 </dd>
               </div>
             ))}
@@ -220,10 +237,10 @@ export default function ResumePage() {
           pageLinks={
             <>
               <Link href="/about" className="no-underline">
-                <REyebrow className="transition-colors hover:!text-spot">← About</REyebrow>
+                <REyebrow className="transition-colors hover:!text-spot-ink">← About</REyebrow>
               </Link>
               <Link href="/" className="no-underline">
-                <REyebrow className="transition-colors hover:!text-spot">The work →</REyebrow>
+                <REyebrow className="transition-colors hover:!text-spot-ink">The work →</REyebrow>
               </Link>
             </>
           }

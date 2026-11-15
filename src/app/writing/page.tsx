@@ -72,10 +72,10 @@ export default function WritingIndexPage() {
         pageLinks={
           <>
             <Link href="/" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">← Home</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">← Home</REyebrow>
             </Link>
             <Link href="/work" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">The work →</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">The work →</REyebrow>
             </Link>
           </>
         }

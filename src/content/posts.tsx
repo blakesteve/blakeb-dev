@@ -78,7 +78,7 @@ function H({
       <div className="dek">
         <div>
           {/* No `--world` on a post, so this falls back to the site spot. */}
-          <div className="pt-3 text-[var(--world,var(--spot))]">
+          <div className="pt-3 text-[var(--world-ink,var(--spot-ink))]">
             <Dek>{dek}</Dek>
           </div>
         </div>

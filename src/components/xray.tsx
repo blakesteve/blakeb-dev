@@ -185,9 +185,9 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
         data-xray-ui
         onClick={() => setMode(!on)}
         aria-pressed={on}
-        className="fixed bottom-4 right-4 z-[60] h-auto gap-[7.4px] rounded-full border-rule bg-panel px-3 py-2 text-[10px] font-normal leading-[15px] uppercase tracking-[0.14em] text-ink-faint shadow-sm hover:border-spot hover:bg-panel hover:text-spot"
+        className="fixed bottom-4 right-4 z-[60] h-auto gap-[7.4px] rounded-full border-rule bg-panel px-3 py-2 text-[10px] font-normal leading-[15px] uppercase tracking-[0.14em] text-ink-faint shadow-sm hover:border-spot hover:bg-panel hover:text-spot-ink"
       >
-        <span aria-hidden="true" className="text-spot">
+        <span aria-hidden="true" className="text-spot-ink">
           ⌥X
         </span>
         X-ray
@@ -231,7 +231,7 @@ export function XRay({ tiers }: { tiers: Record<string, string> }) {
                         href={href}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-[family-name:var(--font-util)] text-[11px] text-ink no-underline hover:text-spot"
+                        className="font-[family-name:var(--font-util)] text-[11px] text-ink no-underline hover:text-spot-ink"
                       >
                         {item.name}
                       </a>

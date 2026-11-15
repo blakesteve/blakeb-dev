@@ -93,7 +93,7 @@ export default function SpecimensPage() {
         <InkSwap jobs={jobs} shipped={shipped} fonts={JOB_FONTS} />
         <p className="m-0 max-w-[64ch] pt-6 text-[0.96875rem] leading-[1.62] text-ink-soft">
           Press{" "}
-          <kbd className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">⌥X</kbd> and
+          <kbd className="font-[family-name:var(--font-util)] text-[0.9em] text-spot-ink">⌥X</kbd> and
           every one of them is outlined and named, which is also how you can check that this page
           is not drawing pictures of buttons.
         </p>
@@ -129,7 +129,7 @@ export default function SpecimensPage() {
         <p className="m-0 max-w-[64ch] pb-5 pt-3 text-[0.96875rem] leading-[1.62] text-ink-soft">
           Each swatch is shown twice. The top half is the hex Roster ships; the
           bottom half is what{" "}
-          <code className="font-[family-name:var(--font-util)] text-[0.9em] text-spot">
+          <code className="font-[family-name:var(--font-util)] text-[0.9em] text-spot-ink">
             var(--roster-*)
           </code>{" "}
           resolves to on this page, after this site remaps it. Where the two
@@ -167,10 +167,10 @@ export default function SpecimensPage() {
         pageLinks={
           <>
             <Link href="/" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">← Back to work</REyebrow>
+              <REyebrow className="transition-colors hover:!text-spot-ink">← Back to work</REyebrow>
             </Link>
             <Link href="/work/roster" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">
+              <REyebrow className="transition-colors hover:!text-spot-ink">
                 How it got built →
               </REyebrow>
             </Link>

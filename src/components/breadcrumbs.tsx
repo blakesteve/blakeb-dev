@@ -33,7 +33,7 @@ const FOLIO_TYPE =
   "[&_*]:font-[family-name:var(--font-util)] [&_*]:text-[0.625rem] " +
   /* The nav's 15px line height, so the two share a baseline in the bar. */
   "[&_*]:leading-[15px] [&_*]:uppercase [&_*]:tracking-[0.16em] [&_*]:font-normal " +
-  "[&_a]:text-ink-faint [&_a]:hover:text-spot [&_a]:no-underline";
+  "[&_a]:text-ink-faint [&_a]:hover:text-spot-ink [&_a]:no-underline";
 
 export function RBreadcrumbs({
   className = "",

@@ -30,6 +30,31 @@ The site has one design in two inks, named after the stages of a print job.
 | Role | light | dark |
 | Paper | `#e7e8e3` | `#0a0c11` |
 | Spot | process magenta | blueprint cyan |
+| Spot, as text | `#b10159` | the spot itself |
+
+**Text inks.** A color that marks the page isn't always one that reads as small
+text on it. The spot, `#d6006d`, is 4.18:1 on the press sheet's paper, and 3.54:1
+on `RCta`'s own 10% wash. So text takes `--spot-ink`, the same OKLCH hue taken
+darker until it reads (5.65 on the paper, 4.78 on the wash), and rules, tabs,
+swatches and the registration mark keep the spot. `--second` has a `--second-ink`
+the same way. Each project's world (`projects.ts`) carries a `pressInk` and a
+`bluelineInk` beside its two colors, at its own hue, for every text use on the home
+page, `/work`, the case studies and the TL;DR toggle and summaries, large text
+included. The TL;DR summaries set their words in full ink, since the soft ink on
+their accent's wash read under 4.5:1. `worldStyle()` declares
+all four, and `.world` picks by state. Each ink reads at 4.5:1 or more on the
+paper, the panel, `RCta`'s wash and the case-study header at 15% world, the most
+any header text sits on (13.7%, measured 15 Nov 2026). Where a color already read,
+its ink is the same value. `app/text-ink.test.ts` measures the spot's, the
+second's and every world's ink from the tokens themselves, and fails if
+`text-spot`, `text-[var(--spot…)]` or `text-[var(--world…)]` turns up on text
+again. `RCta` takes an `ink` beside its `tint`, and underlines on hover rather
+than dimming, which took every tint under 4.5:1. On the blueline the site sets
+`--roster-primary-500-ink` to the paper, since it sets the violet fill under it:
+Roster's white there was 4.17:1. Every view of an app as it ships, the "As Roster
+ships it" column and each Ink swap job, unsets the inks the site sets
+(`lib/site-inks.ts`) unless the app sets its own, so it shows that app's ink, not
+this site's.
 
 Dark mode is class-based (`.dark` on `<html>`) rather than tied to the OS, so
 the toggle can be manual. A blocking script in `app/layout.tsx` sets the class
@@ -251,6 +276,18 @@ The browser's print dialog is the PDF export, so the page and the downloadable
 file can't drift apart. `@media print` forces the press sheet regardless of
 which state the visitor is in — printing a near-black page wastes a cartridge —
 and drops the nav, the footer, and the print button itself.
+
+It's written to be parsed as well as read, since the PDF goes to services that
+fill a profile from its text. The headline under the name says what he does, on
+its own line apart from the city. Selected work links each project's case study and
+its live site by whole address, and in print the visible text carries `https://`
+too, because a parser reads the text layer, not the links behind it. In print the
+sheet sets its text in system faces, Charter and Helvetica Neue from each stack's
+own fallbacks, with ligatures off. Chromium embeds a variable font's instance as
+Type 3 glyphs, which a PDF's text layer rebuilt as "I BM" and the name as "B ALL",
+and WebKit wrote the fi and ff ligatures as the wrong characters ("soAware").
+Checked 15 Nov 2026 by printing through both engines and reading the text layer
+back.
 
 Dropping a PDF at `public/blake-ball-resume.pdf` adds a download link. Its
 presence is checked with `existsSync` at build time rather than assumed, so the
@@ -510,7 +547,7 @@ and a `Dialog` elsewhere.
 both states, and the loupe with a Chip selected. Fixed through Roster's tokens,
 scoped to the sheet and the loupe in `contact-sheet.css`: Tabs' and LiquidTabs'
 inactive text, Footer's text, `--roster-success-500-ink` on the press sheet,
-`--roster-primary-500-ink` and the liquid strip's fill on the blueline, and the paper skeleton behind
+the liquid strip's fill on the blueline, and the paper skeleton behind
 upcoming Timeline and StepProgress digits that Ink swap's own sheet uses. Navbar
 takes `themeMode="auto"`. Four are Roster's fixed grays, left for Roster rather
 than painted over: AvatarStrip's overflow count (4.46, 4.29), MatchupCard's
@@ -582,7 +619,7 @@ buys nothing.
 |---|---|
 | `lib/career.ts` | month arithmetic, the open-ended role, singular versus plural units, a position whose title changed in place, and the rounding boundary in `yearsShipping` |
 | `lib/game-verdict-stats.ts` | every degradation path: non-ok response, non-object body, unparseable body, both counts null, fetch throwing |
-| `lib/roster.ts` | the `.d.ts` parse across both entry points, and the token and ramp readers against the shipped `tokens.css` |
+| `lib/roster.ts` | the `.d.ts` parse across both entry points, the token and ramp readers against the shipped `tokens.css`, and `ROSTER_APPS` pinned to the 15 Nov 2026 scan's nine, spelled as its own count |
 | `content/posts.ts` | date formatting, lookup, sort order, and the data invariants routing depends on: unique slugs, URL-safe slugs, `YYYY-MM-DD` dates, and a dek short enough to survive as a meta description |
 | `components/crt-reveal.ts` | when the CRT toggle is visible and when it pulses, across every combination of stored state, scroll position, and latch — including the two shipped regressions |
 | `content/deks.test.ts` | that every section in both content files has a dek, that each is long enough to say something and short enough to read, that none repeats another, and that none smuggles in the jargon the lens exists to avoid |
@@ -593,6 +630,9 @@ buys nothing.
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
 | `app/specimens/contact/frames.test.ts` | that the Contact sheet's frames are exactly the installed package's components, each in its tier, with a specimen in its tier's chunk and a bench behind every knob, that a knob's `needs` names a knob and value the frame has and `turnKnob` keeps every pair legal, chains included, that the comparison catches an addition, a removal and a move, and the provenance as Blake confirmed it |
 | `app/specimens/contact/grease.test.ts` | that the grease pencil names only real components, that its record matches the installed library's count, and the marks as literals: circles on 5.18.0's two, a cross on LiquidTabs, and that the note's font stack ends on this site's face, never Comic Sans or a generic `cursive` |
+| `app/text-ink.test.ts` | that the spot's, the second's and every world's text ink reads at 4.5:1 or more on each ground it sits on, in both states, with the old values' failures as the twin; that `worldStyle()` and the `.world` rules carry each project's ink to the page in both states; that spot and world text stay on their inks; that a world `RCta` passes its ink; and that the shipped column unsets every ink the site sets |
+| `content/hosting-claims.test.ts` | that nothing about Retrospect says Hobby, free tier, costs nothing or a hosting cost, in the case study or on its card, and that the true words are there |
+| `app/resume/resume.test.ts` | the headline on its own line, every Selected work link a whole `https://` address with the scheme printed, and the print rules that keep the PDF's text layer whole |
 | `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", and that the extractor feeding both checks is still reading all of it |
 
 Six things are worth knowing about how these are written.

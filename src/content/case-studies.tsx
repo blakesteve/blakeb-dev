@@ -163,7 +163,7 @@ function Section({
           project accent is harder to read than the thing it is summarizing. */}
       <div className="dek">
         <div>
-          <div className="pb-3 text-[var(--world,var(--spot))]">
+          <div className="pb-3 text-[var(--world-ink,var(--spot-ink))]">
             <Dek>{dek}</Dek>
           </div>
         </div>
@@ -234,7 +234,7 @@ function Tiers() {
 
 function Code({ children }: { children: ReactNode }) {
   return (
-    <RInlineCode colorScheme="current" className="text-[var(--world)]">
+    <RInlineCode colorScheme="current" className="text-[var(--world-ink)]">
       {children}
     </RInlineCode>
   );
@@ -247,15 +247,18 @@ export const caseStudies: Record<string, CaseStudy> = {
       /* Verdicts leads: games tracked is inventory that was imported, verdicts
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
-      { value: "3,488", label: "Verdicts cast", source: "4 Nov 2026 snapshot", live: "verdicts" },
-      { value: "2,058", label: "Games tracked", source: "4 Nov 2026 snapshot", live: "games" },
+      /* api.gameverdict.app/api/stats, read once on 15 Nov 2026 at 09:59 CST. */
+      { value: "3,569", label: "Verdicts cast", source: "15 Nov 2026 snapshot", live: "verdicts" },
+      { value: "2,153", label: "Games tracked", source: "15 Nov 2026 snapshot", live: "games" },
       /* Counted off `origin/main`. That is NOT this repo's default branch -
          game-verdict releases from `dev` - but `main` is its release line, so
          this counts shipped work rather than whatever `dev` is carrying, and it
          matches how the Roster card counts. No live path for this one: the repo
          is private, so there is nothing for the GitHub reader to reach, which
          makes it the only number on this card that can go stale silently. */
-      { value: "1,158", label: "Commits", source: "4 Nov 2026 snapshot · private repo" },
+      /* `git rev-list --count origin/main` after a fetch: main is dev plus its
+         release merges, the count 4 Nov's 1,158 was taken by. 3c2f8c1. */
+      { value: "1,260", label: "Commits", source: "15 Nov 2026 snapshot · main · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -654,8 +657,8 @@ export const caseStudies: Record<string, CaseStudy> = {
         /* Matches `git rev-list --count origin/main` after a fetch, which is
            the same count the GitHub API reports and the same thing the live
            path above renders. Not a local working copy, which drifts ahead.
-           Last checked 4 Nov 2026. */
-        value: "400",
+           Last checked 15 Nov 2026, at 8fd068d. */
+        value: "411",
         label: "Commits",
         source: "since Feb 2026",
         commitsFrom: "blakesteve/roster",
@@ -671,7 +674,7 @@ export const caseStudies: Record<string, CaseStudy> = {
               label: "Tests",
               source: `live · roster @ ${meta.version}`,
             }
-          : { value: "2,701", label: "Tests", source: "roster @ 5.18.0" })(
+          : { value: "2,976", label: "Tests", source: "roster @ 5.19.4" })(
         getRosterMeta(),
       ),
       { value: String(ROSTER_APPS.count), label: "Apps consuming it", source: "including this one" },
@@ -870,7 +873,7 @@ export const caseStudies: Record<string, CaseStudy> = {
       { value: "12", label: "Questions, the same for everyone", source: "corrected for asking 12" },
       { value: "7.1%", label: "Fake histories given a false yes", source: "1,000 with no sky in them" },
       { value: "500k", label: "Plays in my history", source: "since October 2009, one account" },
-      { value: "$0", label: "Hosting cost", source: "by design" },
+      { value: "$0", label: "Egress fees on storage", source: "Cloudflare R2, by design" },
     ],
     stack: [
       { k: "Framework", v: "Next.js 16" },
@@ -878,7 +881,7 @@ export const caseStudies: Record<string, CaseStudy> = {
       { k: "Source", v: "Last.fm API" },
       { k: "Space data", v: "NASA and JPL, no key" },
       { k: "Storage", v: "Cloudflare R2" },
-      { k: "Hosting", v: "Vercel Hobby" },
+      { k: "Hosting", v: "Vercel Pro" },
     ],
     also: [
       { k: "Questions", v: "Mercury, Venus, Mars, the Moon, the Sun" },
@@ -1201,15 +1204,14 @@ export const caseStudies: Record<string, CaseStudy> = {
         </Section>
 
         <Section
-          eyebrow="What it cost"
-          title="Built to cost nothing, on purpose"
-          dek="It runs entirely on free tiers, and the storage was chosen so that a sudden rush of visitors can’t produce a surprise bill."
+          eyebrow="What it costs"
+          title="Storage with no egress fees"
+          dek="Every listening history lives in Cloudflare R2, which charges nothing for data leaving it, so reading a history back out of storage never carries an egress fee."
         >
           <p>
-            Retrospect runs on Vercel&rsquo;s free tier with Cloudflare R2 for storage. R2 was chosen
-            specifically because it has <strong>zero egress fees</strong>: it charges nothing to
-            serve data out, so a rush of visitors can&rsquo;t generate a surprise bill, and Vercel Hobby pauses rather than charges
-            when limits are hit. Two daily jobs do the housekeeping: one fills and refreshes
+            Retrospect runs on Vercel with Cloudflare R2 for storage. R2 was chosen specifically
+            because it has <strong>zero egress fees</strong>: pulling a stored history back out of
+            storage carries no transfer charge, however many people come to look. Two daily jobs do the housekeeping: one fills and refreshes
             NASA&rsquo;s data, the other deletes any history nobody has looked at in 90 days. None of
             the NASA or JPL sources need a key.
           </p>
@@ -1235,7 +1237,10 @@ export const caseStudies: Record<string, CaseStudy> = {
     stats: [
       { value: "14", label: "Leagues supported", source: "five sports, 22 competitions" },
       { value: "285", label: "Games in one season", source: "scored, reconciled, settled" },
-      { value: "32", label: "Ways it answers back", source: "13 hits, 12 misses, 7 scoldings" },
+      /* mega-squad's `playfulStrings.ts` on main, a90bb02, 15 Nov 2026: 13 hits
+         and 12 misses all year, 8 Halloween and 8 Christmas lines that stand in
+         for them in their month, and 7 scoldings. Commented-out lines aren't counted. */
+      { value: "48", label: "Ways it answers back", source: "25 all year, 16 seasonal, 7 scoldings" },
       { value: "30 s", label: "Poll interval", source: "idle after 5 min" },
     ],
     stack: [

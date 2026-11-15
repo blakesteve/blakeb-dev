@@ -280,9 +280,10 @@ export const SKILLS: { group: string; items: string[] }[] = [
 /** A one-paragraph summary, used at the top of the résumé. */
 export function summary(): string {
   return (
-    `Front end leader with a design degree and ${yearsShippingWords()} years shipping software, ` +
-    `from IBM's cloud dashboards to a component library ${ROSTER_APPS.words} apps run on. ` +
-    "Comfortable owning the whole path: schema and caching underneath, tokens and " +
-    "type on top, and the argument with design in the middle."
+    "Leads front-end work for product teams from design to production: accessible React " +
+    "and Next.js interfaces, the component library and tokens a team ships on, and the " +
+    "schema and caching underneath them. " +
+    `${yearsShippingWordsCapitalized()} years shipping software, from IBM's cloud dashboards ` +
+    `to a component library ${ROSTER_APPS.words} apps run on, with a design degree behind it.`
   );
 }

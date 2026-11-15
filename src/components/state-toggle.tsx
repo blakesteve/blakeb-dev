@@ -28,12 +28,12 @@ export function StateToggle() {
       toDarkLabel="Switch to the blueline proof"
       toLightLabel="Switch back to the press sheet"
       lightIcon={
-        <span aria-hidden="true" className="text-spot">
+        <span aria-hidden="true" className="text-spot-ink">
           ◐
         </span>
       }
       darkIcon={
-        <span aria-hidden="true" className="text-spot">
+        <span aria-hidden="true" className="text-spot-ink">
           ◐
         </span>
       }

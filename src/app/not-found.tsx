@@ -81,7 +81,7 @@ export default function NotFound() {
             </p>
             <div className="flex flex-wrap gap-2">
               <RCta href="/">Back to work →</RCta>
-              <RCta href={SPECIMENS_PAGE.href} tint="var(--second)">
+              <RCta href={SPECIMENS_PAGE.href} tint="var(--second)" ink="var(--second-ink)">
                 {SPECIMENS_PAGE.label} →
               </RCta>
             </div>
@@ -93,12 +93,12 @@ export default function NotFound() {
         pageLinks={
           <>
             <Link href="/about" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">
+              <REyebrow className="transition-colors hover:!text-spot-ink">
                 ← About
               </REyebrow>
             </Link>
             <Link href="/resume" className="no-underline">
-              <REyebrow className="transition-colors hover:!text-spot">
+              <REyebrow className="transition-colors hover:!text-spot-ink">
                 Résumé →
               </REyebrow>
             </Link>

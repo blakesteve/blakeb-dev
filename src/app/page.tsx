@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   RCard,
@@ -10,7 +9,7 @@ import { RegistrationMark } from "@/components/registration-mark";
 import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { AlsoSeparately } from "@/components/also-separately";
-import { projects } from "@/lib/projects";
+import { projects, worldStyle } from "@/lib/projects";
 import { getRosterComponentCount, getRosterTokens, getRosterVersion } from "@/lib/roster";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
 import { yearsShippingWords } from "@/lib/career";
@@ -149,12 +148,7 @@ export default async function Home() {
               brandColorBottom="transparent"
               padding="none"
               className="world pb-[13px] transition-colors hover:border-[var(--world)]"
-              style={
-                {
-                  "--world-press": project.world.press,
-                  "--world-blueline": project.world.blueline,
-                } as CSSProperties
-              }
+              style={worldStyle(project.world)}
             >
               <div className="flex flex-col gap-[9px] px-4 pt-[15px]">
                 <div className="flex items-baseline justify-between gap-3">
@@ -167,7 +161,7 @@ export default async function Home() {
                   <REyebrow
                     as="a"
                     href={project.links[0]?.href}
-                    className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world)]"
+                    className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world-ink)]"
                   >
                     <span
                       aria-hidden="true"
@@ -182,7 +176,7 @@ export default async function Home() {
                       above sits on z-10 to stay independently clickable. */}
                   <Link
                     href={`/work/${project.slug}`}
-                    className="no-underline transition-colors before:absolute before:inset-0 before:content-[''] hover:text-[var(--world)]"
+                    className="no-underline transition-colors before:absolute before:inset-0 before:content-[''] hover:text-[var(--world-ink)]"
                   >
                     {project.name}
                   </Link>
@@ -198,7 +192,7 @@ export default async function Home() {
                   description: (
                     <span
                       className={
-                        "tabular-nums " + (row.accent ? "text-[var(--world)]" : "text-ink")
+                        "tabular-nums " + (row.accent ? "text-[var(--world-ink)]" : "text-ink")
                       }
                     >
                       {row.live && liveStats.games !== null

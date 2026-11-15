@@ -18,30 +18,36 @@
  * real growth could hide behind a chunk that happened to merge. A route's
  * first load is what its visitor pays, whichever way the chunks fall.
  *
- * Measured 8 November 2026 on Next 16.4.5 and Roster 5.19.0, a clean copy with
- * `.env.local` beside it. Against `main` at aca5cd2 on the same two, the Contact
- * sheet moved `/specimens` up by 26,568 bytes: about 8.9 kB is the sheet, and the rest
- * is Turbopack keeping one copy of each shared module, Font Awesome's icons,
- * floating-ui and Headless UI among them, with every export the lazy tier chunks
- * use. The same mechanism moved every other route but `/_global-error` by 3,198,
- * 2,883 of them Font Awesome icons the tiers' components draw. Next 16.4.5 itself,
- * against 16.4.2 at aca5cd2, moved every route by 1,057 to 1,649.
+ * Measured 15 November 2026 on Next 16.4.5 and Roster 5.19.4, a clean copy with
+ * `.env.local` beside it. Against `main` at 7746913 (Roster 5.19.0), Roster
+ * 5.19.4 alone moved `/specimens` up by 1,727 bytes, its Sheet and Dialog
+ * changes reaching the Contact sheet, and no other route. This branch's own
+ * code added 101 to every route but `/_global-error` (109 on `/work/[slug]`,
+ * 176 on `/specimens`): the text inks in the client components every page
+ * carries (the theme toggle, the nav, X-ray, the CRT toggle, breadcrumbs, the
+ * TL;DR toggle), RCta's ink, and on `/specimens` Ink swap unsetting the site's
+ * inks for each job. The world inks themselves ship as HTML, not first-load JS.
+ *
+ * On 8 November, on Roster 5.19.0, the Contact sheet had moved `/specimens` up
+ * by 26,568: about 8.9 kB the sheet, the rest Turbopack keeping one copy of
+ * each shared module with every export the lazy tier chunks use, which also
+ * moved every other route but `/_global-error` by 3,198.
  *
  * Re-measure when you change one: a figure carried forward from an older tree
  * stops being a measurement. Run `npm run check:bundle` on a fresh build; it
  * prints every route's first load.
  */
 export const ROUTE_FIRST_LOAD = {
-  "/": 647_966,
+  "/": 648_067,
   "/_global-error": 458_409,
-  "/_not-found": 647_966,
-  "/about": 662_925,
-  "/resume": 648_301,
-  "/specimens": 866_612,
-  "/work": 665_544,
-  "/work/[slug]": 669_432,
-  "/writing": 665_544,
-  "/writing/[slug]": 665_544,
+  "/_not-found": 648_067,
+  "/about": 663_026,
+  "/resume": 648_402,
+  "/specimens": 868_515,
+  "/work": 665_645,
+  "/work/[slug]": 669_541,
+  "/writing": 665_645,
+  "/writing/[slug]": 665_645,
 };
 
 /**

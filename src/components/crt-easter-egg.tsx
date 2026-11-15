@@ -224,11 +224,11 @@ export function CrtEasterEgg() {
             onAnimationEnd={() => setPulsed(true)}
             aria-pressed={on}
             className={
-              "rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot" +
+              "rounded-full border border-rule bg-panel px-3 py-2 font-[family-name:var(--font-util)] text-[10px] uppercase tracking-[0.14em] text-ink-faint shadow-sm transition-colors hover:border-spot hover:text-spot-ink" +
               (glow ? " crt-reveal" : "")
             }
           >
-            <span aria-hidden="true" className="text-spot">
+            <span aria-hidden="true" className="text-spot-ink">
               ▚
             </span>{" "}
             CRT {on ? "on" : "off"}
