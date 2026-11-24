@@ -257,15 +257,23 @@ describe("the sheet", () => {
     expect(printed).not.toContain("box-shadow");
   });
 
-  it("sets SegmentBar's legend at full strength, on the sheet alone", () => {
-    expect(readFileSync("src/app/specimens/ink-swap.css", "utf8")).toMatch(
-      /\.ink-sheet \[data-testid="segment-bar-legend"\] > span > span:last-child \{[^}]*opacity: 1;/,
+  /* Roster 5.20.0 stopped fading the percents. Its gray reads on a light sheet
+     and misses on a dark one, so only a dark sheet takes the job's soft ink. */
+  it("sets SegmentBar's percents in the job's soft ink, on a dark sheet alone", () => {
+    const css = readFileSync("src/app/specimens/ink-swap.css", "utf8");
+    const rule = /([^}]*)\[data-testid="segment-bar-legend"\] > span > span:last-child \{([^}]*)\}/.exec(
+      css.slice(css.indexOf("/* SegmentBar's percents")),
     );
+    expect(rule?.[1]).toContain(".dark .ink-sheet ");
+    expect(rule?.[1]).toContain(".ink-sheet.dark ");
+    expect(rule?.[2].trim()).toBe("color: var(--job-soft);");
+    expect(css).not.toMatch(/\n\.ink-sheet \[data-testid="segment-bar-legend"\]/);
     const legend = readFileSync(
       "node_modules/@blakesteve/roster/dist/components/atoms/SegmentBar/SegmentBar.js",
       "utf8",
     );
     expect(legend).toContain("segment-bar-legend");
+    expect(legend).not.toMatch(/opacity-\d/);
   });
 
   it("gives only a printed job its seals", () => {

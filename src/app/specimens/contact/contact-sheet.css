@@ -397,8 +397,7 @@
 
 /* Contrast on this site's palette, spec 7.9, through Roster's own tokens where
    it has one. Scoped to the sheet and the loupe, which is where these pairs
-   occur. What's left is Roster's fixed grays (AvatarStrip's overflow count,
-   MatchupCard's separator and losing score, Stat's source line), reported
+   occur. What's left is Roster's: AvatarStrip's overflow count, reported
    rather than painted over. */
 .cs,
 .loupe-panel {
@@ -422,10 +421,10 @@
 .loupe-panel [data-roster="StepProgress"] {
   --roster-skeleton: var(--paper);
 }
-/* SegmentBar's percents are opacity .6, which Ink swap overrides the same way.
-   Keyed on Roster's test id, so it can go when Roster's fix lands. */
-.cs [data-testid="segment-bar-legend"] > span > span:last-child,
-.loupe-panel [data-testid="segment-bar-legend"] > span > span:last-child {
+/* SegmentBar's percents. Roster 5.20.0 draws them at full strength, which reads
+   on the press sheet; on the blueline its gray is 4.25 on the panel, so they
+   take the soft ink there. Keyed on Roster's test id. */
+.dark .cs [data-testid="segment-bar-legend"] > span > span:last-child,
+.dark .loupe-panel [data-testid="segment-bar-legend"] > span > span:last-child {
   color: var(--ink-soft);
-  opacity: 1;
 }
