@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { mixLab, ratio, rgb, wash } from "@/lib/color-math";
 import { projects, worldStyle } from "@/lib/projects";
 import { SITE_ROSTER_INKS } from "@/lib/site-inks";
 
@@ -24,23 +25,6 @@ function token(selector: string, name: string): string {
   if (start < 0 || !value) throw new Error(`${name} isn't set in ${selector}`);
   return value;
 }
-
-type Rgb = [number, number, number];
-const rgb = (hex: string): Rgb => {
-  const m = /^#([0-9a-f]{6})$/i.exec(hex);
-  if (!m) throw new Error(`not a six-digit hex: ${hex}`);
-  return [0, 2, 4].map((at) => parseInt(m[1].slice(at, at + 2), 16)) as Rgb;
-};
-const lum = (c: Rgb) => {
-  const [r, g, b] = c.map((v) => v / 255).map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-const ratio = (a: Rgb, b: Rgb) => {
-  const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
-  return (x + 0.05) / (y + 0.05);
-};
-/** `fg` at `alpha` laid over `bg`, as `bg-[var(--cta)]/10` paints it. */
-const wash = (fg: Rgb, alpha: number, bg: Rgb): Rgb => fg.map((v, i) => v * alpha + bg[i] * (1 - alpha)) as Rgb;
 
 const LOOKS = {
   "the press sheet": ":root",
@@ -151,39 +135,12 @@ describe("spot as text", () => {
   });
 });
 
-/* `color-mix(in oklab, world N%, paper)`, as the case-study header paints it. */
-const toLab = (c: Rgb) => {
-  const [r, g, b] = c.map((v) => v / 255).map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
-  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
-  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
-  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
-  return [
-    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
-    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
-    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
-  ];
-};
-const fromLab = ([L, a, b]: number[]): Rgb => {
-  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
-  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
-  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
-  return [
-    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
-  ].map((v) => Math.round(255 * Math.min(1, Math.max(0, v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055)))) as Rgb;
-};
-const mixLab = (fg: Rgb, share: number, bg: Rgb): Rgb => {
-  const [a, b] = [toLab(fg), toLab(bg)];
-  return fromLab(a.map((v, i) => v * share + b[i] * (1 - share)));
-};
-
 /**
  * Each project's world, as text. The world itself stays on rules, dots, the
  * card's top edge and the header's gradient; text takes its ink. Measured on
  * everything world text sits on: the paper, the panel, RCta's 10% wash, and the
- * case-study header at 15% world, the most any of its text sits on (13.7%,
- * sampled under every header figure and link at 320, 375 and 1280, 15 Nov 2026).
+ * case-study header at 15% world, more than its figures and links sit on. The
+ * TL;DR control sits deeper on a phone, and takes no world ink (worlds.test.ts).
  * Large text is held to 4.5 too, so one token serves both sizes.
  */
 describe("each world's text ink", () => {
@@ -225,31 +182,26 @@ describe("each world's text ink", () => {
       const start = css.indexOf(`\n${selector} {`);
       return start < 0 ? "" : css.slice(start, css.indexOf("}", start));
     };
+    expect(rule(".world")).toContain("--world: var(--world-press);");
+    expect(rule(".dark .world")).toContain("--world: var(--world-blueline);");
     expect(rule(".world")).toContain("--world-ink: var(--world-ink-press);");
     expect(rule(".dark .world")).toContain("--world-ink: var(--world-ink-blueline);");
+    /* Paper is white whichever state the page was in. */
+    const print = css.slice(css.indexOf("@media print"));
+    expect(print).toMatch(/\n {2}\.dark \.world \{\s*--world: var\(--world-press\);\s*--world-ink: var\(--world-ink-press\);/);
+    expect(print).toMatch(/\n {2}\.dark \.roster-bar \{\s*background: var\(--bar-press\);/);
     for (const page of [["page.tsx"], ["work", "page.tsx"], ["work", "[slug]", "page.tsx"]]) {
       const source = readFileSync(join(process.cwd(), "src", "app", ...page), "utf8");
       expect(source, page.join("/")).toContain("style={worldStyle(project.world)}");
     }
   });
 
-  it("is the 15 Nov set", () => {
-    expect(Object.fromEntries(projects.map((p) => [p.slug, p.world]))).toEqual({
-      "game-verdict": { press: "#4b45c7", blueline: "#6d6bf2", pressInk: "#4b45c7", bluelineInk: "#7879ff" },
-      roster: { press: "#0e9b74", blueline: "#12b886", pressInk: "#006b4f", bluelineInk: "#12b886" },
-      retrospect: { press: "#b98a12", blueline: "#d9a82c", pressInk: "#7a5900", bluelineInk: "#d9a82c" },
-      megasquad: { press: "#c62828", blueline: "#e23b3b", pressInk: "#b50f18", bluelineInk: "#f04a47" },
-    });
-  });
-
-  /* The twin: the worlds themselves, as text, are what failed. */
-  it("is needed: the worlds as text are under AA where they changed", () => {
-    const at = (slug: string) => projects.find((p) => p.slug === slug)!.world;
-    expect(ratio(rgb(at("roster").press), press.paper)).toBeCloseTo(2.86, 2);
-    expect(ratio(rgb(at("retrospect").press), press.paper)).toBeCloseTo(2.54, 2);
-    expect(ratio(rgb(at("megasquad").press), wash(rgb(at("megasquad").press), 0.1, press.paper))).toBeLessThan(4.5);
-    expect(ratio(rgb(at("game-verdict").blueline), blueline.panel)).toBeLessThan(4.5);
-    expect(ratio(rgb(at("megasquad").blueline), blueline.panel)).toBeLessThan(4.5);
+  /* The twin: Game Verdict's primary-600, as its own world. It reads on the
+     paper and misses on the header, which is why the set is that deep. */
+  it("fails an ink that misses on the header alone", () => {
+    const indigo = rgb("#4f46e5");
+    expect(ratio(indigo, press.paper)).toBeGreaterThanOrEqual(4.5);
+    expect(ratio(indigo, mixLab(indigo, 0.15, press.paper))).toBeCloseTo(4.18, 1);
   });
 });
 

@@ -10,6 +10,7 @@ import { TopBar } from "@/components/top-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { AlsoSeparately } from "@/components/also-separately";
 import { projects, worldStyle } from "@/lib/projects";
+import { RosterBar } from "@/components/roster-bar";
 import { getRosterComponentCount, getRosterTokens, getRosterVersion } from "@/lib/roster";
 import { getGameVerdictStats } from "@/lib/game-verdict-stats";
 import { yearsShippingWords } from "@/lib/career";
@@ -107,7 +108,7 @@ export default async function Home() {
       <section className="mt-10 overflow-hidden rounded-[3px] border border-rule bg-panel">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-rule px-4 py-2">
           <REyebrow>Built with @blakesteve/roster</REyebrow>
-          <REyebrow wraps>
+          <REyebrow>
             v{version} · {componentCount} components · tokens read live
           </REyebrow>
         </div>
@@ -144,13 +145,18 @@ export default async function Home() {
             <RCard
               key={project.slug}
               branded
-              brandColorTop="var(--world)"
+              /* Roster's edge is the color bar, a child: this prop is a
+                 background color and can't hold a gradient. */
+              brandColorTop={project.slug === "roster" ? "transparent" : "var(--world)"}
               brandColorBottom="transparent"
               padding="none"
-              className="world pb-[13px] transition-colors hover:border-[var(--world)]"
+              /* A column, with the props pushed to the foot, so the divider and
+                 rows line up across a row whatever the blurbs' lengths. */
+              className="world world-card flex flex-col pb-[13px] transition-colors hover:border-[var(--world)]"
               style={worldStyle(project.world)}
             >
-              <div className="flex flex-col gap-[9px] px-4 pt-[15px]">
+              {project.slug === "roster" && <RosterBar />}
+              <div className="flex flex-col gap-[9px] px-4 pt-[15px] pb-[2px]">
                 <div className="flex items-baseline justify-between gap-3">
                   <REyebrow className="!tracking-[0.14em]">
                     {String(i + 1).padStart(2, "0")} / {project.status}
@@ -161,7 +167,7 @@ export default async function Home() {
                   <REyebrow
                     as="a"
                     href={project.links[0]?.href}
-                    className="relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world-ink)]"
+                    className="world-focus relative z-10 inline-flex items-center gap-[5px] no-underline transition-colors hover:!text-[var(--world-ink)]"
                   >
                     <span
                       aria-hidden="true"
@@ -176,7 +182,7 @@ export default async function Home() {
                       above sits on z-10 to stay independently clickable. */}
                   <Link
                     href={`/work/${project.slug}`}
-                    className="no-underline transition-colors before:absolute before:inset-0 before:content-[''] hover:text-[var(--world-ink)]"
+                    className="no-underline decoration-2 underline-offset-4 transition-colors before:absolute before:inset-0 before:content-[''] hover:text-[var(--world-ink)] hover:underline"
                   >
                     {project.name}
                   </Link>
@@ -186,7 +192,7 @@ export default async function Home() {
               </div>
 
               <RDescriptionList
-                className="mt-[2px] border-t border-rule px-4 pt-[10px]"
+                className="mt-auto border-t border-rule px-4 pt-[10px]"
                 items={project.props.map((row) => ({
                   term: row.label,
                   description: (

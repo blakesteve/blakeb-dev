@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
@@ -10,6 +11,7 @@ import {
   RStat,
 } from "@/lib/roster-ui";
 import { CrtEasterEgg } from "@/components/crt-easter-egg";
+import { RosterBar } from "@/components/roster-bar";
 import { TldrToggle } from "@/components/tldr-toggle";
 import { caseStudies } from "@/content/case-studies";
 import { SPECIMENS_PAGE } from "@/lib/nav";
@@ -72,6 +74,14 @@ function SidebarPanel({ label, rows }: { label: string; rows: { k: string; v: st
   );
 }
 
+/* A Stat's label and source read Roster's faint grays, gray-500 on the press
+   sheet and gray-400 on the blueline, which miss AA on the header's gradient.
+   Here they're the soft ink. */
+const FIGURE_GRAYS = {
+  "--roster-gray-400": "var(--ink-soft)",
+  "--roster-gray-500": "var(--ink-soft)",
+} as CSSProperties;
+
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }
@@ -109,17 +119,21 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
       />
 
       {/* The project's own world, mixed from its accent so it holds in both
-          production states without authoring two gradients. */}
+          production states without authoring two gradients. 20% at the corner
+          is the most that keeps the soft ink readable where text sits. On a
+          phone the TL;DR control wraps under Game Verdict's title, near the
+          corner, and reads 4.52 there; at the corner itself it wouldn't. */}
       <header
-        className="w-full"
+        className={slug === "roster" ? "relative isolate w-full" : "w-full"}
         style={{
           background:
             "radial-gradient(120% 150% at 10% 0%," +
-            " color-mix(in oklab, var(--world) 26%, var(--paper)) 0%," +
+            " color-mix(in oklab, var(--world) 20%, var(--paper)) 0%," +
             " color-mix(in oklab, var(--world) 9%, var(--paper)) 46%," +
             " var(--paper) 100%)",
         }}
       >
+        {slug === "roster" && <RosterBar />}
         <div className="mx-auto w-full max-w-[1180px] px-6 py-11 sm:px-8">
           {/* Beside the title, and marked as the anchor the sticky bar watches:
               once this scrolls away the bar reveals its own copy, so the lens
@@ -137,7 +151,10 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           {/* `current` lets each project's accent reach the figures without
               Roster knowing anything about this site's palette. The display
               face is the one thing Stat does not offer, so it rides along. */}
-          <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4 text-[var(--world-ink)]">
+          <dl
+            className="mt-7 flex flex-wrap gap-x-10 gap-y-6 border-t border-rule pt-4 text-[var(--world-ink)]"
+            style={FIGURE_GRAYS}
+          >
             {stats.map((stat) => (
               <RStat
                 key={stat.label}

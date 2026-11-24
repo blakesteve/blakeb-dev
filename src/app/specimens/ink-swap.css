@@ -181,11 +181,11 @@
 .ink-tabs {
   overflow-x: auto;
 }
-/* SegmentBar sets its legend's percents at 60% opacity, which misses AA on every
-   job. The job's soft ink at full strength clears it. */
-.ink-sheet [data-testid="segment-bar-legend"] > span > span:last-child {
+/* SegmentBar's percents on a dark sheet, where Roster's gray reads 4.19 to 4.27.
+   The job's soft ink clears it. A light sheet takes Roster's own (4.71 or more). */
+.dark .ink-sheet [data-testid="segment-bar-legend"] > span > span:last-child,
+.ink-sheet.dark [data-testid="segment-bar-legend"] > span > span:last-child {
   color: var(--job-soft);
-  opacity: 1;
 }
 .ink-actions {
   display: flex;

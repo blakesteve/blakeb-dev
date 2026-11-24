@@ -4,18 +4,24 @@ import { STORYBOOK_URL } from "./storybook";
 import type { GameVerdictStats } from "./game-verdict-stats";
 
 /**
- * The work. `world` is the project's own accent — it shows up as a 2px rule
- * across the top of its card on the home page, and takes over the whole field
- * on its case-study page. Two values because a color that reads well on paper
- * usually needs to lift on the blueline.
+ * The work, in the order every page lists it: home, /work, the folio numbers
+ * and each study's Next link read this one array. Reordering it changes which
+ * colors touch, and `app/worlds.test.ts` fails if two that touch can't be told
+ * apart.
  *
- * The `*Ink` pair is the same world for text, at its own OKLCH hue, darker on
- * the press sheet and lighter on the blueline until it reads at 4.5:1 or more
- * on the paper, the panel, RCta's 10% wash and the case-study header at 15%
- * world (the most any header text sits on, measured 15 Nov 2026 at 320 to
- * 1280: 13.7%). Large text uses it too, so one token serves both. Rules, dots,
- * the card's top edge and the header's gradient keep the world itself. Where
- * the world already read, the ink is the same value.
+ * `world` is the project's own accent, and every value is a token in that app's
+ * own stylesheet, so it can be checked against its repo. The marks (the card's
+ * top edge, the dots, borders and washes, the header's gradient) take `press`
+ * and `blueline`. The `*Ink` pair is the same palette for text: 4.5:1 or more on
+ * the paper, the panel, RCta's 10% wash and the case-study header at 15% world.
+ *
+ *   Game Verdict  --roster-primary-700, 500, 700, 400
+ *   Roster        its shipped gray-500, 400, 900, 200
+ *   MegaSquad     --roster-primary-600, 400, 700, 400
+ *   Retrospect    --roster-primary-700, 500, 900, 500
+ *
+ * Roster's accent is none, on purpose: its mark is graphite, its words are its
+ * darkest neutrals, and its card edge and header carry the color bar below.
  */
 /**
  * Where a project can be reached. Several have more than one front door:
@@ -44,6 +50,8 @@ export type Project = {
   host: string;
   links: ProjectLink[];
   world: { press: string; blueline: string; pressInk: string; bluelineInk: string };
+  /** Runs on Roster, so its color is in Roster's bar. Read from the app's own `package.json`. */
+  onRoster?: true;
   props: {
     label: string;
     value: string;
@@ -69,7 +77,8 @@ export const projects: Project[] = [
     links: [
       { label: "gameverdict.app", href: "https://gameverdict.app", kind: "live" },
     ],
-    world: { press: "#4b45c7", blueline: "#6d6bf2", pressInk: "#4b45c7", bluelineInk: "#7879ff" },
+    world: { press: "#3730a3", blueline: "#6366f1", pressInk: "#3730a3", bluelineInk: "#818cf8" },
+    onRoster: true,
     props: [
       { label: "Stack", value: "Next 16 · Supabase · Upstash" },
       /* Commit counts live in the case study stat row, which reads them from
@@ -111,7 +120,7 @@ export const projects: Project[] = [
       },
       { label: "GitHub", href: "https://github.com/blakesteve/roster", kind: "source" },
     ],
-    world: { press: "#0e9b74", blueline: "#12b886", pressInk: "#006b4f", bluelineInk: "#12b886" },
+    world: { press: "#65635f", blueline: "#a8a29e", pressInk: "#1c1917", bluelineInk: "#e7e5e4" },
     props: [
       { label: "Stack", value: "React 19 · TS · Tailwind v4" },
       {
@@ -120,6 +129,35 @@ export const projects: Project[] = [
         accent: true,
       },
       { label: "Note", value: "Press ⌥X to see it on this page" },
+    ],
+  },
+  {
+    slug: "megasquad",
+    name: "MegaSquad",
+    tagline: "Pick'ems for your friend group.",
+    /* Leagues and sports are already in the prop row below and in the lede;
+       what only this card says is how it talks back. */
+    blurb:
+      "Every settled pick answers back: “Bullseye!”, “So Fetch!”, or “Gross, dude.” Underneath the jokes, a scoreboard that always adds up.",
+    status: "Private",
+    host: "megasquad.org",
+    /* Private: the front end is mine, the API is my brother's. */
+    links: [
+      { label: "megasquad.org", href: "https://megasquad.org", kind: "live" },
+    ],
+    world: { press: "#0770da", blueline: "#52a8ff", pressInk: "#0b59a8", bluelineInk: "#52a8ff" },
+    onRoster: true,
+    props: [
+      { label: "Stack", value: "Vite · React 19 · Zustand" },
+      /* This card once said ten while the case study said thirteen: it
+         repeated a figure the case study owns and drifted a month behind it, which is the exact failure the comment two
+         entries above describes. Leagues are the hub's `SportLeague` registry
+         on its main branch, playoff and tournament variants folded into their
+         base league. Components are distinct Roster components, by Roster's
+         own list, imported in mega-squad's `src` on its main branch, tests and
+         stories excluded. Both checked 4 Nov 2026. */
+      { label: "Scale", value: "14 leagues · 33 Roster components", accent: true },
+      { label: "Note", value: "Front end mine, API my brother's" },
     ],
   },
   {
@@ -141,45 +179,51 @@ export const projects: Project[] = [
       },
       { label: "GitHub", href: "https://github.com/blakesteve/retrospect", kind: "source" },
     ],
-    world: { press: "#b98a12", blueline: "#d9a82c", pressInk: "#7a5900", bluelineInk: "#d9a82c" },
+    world: { press: "#96731a", blueline: "#d4af37", pressInk: "#684d1d", bluelineInk: "#d4af37" },
+    onRoster: true,
     props: [
       { label: "Stack", value: "Next 16 · astronomy-engine · R2" },
       { label: "Scale", value: "12 questions · 2,000 fake skies each", accent: true },
       { label: "Note", value: "Read the math; the repo is public" },
     ],
   },
-  {
-    slug: "megasquad",
-    name: "MegaSquad",
-    tagline: "Pick'ems for your friend group.",
-    /* Leagues and sports are already in the prop row below and in the lede;
-       what only this card says is how it talks back. */
-    blurb:
-      "Every settled pick answers back: “Bullseye!”, “So Fetch!”, or “Gross, dude.” Underneath the jokes, a scoreboard that always adds up.",
-    status: "Private",
-    host: "megasquad.org",
-    /* Private: the front end is mine, the API is my brother's. */
-    links: [
-      { label: "megasquad.org", href: "https://megasquad.org", kind: "live" },
-    ],
-    world: { press: "#c62828", blueline: "#e23b3b", pressInk: "#b50f18", bluelineInk: "#f04a47" },
-    props: [
-      { label: "Stack", value: "Vite · React 19 · Zustand" },
-      /* This card once said ten while the case study said thirteen: it
-         repeated a figure the case study owns and drifted a month behind it, which is the exact failure the comment two
-         entries above describes. Leagues are the hub's `SportLeague` registry
-         on its main branch, playoff and tournament variants folded into their
-         base league. Components are distinct Roster components, by Roster's
-         own list, imported in mega-squad's `src` on its main branch, tests and
-         stories excluded. Both checked 4 Nov 2026. */
-      { label: "Scale", value: "14 leagues · 33 Roster components", accent: true },
-      { label: "Note", value: "Front end mine, API my brother's" },
-    ],
-  },
 ];
 
 export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug);
+}
+
+/**
+ * The résumé's projects, by slug and in this order, whatever the array does. It
+ * used to print the first four with links, so a reorder rewrote the résumé.
+ */
+export const RESUME_SLUGS = ["game-verdict", "roster", "retrospect", "megasquad"] as const;
+
+export function resumeProjects(): Project[] {
+  return RESUME_SLUGS.map((slug) => {
+    const project = getProject(slug);
+    if (!project) throw new Error(`the résumé names ${slug}, which isn't a project`);
+    return project;
+  });
+}
+
+/**
+ * Roster's color bar: the color of every project that runs on Roster, in page
+ * order, as equal hard-stopped segments, like a printer's control strip.
+ * Computed, so it can't drift from the worlds. Roster itself has no segment.
+ */
+export function barColors(state: "press" | "blueline", list: Project[] = projects): string[] {
+  return list.filter((project) => project.onRoster).map((project) => project.world[state]);
+}
+
+function strip(colors: string[]): string {
+  const at = (n: number) => `${+((100 * n) / colors.length).toFixed(3)}%`;
+  return `linear-gradient(to right, ${colors.map((color, i) => `${color} ${at(i)} ${at(i + 1)}`).join(", ")})`;
+}
+
+/** What `.roster-bar` declares; globals.css picks by state, as it does for a world. */
+export function barStyle(): CSSProperties {
+  return { "--bar-press": strip(barColors("press")), "--bar-blueline": strip(barColors("blueline")) } as CSSProperties;
 }
 
 /** The four values a `.world` element declares; globals.css picks by state. */

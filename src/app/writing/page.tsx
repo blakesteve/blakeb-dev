@@ -44,7 +44,7 @@ export default function WritingIndexPage() {
                 className="group grid gap-x-8 gap-y-2 py-6 no-underline sm:grid-cols-[128px_1fr]"
               >
                 <div className="flex flex-col gap-1">
-                  <REyebrow wraps>{formatPostDate(post.date)}</REyebrow>
+                  <REyebrow>{formatPostDate(post.date)}</REyebrow>
                 </div>
 
                 <div className="flex flex-col gap-2">

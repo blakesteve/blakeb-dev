@@ -38,7 +38,7 @@ const SLICES = {
     anchor: "Cloudflare R2 for storage",
   },
   "the /work card": {
-    text: slice(read("lib", "projects.ts"), 'slug: "retrospect"', 'slug: "megasquad"'),
+    text: slice(read("lib", "projects.ts"), 'slug: "retrospect"', "\n];"),
     anchor: "astronomy-engine",
   },
 };

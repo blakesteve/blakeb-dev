@@ -74,7 +74,7 @@ export default async function WorkIndexPage() {
                       <h2 className="m-0 font-[family-name:var(--font-display)] text-[1.5rem] font-bold uppercase leading-none tracking-[-0.03em]">
                         <Link
                           href={`/work/${project.slug}`}
-                          className="text-ink no-underline transition-colors hover:text-[var(--world-ink)]"
+                          className="world-focus text-ink no-underline decoration-2 underline-offset-4 transition-colors hover:text-[var(--world-ink)] hover:underline"
                         >
                           {project.name}
                         </Link>
