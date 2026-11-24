@@ -123,7 +123,8 @@ export function RCta({
     <RosterLink
       data-roster="Link"
       underline="none"
-      style={{ "--cta": cta, "--cta-ink": ink } as React.CSSProperties}
+      /* Roster's focus ring in the button's own ink, not the site's spot. */
+      style={{ "--cta": cta, "--cta-ink": ink, "--roster-ring": "var(--cta-ink)" } as React.CSSProperties}
       className={
         "inline-block rounded-[3px] border border-[var(--cta)] bg-[var(--cta)]/10 " +
         "px-4 py-[10px] text-center font-[family-name:var(--font-util)] text-[10px] " +
@@ -157,24 +158,9 @@ export function RAccordion(props: ComponentProps<typeof Accordion>) {
  * The site's old `.u` class, now a component. Roster's `xs` size is the same
  * 0.625rem at 0.16em tracking the class shipped, and `faint` lands on
  * --ink-faint in both states, so this is a straight pass-through.
- *
- * `wraps` is for a block-level eyebrow that can run to a second line. From
- * Roster 5.8.0 Eyebrow sets `leading-none`, which trims a one-line label to
- * its cap height but stacks a wrapped block with no gap between its lines.
- * `wraps` puts the 1.5 line height back for those, and only those, so one-line
- * labels keep the tighter box. An inline eyebrow, like a screenshot caption or
- * a "Next:" link, takes its line spacing from its parent and doesn't need it.
- * Measured 13 Oct 2026: three block-level eyebrows wrap, the home page's
- * version line at 390 wide and two post dates on /writing at 1280.
  */
-export function REyebrow<E extends React.ElementType = "span">(
-  props: ComponentProps<typeof Eyebrow<E>> & { wraps?: boolean },
-) {
-  const { wraps = false, ...rest } = props;
-  const eyebrowProps = rest as ComponentProps<typeof Eyebrow<E>>;
-  const className =
-    [wraps ? "leading-normal" : null, eyebrowProps.className].filter(Boolean).join(" ") || undefined;
-  return <Eyebrow data-roster="Eyebrow" {...eyebrowProps} className={className} />;
+export function REyebrow<E extends React.ElementType = "span">(props: ComponentProps<typeof Eyebrow<E>>) {
+  return <Eyebrow data-roster="Eyebrow" {...props} />;
 }
 
 export function RStat(props: ComponentProps<typeof Stat>) {

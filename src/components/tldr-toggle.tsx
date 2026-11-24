@@ -94,25 +94,22 @@ export function TldrToggle({ anchor = false }: { anchor?: boolean } = {}) {
           ? "Hide the plain-language summaries"
           : "Show a plain-language summary of each section"
       }
-      /* Active, it takes the project's own accent for its border and a 10%
-         wash, and that accent's text ink for its words, the way every other
-         figure on a case study page does. `--world` is unset on /writing, so
-         the fallbacks hold it to the site spot and its ink there.
+      /* Active, it takes the project's own accent for its border and a 10% wash,
+         and full ink for its words: on a phone it wraps into the case study
+         header's gradient, where the accent's ink on that wash read 4.12 on
+         MegaSquad's press sheet (23 Nov 2026). The summary it opens is full ink
+         for the same reason. `--world` is unset on /writing, so the fallbacks
+         hold it to the site spot there. The wash is the ground the dek sits on
+         (`bg-current/10`) and `RCta` takes.
 
-         The wash is not decoration. Text and border already carry the exact
-         accent the deks and the stat row use, but at 10px against a dark ground
-         a hairline and a line of small caps lose apparent chroma next to a 36px
-         bold number in the identical color, and the button read as a duller
-         green than the panel it reveals. The dek gets its green from sitting on
-         `bg-current/10`; this gives the button the same ground, which is also
-         what `RCta` does. */
+         At rest it's the soft ink: the faint one misses AA on that gradient. */
       className={
         /* The mono face comes from `RButton` now; only the folio sizing is local. */
         "!text-[10px] !uppercase !tracking-[0.14em] " +
         (on
-          ? "!border-[var(--world,var(--spot))] !text-[var(--world-ink,var(--spot-ink))] " +
+          ? "!border-[var(--world,var(--spot))] !text-ink " +
             "!bg-[var(--world,var(--spot))]/10"
-          : "!text-ink-faint")
+          : "!text-ink-soft")
       }
     >
       <span aria-hidden="true" className="mr-[6px]">

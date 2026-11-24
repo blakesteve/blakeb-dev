@@ -624,6 +624,35 @@ body {
   --world-ink: var(--world-ink-blueline);
 }
 
+/* Roster's color bar, declared by `barStyle()` the way a world is. */
+.roster-bar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+  height: 4px;
+  background: var(--bar-press);
+  pointer-events: none;
+}
+.dark .roster-bar {
+  background: var(--bar-blueline);
+}
+
+/* The keyboard gets what the pointer gets: the project's mark on the card's
+   border, and an outline in its ink. The whole card is the title's target, so
+   the card takes the outline and the title doesn't. */
+.world-card:has(h2 a:focus-visible) {
+  border-color: var(--world);
+}
+.world-card:has(h2 a:focus-visible),
+.world-focus:focus-visible {
+  outline: 2px solid var(--world-ink);
+  outline-offset: 2px;
+}
+.world-card h2 a:focus-visible {
+  color: var(--world-ink);
+  outline: none;
+}
+
 /* The uppercase utility labels that carry the folio, the prop rows, and the
    token strip. Used often enough to earn a class. */
 .u {
@@ -732,9 +761,9 @@ body {
   }
 }
 
-/* The dot before a case study's current item. `--world` as text was 2.86:1
-   for Roster on the press sheet, which is why text takes `--world-ink`; this
-   is a mark, so it keeps the world, and the words beside it stay ink. */
+/* The dot before a case study's current item. A world is a mark's color, at
+   3:1 or more, and text takes `--world-ink`; this is a mark, so it keeps the
+   world, and the words beside it stay ink. */
 .bar-slot-head-world [aria-current]::before {
   content: "";
   display: inline-block;
@@ -809,6 +838,15 @@ body {
 
     --tint-light: #ffffff;
     --tint-dark: #101010;
+  }
+
+  /* A blueline ink is made for a dark ground: Roster's is 1.26:1 on white. */
+  .dark .world {
+    --world: var(--world-press);
+    --world-ink: var(--world-ink-press);
+  }
+  .dark .roster-bar {
+    background: var(--bar-press);
   }
 
   body {

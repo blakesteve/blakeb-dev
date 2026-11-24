@@ -32,29 +32,50 @@ The site has one design in two inks, named after the stages of a print job.
 | Spot | process magenta | blueprint cyan |
 | Spot, as text | `#b10159` | the spot itself |
 
-**Text inks.** A color that marks the page isn't always one that reads as small
-text on it. The spot, `#d6006d`, is 4.18:1 on the press sheet's paper, and 3.54:1
-on `RCta`'s own 10% wash. So text takes `--spot-ink`, the same OKLCH hue taken
-darker until it reads (5.65 on the paper, 4.78 on the wash), and rules, tabs,
-swatches and the registration mark keep the spot. `--second` has a `--second-ink`
-the same way. Each project's world (`projects.ts`) carries a `pressInk` and a
-`bluelineInk` beside its two colors, at its own hue, for every text use on the home
-page, `/work`, the case studies and the TL;DR toggle and summaries, large text
-included. The TL;DR summaries set their words in full ink, since the soft ink on
-their accent's wash read under 4.5:1. `worldStyle()` declares
-all four, and `.world` picks by state. Each ink reads at 4.5:1 or more on the
-paper, the panel, `RCta`'s wash and the case-study header at 15% world, the most
-any header text sits on (13.7%, measured 15 Nov 2026). Where a color already read,
-its ink is the same value. `app/text-ink.test.ts` measures the spot's, the
-second's and every world's ink from the tokens themselves, and fails if
-`text-spot`, `text-[var(--spot…)]` or `text-[var(--world…)]` turns up on text
-again. `RCta` takes an `ink` beside its `tint`, and underlines on hover rather
-than dimming, which took every tint under 4.5:1. On the blueline the site sets
+**Text inks.** A color that marks the page isn't always one that reads as small text
+on it. The spot, `#d6006d`, is 4.18:1 on the press sheet's paper, and 3.54:1 on
+`RCta`'s own 10% wash. So text takes `--spot-ink`, the same OKLCH hue taken darker
+until it reads (5.65 on the paper, 4.78 on the wash), and rules, tabs, swatches and
+the registration mark keep the spot. `--second` has a `--second-ink` the same way.
+Each project's world (`projects.ts`) carries a `pressInk` and a `bluelineInk` beside
+its two colors, for every text use on the home page, `/work`, the case studies and
+the TL;DR summaries' label, large text included. The TL;DR summaries and the toggle,
+when it's on, set their words in full ink, since neither the soft ink nor the
+accent's reads on every accent's wash. `worldStyle()` declares all four, and
+`.world` picks by state. Each ink reads at 4.5:1 or more on the paper, the panel,
+`RCta`'s wash and the case-study header at 15% world. Printing takes the press
+values whichever state the page is in. `app/text-ink.test.ts` measures the spot's,
+the second's and every world's ink from the tokens themselves, and fails if
+`text-spot`, `text-[var(--spot…)]` or `text-[var(--world…)]` turns up on text again.
+`RCta` takes an `ink` beside its `tint`, and underlines on hover rather than
+dimming, which took every tint under 4.5:1. On the blueline the site sets
 `--roster-primary-500-ink` to the paper, since it sets the violet fill under it:
 Roster's white there was 4.17:1. Every view of an app as it ships, the "As Roster
 ships it" column and each Ink swap job, unsets the inks the site sets
 (`lib/site-inks.ts`) unless the app sets its own, so it shows that app's ink, not
 this site's.
+
+**The worlds.** Every value is a token in that app's own stylesheet, named in
+`projects.ts`, and reads at 3:1 or more as a mark. The array's order is the order of
+the home page, `/work`, the folio numbers and each study's Next link, so it decides
+which colors touch. `app/worlds.test.ts` pins the set and fails if two that touch, in
+the list or in two columns, are under 10 apart (OKLab, times 100) to a reader with
+normal, deutan or protan vision.
+
+Roster's own accent is none: graphite marks, and words in its darkest neutrals. What
+carries it is the color bar, 4px on its card and its case study's header, a segment
+for each project that runs on Roster (`onRoster`), computed from their worlds so it
+can't drift. Titles underline on hover, so no hover rests on hue. Keyboard focus
+matches the pointer: a card takes its mark on the border and an outline in its ink,
+and a CTA's ring takes the CTA's ink.
+
+On a case study's header, the small gray text is `--ink-soft` (a Stat's label and
+source read Roster's grays, which the header sets) and the gradient starts at 20%
+world, with the TL;DR control in full ink when it's on. Sampled under every text run
+at 320, 375 and 1280 in both states on 23 Nov 2026: 0 of 512 under AA, where `main`
+had 185. The thinnest is the control at rest on Game Verdict's press sheet at 320
+and 375, 4.52. It depends on where the title makes it wrap, so sample again for a new
+study or when that world moves; `worlds.test.ts` computes it.
 
 Dark mode is class-based (`.dark` on `<html>`) rather than tied to the OS, so
 the toggle can be manual. A blocking script in `app/layout.tsx` sets the class
@@ -281,7 +302,8 @@ It's written to be parsed as well as read, since the PDF goes to services that
 fill a profile from its text. The headline under the name says what he does, on
 its own line apart from the city. Selected work links each project's case study and
 its live site by whole address, and in print the visible text carries `https://`
-too, because a parser reads the text layer, not the links behind it. In print the
+too, because a parser reads the text layer, not the links behind it. Which four it prints is
+`RESUME_SLUGS` in `projects.ts`, so reordering the work can't rewrite the résumé. In print the
 sheet sets its text in system faces, Charter and Helvetica Neue from each stack's
 own fallbacks, with ligatures off. Chromium embeds a variable font's instance as
 Type 3 glyphs, which a PDF's text layer rebuilt as "I BM" and the name as "B ALL",
@@ -549,10 +571,8 @@ scoped to the sheet and the loupe in `contact-sheet.css`: Tabs' and LiquidTabs'
 inactive text, Footer's text, `--roster-success-500-ink` on the press sheet,
 the liquid strip's fill on the blueline, and the paper skeleton behind
 upcoming Timeline and StepProgress digits that Ink swap's own sheet uses. Navbar
-takes `themeMode="auto"`. Four are Roster's fixed grays, left for Roster rather
-than painted over: AvatarStrip's overflow count (4.46, 4.29), MatchupCard's
-separator on the blueline (3.36) and losing score on the press sheet (3.38, at
-`opacity-50`), and Stat's source line (3.10, 3.19). The selected liquid
+takes `themeMode="auto"`. One is Roster's, left for Roster rather than painted
+over: AvatarStrip's overflow count (4.46, 4.29 on Roster 5.23.0). The selected liquid
 tab (LiquidTabs' "Verdict", Tabs' "Plates"), and Countdown's digits while it
 runs, read 1:1 because the color behind them is a
 sibling's, which the audit can't see.
@@ -630,6 +650,8 @@ buys nothing.
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
 | `app/specimens/contact/frames.test.ts` | that the Contact sheet's frames are exactly the installed package's components, each in its tier, with a specimen in its tier's chunk and a bench behind every knob, that a knob's `needs` names a knob and value the frame has and `turnKnob` keeps every pair legal, chains included, that the comparison catches an addition, a removal and a move, and the provenance as Blake confirmed it |
 | `app/specimens/contact/grease.test.ts` | that the grease pencil names only real components, that its record matches the installed library's count, and the marks as literals: circles on 5.18.0's two, a cross on LiquidTabs, and that the note's font stack ends on this site's face, never Comic Sans or a generic `cursive` |
+| `app/worlds.test.ts` | the worlds as literals in order, each at 3:1 or more as a mark, Roster's inks at 12:1, the colors that touch told apart in three kinds of vision from the array's own order, the color bar's segments and where it's drawn, the résumé's four, the case study header's small text (a rendered Stat included), and focus and hover on a project, each with its twin |
+| `discord-workflow.test.ts` | `.github/workflows/discord.yml` run rather than read: its real `if:` against each event and its real script in bash, with stand-ins for curl and gh |
 | `app/text-ink.test.ts` | that the spot's, the second's and every world's text ink reads at 4.5:1 or more on each ground it sits on, in both states, with the old values' failures as the twin; that `worldStyle()` and the `.world` rules carry each project's ink to the page in both states; that spot and world text stay on their inks; that a world `RCta` passes its ink; and that the shipped column unsets every ink the site sets |
 | `content/hosting-claims.test.ts` | that nothing about Retrospect says Hobby, free tier, costs nothing or a hosting cost, in the case study or on its card, and that the true words are there |
 | `app/resume/resume.test.ts` | the headline on its own line, every Selected work link a whole `https://` address with the scheme printed, and the print rules that keep the PDF's text layer whole |
@@ -717,3 +739,14 @@ suite will not block a deploy.
 
 Vercel, on push. The build fetches gameverdict.app, so it has a network
 dependency; the fallback covers an outage, and the build log says when it fired.
+
+### Deployment notices
+
+`.github/workflows/discord.yml` posts to the site's Discord channel when a production
+deploy succeeds or fails, and when CI goes red on a push to `main`. A deploy lists the
+pull requests merged since the last good one; a red CI names each failed job and step.
+It's the shared notices workflow, copied from Roster's, without releases or a version,
+which this site doesn't have. It needs the `DISCORD_WEBHOOK_URL` secret, and skips
+cleanly without it. The repo is public and a deploy runs the copy in the deployed
+commit, so Vercel's Git Fork Protection stays on. To send a test by hand, run the
+Discord workflow from the Actions tab and choose a message.

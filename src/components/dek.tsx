@@ -30,9 +30,9 @@ export function Dek({ children }: { children: ReactNode }) {
          which outranks `roster`, so no `!important` is needed to beat the
          component's `font-semibold`.
 
-         No opacity on the label. It carries the same accent as the TL;DR toggle
-         that reveals it, and dimming it to 80% composited against the panel read
-         as a second, slightly-off green sitting next to the button. */
+         No opacity on the label. It carries the same accent as the border of the
+         TL;DR toggle that reveals it, and dimming it to 80% composited against
+         the panel read as a second, slightly-off color beside the button. */
       className={
         "[&_p]:font-[family-name:var(--font-util)] [&_p]:text-[9.5px] " +
         "[&_p]:font-normal [&_p]:uppercase [&_p]:tracking-[0.14em] " +

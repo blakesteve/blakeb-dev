@@ -18,15 +18,12 @@
  * real growth could hide behind a chunk that happened to merge. A route's
  * first load is what its visitor pays, whichever way the chunks fall.
  *
- * Measured 15 November 2026 on Next 16.4.5 and Roster 5.19.4, a clean copy with
- * `.env.local` beside it. Against `main` at 7746913 (Roster 5.19.0), Roster
- * 5.19.4 alone moved `/specimens` up by 1,727 bytes, its Sheet and Dialog
- * changes reaching the Contact sheet, and no other route. This branch's own
- * code added 101 to every route but `/_global-error` (109 on `/work/[slug]`,
- * 176 on `/specimens`): the text inks in the client components every page
- * carries (the theme toggle, the nav, X-ray, the CRT toggle, breadcrumbs, the
- * TL;DR toggle), RCta's ink, and on `/specimens` Ink swap unsetting the site's
- * inks for each job. The world inks themselves ship as HTML, not first-load JS.
+ * Measured 23 November 2026 on Next 16.4.5 and Roster 5.23.0, a clean copy with
+ * `.env.local` beside it. Against `main` at f57bab0 (Roster 5.19.4), 5.23.0 alone
+ * moved every route but `/_global-error` up by 1,417 bytes, and `/specimens` by
+ * 4,169. This branch's own code took 108 back on each, most of it `REyebrow`'s
+ * `wraps` prop, which 5.20.0 made needless. The worlds, the color bar
+ * and the focus styles ship as HTML and CSS.
  *
  * On 8 November, on Roster 5.19.0, the Contact sheet had moved `/specimens` up
  * by 26,568: about 8.9 kB the sheet, the rest Turbopack keeping one copy of
@@ -38,16 +35,16 @@
  * prints every route's first load.
  */
 export const ROUTE_FIRST_LOAD = {
-  "/": 648_067,
+  "/": 649_376,
   "/_global-error": 458_409,
-  "/_not-found": 648_067,
-  "/about": 663_026,
-  "/resume": 648_402,
-  "/specimens": 868_515,
-  "/work": 665_645,
-  "/work/[slug]": 669_541,
-  "/writing": 665_645,
-  "/writing/[slug]": 665_645,
+  "/_not-found": 649_376,
+  "/about": 664_335,
+  "/resume": 649_711,
+  "/specimens": 872_576,
+  "/work": 666_954,
+  "/work/[slug]": 670_850,
+  "/writing": 666_954,
+  "/writing/[slug]": 666_954,
 };
 
 /**
