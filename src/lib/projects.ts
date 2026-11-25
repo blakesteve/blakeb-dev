@@ -15,10 +15,12 @@ import type { GameVerdictStats } from "./game-verdict-stats";
  * and `blueline`. The `*Ink` pair is the same palette for text: 4.5:1 or more on
  * the paper, the panel, RCta's 10% wash and the case-study header at 15% world.
  *
- *   Game Verdict  --roster-primary-700, 500, 700, 400
- *   Roster        its shipped gray-500, 400, 900, 200
- *   MegaSquad     --roster-primary-600, 400, 700, 400
- *   Retrospect    --roster-primary-700, 500, 900, 500
+ *   Game Verdict    --roster-primary-700, 500, 700, 400
+ *   Bragging Rocks  --br-vermilion, --roster-error-400, 700, 400
+ *   Roster          its shipped gray-500, 400, 900, 200
+ *   MegaSquad       --roster-primary-600, 400, 700, 400
+ *   Retrospect      --roster-primary-700, 500, 900, 500
+ *   Tehon           its light accent, night rule, light accent, night ruleStrong
  *
  * Roster's accent is none, on purpose: its mark is graphite, its words are its
  * darkest neutrals, and its card edge and header carry the color bar below.
@@ -34,7 +36,8 @@ import type { GameVerdictStats } from "./game-verdict-stats";
 export type ProjectLink = {
   label: string;
   href: string;
-  kind: "live" | "source" | "package" | "docs";
+  /** `site` is a project's own page about itself, where there's nothing to use yet. */
+  kind: "live" | "site" | "source" | "package" | "docs";
 };
 
 export type Project = {
@@ -98,12 +101,33 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "bragging-rocks",
+    name: "Bragging Rocks",
+    tagline: "Show your rocks to collectors around the world.",
+    resumeLine: "A community where rock collectors show off their collections, with community-sourced rock identification.",
+    blurb:
+      "Each member keeps a cabinet of their rocks, and each week everyone may bring one to the table. Members can help each other identify a rock.",
+    status: "Live",
+    host: "bragging.rocks",
+    /* Private repo, so nothing here links to it. */
+    links: [{ label: "bragging.rocks", href: "https://bragging.rocks", kind: "live" }],
+    world: { press: "#ba220d", blueline: "#ed5741", pressInk: "#9f1200", bluelineInk: "#ed5741" },
+    onRoster: true,
+    props: [
+      { label: "Stack", value: "Next 16 · Supabase · Cloudflare R2" },
+      /* Its GitHub releases, 0.1.0 to 0.25.0 (9 Oct to 22 Nov 2026), read 24 Nov.
+         No member figures here, on purpose. */
+      { label: "Scale", value: "31 releases since October", accent: true },
+      { label: "Note", value: "Photos never carry a location" },
+    ],
+  },
+  {
     slug: "roster",
     name: "Roster",
     tagline: "The library this site is made of.",
     resumeLine: "An accessible React component library, published to npm.",
     blurb:
-      "A production-grade atomic component library: accessible, theme-aware, documented in Storybook, and imported by every project beside it.",
+      "A production-grade atomic component library: accessible, theme-aware, documented in Storybook, and imported by every web app beside it.",
     status: "npm",
     host: "@blakesteve/roster",
     links: [
@@ -135,10 +159,9 @@ export const projects: Project[] = [
     slug: "megasquad",
     name: "MegaSquad",
     tagline: "Pick'ems for your friend group.",
-    /* Leagues and sports are already in the prop row below and in the lede;
-       what only this card says is how it talks back. */
+    /* Leagues and sports are already in the prop row below and in the lede. */
     blurb:
-      "Every settled pick answers back: “Bullseye!”, “So Fetch!”, or “Gross, dude.” Underneath the jokes, a scoreboard that always adds up.",
+      "Pick the winners with your friends, lock it in before tip-off, and let the standings settle the trash talk. Every result talks back.",
     status: "Private",
     host: "megasquad.org",
     /* Private: the front end is mine, the API is my brother's. */
@@ -155,7 +178,7 @@ export const projects: Project[] = [
          on its main branch, playoff and tournament variants folded into their
          base league. Components are distinct Roster components, by Roster's
          own list, imported in mega-squad's `src` on its main branch, tests and
-         stories excluded. Both checked 4 Nov 2026. */
+         stories excluded. Both checked 24 Nov 2026, at 97ad31d. */
       { label: "Scale", value: "14 leagues · 33 Roster components", accent: true },
       { label: "Note", value: "Front end mine, API my brother's" },
     ],
@@ -187,6 +210,25 @@ export const projects: Project[] = [
       { label: "Note", value: "Read the math; the repo is public" },
     ],
   },
+  {
+    slug: "tehon",
+    name: "Tehon",
+    tagline: "An app for practicing written Japanese.",
+    blurb:
+      "An app for practicing written Japanese: hiragana, katakana and a bit of kanji. A page a day, with each stroke graded as you finish it. Coming soon to iPhone, iPad and Android.",
+    status: "Coming soon",
+    host: "tehon.app",
+    /* Its own site, until it launches in a store. Nothing here says where to
+       get it: no store badges, no store links (tehon.test.ts). */
+    links: [{ label: "tehon.app", href: "https://tehon.app", kind: "site" }],
+    world: { press: "#23604a", blueline: "#5c8b77", pressInk: "#23604a", bluelineInk: "#93bba8" },
+    props: [
+      { label: "Stack", value: "Expo 58 · React Native · Skia" },
+      /* Jest's total in CI at 14ef879, 24 Nov 2026; the steps are ROADMAP's index there. */
+      { label: "Scale", value: "2,843 tests · 9 of 12 steps", accent: true },
+      { label: "Note", value: "Collects nothing, sends nothing" },
+    ],
+  },
 ];
 
 export function getProject(slug: string) {
@@ -196,12 +238,15 @@ export function getProject(slug: string) {
 /**
  * The résumé's projects, by slug and in this order, whatever the array does. It
  * used to print the first four with links, so a reorder rewrote the résumé.
+ *
+ * Tehon isn't here until it launches in a store. Its tehon.app link doesn't put
+ * it on the résumé.
  */
-export const RESUME_SLUGS = ["game-verdict", "roster", "retrospect", "megasquad"] as const;
+export const RESUME_SLUGS = ["game-verdict", "bragging-rocks", "roster", "megasquad", "retrospect"] as const;
 
-export function resumeProjects(): Project[] {
+export function resumeProjects(list: Project[] = projects): Project[] {
   return RESUME_SLUGS.map((slug) => {
-    const project = getProject(slug);
+    const project = list.find((p) => p.slug === slug);
     if (!project) throw new Error(`the résumé names ${slug}, which isn't a project`);
     return project;
   });

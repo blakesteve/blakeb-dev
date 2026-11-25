@@ -4,7 +4,7 @@ import { REyebrow } from "@/lib/roster-ui";
  * BB's Grove, which sits outside the numbered set on purpose.
  *
  * It is a memorial, not a case study. There is no scale figure, no stack
- * table, and nothing to measure, and putting it in a list beside four projects
+ * table, and nothing to measure, and putting it in a list beside six projects
  * with metrics would quietly turn it into one. The dashed rule is the whole
  * argument: this belongs on the sheet, but not in the sequence.
  *

@@ -13,7 +13,7 @@ import {
   getRosterTokenFamilies,
   getRosterVersion,
 } from "@/lib/roster";
-import { JOB_TOKENS_COPIED, buildJobs } from "@/content/jobs";
+import { JOB_TOKENS_COPIED, REPRINTED_APPS, buildJobs } from "@/content/jobs";
 import { InkSwap } from "./ink-swap";
 import { ContactSheet, type SheetFrame } from "./contact/contact-sheet";
 import { TIERS as TIER_ORDER, frameMeta, type Tier } from "./contact/frames";
@@ -22,7 +22,7 @@ import { JOB_FONTS } from "./job-fonts";
 
 export const metadata = {
   title: SPECIMENS_PAGE.label,
-  description: `One set of components, ${ROSTER_APPS.words} apps. Pick a job and the sheet reprints in that product's own tokens, with every part of the library below it.`,
+  description: `One set of components, ${ROSTER_APPS.words} apps. The sheet reprints in the tokens of ${REPRINTED_APPS.words} of them, one at a time, with every part of the library below it.`,
 };
 
 /** A project's site, for a job's slug line, from the one list of them. */
@@ -48,6 +48,7 @@ export default function SpecimensPage() {
       gv: hostOf("game-verdict", "gameverdict.app"),
       retrospect: hostOf("retrospect", "retrospect-seven.vercel.app"),
       megasquad: hostOf("megasquad", "megasquad.org"),
+      br: hostOf("bragging-rocks", "bragging.rocks"),
     },
   });
 
@@ -83,8 +84,8 @@ export default function SpecimensPage() {
           {SPECIMENS_PAGE.label}
         </h1>
         <p className="m-0 max-w-[56ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
-          One set of components, {ROSTER_APPS.words} apps. Pick a job and this sheet reprints in
-          that product&rsquo;s own tokens. Nothing below is a picture.
+          One set of components, {ROSTER_APPS.words} apps. Pick one of the {REPRINTED_APPS.words} with a
+          job here and this sheet reprints in that app&rsquo;s own tokens. Nothing below is a picture.
         </p>
       </header>
 
@@ -98,7 +99,7 @@ export default function SpecimensPage() {
           is not drawing pictures of buttons.
         </p>
         <p className="m-0 max-w-[64ch] pt-3 font-[family-name:var(--font-util)] text-[11px] leading-[1.6] text-ink-faint">
-          Tokens copied from each app&rsquo;s stylesheet, {JOB_TOKENS_COPIED}. Words invented in
+          Tokens copied from the {REPRINTED_APPS.words} apps&rsquo; stylesheets, {JOB_TOKENS_COPIED}. Words invented in
           each product&rsquo;s register. The numbers in a reprint are samples, not that app&rsquo;s
           real figures.
         </p>

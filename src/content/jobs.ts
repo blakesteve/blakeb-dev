@@ -14,6 +14,16 @@ import copied from "./job-tokens.json";
 
 export const JOB_TOKENS_COPIED = copied.copied;
 
+const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+const reprinted = Object.keys(copied.jobs).length;
+
+/**
+ * How many of Roster's apps a job reprints: the ones whose tokens are copied.
+ * This site is the sheet at rest, and "as shipped" isn't an app. Pages say this
+ * count, never "each app" (ROSTER_APPS has more).
+ */
+export const REPRINTED_APPS = { count: reprinted, words: WORDS[reprinted] } as const;
+
 const PRINT_PEOPLE = ["Mira Vale", "Ozzie K", "Jun Park", "Theo Ash", "Rae Quinn"];
 
 const SYSTEM_SANS = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
@@ -28,7 +38,7 @@ type Live = {
   components: number;
   tiers: Record<string, number>;
   tests: number | null;
-  hosts: { gv: string; retrospect: string; megasquad: string };
+  hosts: { gv: string; retrospect: string; megasquad: string; br: string };
 };
 
 export function buildJobs({ version, components, tiers, tests, hosts }: Live): Job[] {
@@ -330,7 +340,7 @@ export function buildJobs({ version, components, tiers, tests, hosts }: Live): J
       id: "br",
       whose: "Bragging Rocks'",
       name: "Bragging Rocks",
-      host: "bragging.rocks",
+      host: hosts.br,
       scheme: "light",
       source: overrides(br),
       printed: true,

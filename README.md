@@ -65,7 +65,7 @@ normal, deutan or protan vision.
 Roster's own accent is none: graphite marks, and words in its darkest neutrals. What
 carries it is the color bar, 4px on its card and its case study's header, a segment
 for each project that runs on Roster (`onRoster`), computed from their worlds so it
-can't drift. Titles underline on hover, so no hover rests on hue. Keyboard focus
+can't drift. Tehon's app has no Roster, so it has no segment. Titles underline on hover, so no hover rests on hue. Keyboard focus
 matches the pointer: a card takes its mark on the border and an outline in its ink,
 and a CTA's ring takes the CTA's ink.
 
@@ -200,8 +200,16 @@ another app hiccuped, but it should not quietly stop updating either.
 
 ## Where the case-study screenshots come from
 
-`src/images/<app>/` holds 75 frames across three apps, and until 14 Sept 2026
-exactly one app had a repeatable way to refresh them.
+`src/images/<app>/` holds 112 frames for the five case studies that show screenshots
+(Game Verdict 27, MegaSquad 40, Retrospect 23, Tehon 14 and Bragging Rocks 8; Roster's study
+is live components). Counted 24 Nov 2026. The members
+in Game Verdict's app frames are invented. Bragging Rocks' show Blake's own eight rocks, with
+invented members, votes and weeks around them, and Tehon's is its sample notebook.
+
+The private notes repo's `blakeb-dev-shots/` has what retakes Game Verdict's, Bragging
+Rocks' and Tehon's, MegaSquad's December, and Retrospect's landing and samples, with what
+each must never show. None of it reads production. Bragging Rocks' eight rock photos came
+from Blake's own public cabinet once, and are kept there.
 
 MegaSquad's are captured by `scripts/capture-case-study.mjs` **in the mega-squad
 repo**, not here. It drives a real browser over that app's dev server and writes
@@ -219,9 +227,7 @@ handle slot, and a real employer's name in a squad description. All three had
 already shipped. None of them is a name the guards look for, which is the whole
 reason they passed.
 
-game-verdict's 26 frames and retrospect's 14 have no such script yet. They will
-go stale the same way MegaSquad's did, which is to say silently, two days after
-somebody changes a color. Generalizing that script is on the portfolio roadmap.
+Retrospect's landing (and its samples) came from a local build of `main`, offline. The rest of
 Retrospect's were reshot by hand on 4 October 2026, after its redesign, from
 production and Blake's own history; the visits triggered only the hourly
 top-up any visit does. Its loading clip is the production screen with the
@@ -302,8 +308,9 @@ It's written to be parsed as well as read, since the PDF goes to services that
 fill a profile from its text. The headline under the name says what he does, on
 its own line apart from the city. Selected work links each project's case study and
 its live site by whole address, and in print the visible text carries `https://`
-too, because a parser reads the text layer, not the links behind it. Which four it prints is
-`RESUME_SLUGS` in `projects.ts`, so reordering the work can't rewrite the résumé. In print the
+too, because a parser reads the text layer, not the links behind it. Which five it prints is
+`RESUME_SLUGS` in `projects.ts`, in the site's order, so reordering the work can't rewrite
+the résumé. Tehon isn't on it until it launches in a store: its tehon.app link doesn't put it there. In print the
 sheet sets its text in system faces, Charter and Helvetica Neue from each stack's
 own fallbacks, with ligatures off. Chromium embeds a variable font's instance as
 Type 3 glyphs, which a PDF's text layer rebuilt as "I BM" and the name as "B ALL",
@@ -650,12 +657,13 @@ buys nothing.
 | `content/case-study-images.test.ts` | that every image a case study renders is imported from that study's own folder, that no slice is silently skipped, and that each illustrated study renders at least one of its own screenshots |
 | `app/specimens/contact/frames.test.ts` | that the Contact sheet's frames are exactly the installed package's components, each in its tier, with a specimen in its tier's chunk and a bench behind every knob, that a knob's `needs` names a knob and value the frame has and `turnKnob` keeps every pair legal, chains included, that the comparison catches an addition, a removal and a move, and the provenance as Blake confirmed it |
 | `app/specimens/contact/grease.test.ts` | that the grease pencil names only real components, that its record matches the installed library's count, and the marks as literals: circles on 5.18.0's two, a cross on LiquidTabs, and that the note's font stack ends on this site's face, never Comic Sans or a generic `cursive` |
-| `app/worlds.test.ts` | the worlds as literals in order, each at 3:1 or more as a mark, Roster's inks at 12:1, the colors that touch told apart in three kinds of vision from the array's own order, the color bar's segments and where it's drawn, the résumé's four, the case study header's small text (a rendered Stat included), and focus and hover on a project, each with its twin |
+| `app/worlds.test.ts` | the worlds as literals in order, each at 3:1 or more as a mark, Roster's inks at 12:1, the colors that touch told apart in three kinds of vision from the array's own order, the color bar's segments and where it's drawn, the résumé's five, the case study header's small text (a rendered Stat included), and focus and hover on a project, each with its twin |
 | `discord-workflow.test.ts` | `.github/workflows/discord.yml` run rather than read: its real `if:` against each event and its real script in bash, with stand-ins for curl and gh |
 | `app/text-ink.test.ts` | that the spot's, the second's and every world's text ink reads at 4.5:1 or more on each ground it sits on, in both states, with the old values' failures as the twin; that `worldStyle()` and the `.world` rules carry each project's ink to the page in both states; that spot and world text stay on their inks; that a world `RCta` passes its ink; and that the shipped column unsets every ink the site sets |
+| `app/tehon.test.ts` | that nothing in Tehon's entry or study names a store, a badge, a download, TestFlight or "available" but the three phrases that say it isn't out, that its tagline, card and lede open on what it is, and that its only link is tehon.app (not the words inside a screenshot) |
 | `content/hosting-claims.test.ts` | that nothing about Retrospect says Hobby, free tier, costs nothing or a hosting cost, in the case study or on its card, and that the true words are there |
 | `app/resume/resume.test.ts` | the headline on its own line, every Selected work link a whole `https://` address with the scheme printed, and the print rules that keep the PDF's text layer whole |
-| `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", and that the extractor feeding both checks is still reading all of it |
+| `content/voice.test.ts` | that the prose in the two `content/` files uses American spellings and never the closed form "cannot", that no study, card, caption or post puts a date's day first and outside a source line the only exact dates are the pinned ones, and that the extractor feeding the checks is still reading all of it |
 
 Six things are worth knowing about how these are written.
 

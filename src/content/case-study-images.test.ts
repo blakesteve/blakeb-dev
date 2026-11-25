@@ -7,8 +7,8 @@ import { describe, expect, it } from "vitest";
  * A case study may only show screenshots of its own app.
  *
  * This exists because it happened. A section about MegaSquad's picking mode
- * was inserted by anchoring on `eyebrow="The hard thing"` — a string three of
- * the four case studies use — so it landed in the Roster study, complete with
+ * was inserted by anchoring on `eyebrow="The hard thing"` — a string several of
+ * the case studies use — so it landed in the Roster study, complete with
  * two MegaSquad screenshots and copy about tearing tickets.
  *
  * Nothing caught it. `tsc` passed, the build passed, the dek count passed:
@@ -45,10 +45,12 @@ const FOLDER: Record<string, string> = {
   roster: "roster",
   retrospect: "retrospect",
   megasquad: "megasquad",
+  "bragging-rocks": "bragging-rocks",
+  tehon: "tehon",
 };
 
 /** Studies that really do ship screenshots, and so must render some. */
-const ILLUSTRATED = ["game-verdict", "retrospect", "megasquad"];
+const ILLUSTRATED = ["game-verdict", "retrospect", "megasquad", "bragging-rocks", "tehon"];
 
 function slices(): { key: string; body: string }[] {
   /* Keys are a mix of bare and quoted - `roster:` but `"game-verdict":` -

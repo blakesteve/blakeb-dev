@@ -3,10 +3,10 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { buildJobs } from "@/content/jobs";
+import { REPRINTED_APPS, buildJobs } from "@/content/jobs";
 import copied from "@/content/job-tokens.json";
 import { jobInk } from "./ink-jobs";
-import { getRosterShippedTokens } from "./roster";
+import { ROSTER_APPS, getRosterShippedTokens } from "./roster";
 
 const shipped = getRosterShippedTokens();
 const jobs = buildJobs({
@@ -14,7 +14,7 @@ const jobs = buildJobs({
   components: 70,
   tiers: { atoms: 30, molecules: 30, organisms: 10 },
   tests: 3000,
-  hosts: { gv: "gameverdict.app", retrospect: "retrospect.test", megasquad: "megasquad.org" },
+  hosts: { gv: "gameverdict.app", retrospect: "retrospect.test", megasquad: "megasquad.org", br: "bragging.rocks" },
 });
 const job = (id: string) => {
   const found = jobs.find((candidate) => candidate.id === id);
@@ -48,7 +48,7 @@ describe("the jobs", () => {
       components: 70,
       tiers: {},
       tests: null,
-      hosts: { gv: "a", retrospect: "b", megasquad: "c" },
+      hosts: { gv: "a", retrospect: "b", megasquad: "c", br: "d" },
     });
     expect(site.stats.map(({ label }) => label)).toEqual(["Components", "Apps"]);
   });
@@ -57,6 +57,14 @@ describe("the jobs", () => {
     for (const [id, tokens] of Object.entries(copied.jobs)) {
       expect(job(id).source).toBe(`${Object.keys(tokens).length} overrides · 0 components changed`);
     }
+  });
+
+  it("counts the apps it reprints, which isn't every app Roster runs in", () => {
+    /* This site at rest and "as shipped" aren't reprints of an app. */
+    const apps = jobs.filter(({ id }) => id !== "site" && id !== "shipped");
+    expect(REPRINTED_APPS).toEqual({ count: 4, words: "four" });
+    expect(apps).toHaveLength(REPRINTED_APPS.count);
+    expect(REPRINTED_APPS.count).toBeLessThan(ROSTER_APPS.count);
   });
 
   it("says whose tokens a reprint is in, for a screen reader", () => {
