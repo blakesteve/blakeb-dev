@@ -42,9 +42,9 @@ const JARGON = [
 
 describe("section deks", () => {
   it("exist in both content files", () => {
-    /* 29 since the Retrospect redesign: its study went from seven sections
-       to ten. */
-    expect(deksIn("case-studies.tsx").length).toBe(29);
+    /* 47 with Bragging Rocks' eight, Tehon's seven, and the two new sections on
+       Game Verdict's, Roster's and MegaSquad's studies. */
+    expect(deksIn("case-studies.tsx").length).toBe(47);
     /* 40 since "Every song has a sky", which carries ten. */
     expect(deksIn("posts.tsx").length).toBe(40);
   });

@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { projects } from "@/lib/projects";
+
 /**
  * Two house rules about prose, enforced on the prose rather than remembered.
  *
@@ -254,7 +256,7 @@ describe("prose voice", () => {
     /* Opening of each file, and then the closing paragraph of its last
        section. Both ends have to survive. */
     expect(caseStudies).toContain("Multi-sport pick");
-    expect(caseStudies).toContain("That makes the front end a consumer of a");
+    expect(caseStudies).toContain("After that is a beta on both platforms. Stroke order and models come from");
 
     expect(posts).toContain("Tailwind v4 generates utilities from theme tokens");
     /* The tail anchor moves with each new post: it has to be the file's last
@@ -267,5 +269,51 @@ describe("prose voice", () => {
     /* Both files open with a block comment; neither phrase should survive. */
     expect(caseStudies).not.toContain("Read from source: the bodies are JSX");
     expect(posts).not.toContain("No reading-time estimate");
+  });
+});
+
+/**
+ * Blake's dates are American, and a study has almost none. A figure carries its
+ * snapshot's date in its source line; the prose says a month and a year, or nothing.
+ */
+describe("dates on the work and in the posts", () => {
+  const MONTH =
+    "(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)";
+  const DAY_FIRST = new RegExp(String.raw`\b\d{1,2}(?:st|nd|rd|th)?\s+(?:of\s+)?${MONTH}\b`, "g");
+  const EXACT = new RegExp(String.raw`\b${MONTH}\.?\s+\d{1,2}(?:st|nd|rd|th)?\b(?:,\s+\d{4})?`, "g");
+  const all = (pattern: RegExp, text: string) =>
+    [...text.matchAll(pattern)].map(([hit]) => hit.replace(/\s+/g, " "));
+
+  const studies = proseIn("case-studies.tsx");
+  const cards = JSON.stringify(projects);
+
+  it("never puts the day first, in a study, a card, a caption or a post", () => {
+    expect(all(DAY_FIRST, studies)).toEqual([]);
+    expect(all(DAY_FIRST, cards)).toEqual([]);
+    expect(all(DAY_FIRST, proseIn("jobs.ts"))).toEqual([]);
+    expect(all(DAY_FIRST, proseIn("posts.tsx"))).toEqual([]);
+  });
+
+  /* A figure's source line is exempt: a snapshot has to say when it's from. */
+  const undated = (text: string) => text.replace(/\bsource: "[^"]*"/g, " ");
+
+  it("prints an exact date only where the date is the subject", () => {
+    expect(all(EXACT, undated(studies))).toEqual([
+      "October 4", // the night on Tonight's page, when Venus was retrograde
+      "November 13", // until when
+    ]);
+    expect(all(EXACT, cards)).toEqual([]);
+  });
+
+  it("twin: the dates Blake read are refused, and a month or an American date isn't", () => {
+    for (const bad of ["13 November", "29 Oct", "4 October 2026", "30\n  June 2026", "9th of May", "24 Nov snapshot"]) {
+      expect(all(DAY_FIRST, bad), bad).toHaveLength(1);
+    }
+    for (const good of ["October 2026", "November 24, 2026", "14 leagues", "you may", "since October 2009"]) {
+      expect(all(DAY_FIRST, good), good).toEqual([]);
+    }
+    expect(all(EXACT, "October 2026, and 5 Marches")).toEqual([]);
+    expect(all(EXACT, undated('dek="On October 29 it painted"'))).toEqual(["October 29"]);
+    expect(all(EXACT, undated('source: "Nov 24, 2026 snapshot"'))).toEqual([]);
   });
 });

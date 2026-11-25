@@ -31,9 +31,11 @@ describe("the worlds", () => {
   it("are these, in the order the site lists them", () => {
     expect(projects.map((p) => [p.slug, p.world])).toEqual([
       ["game-verdict", { press: "#3730a3", blueline: "#6366f1", pressInk: "#3730a3", bluelineInk: "#818cf8" }],
+      ["bragging-rocks", { press: "#ba220d", blueline: "#ed5741", pressInk: "#9f1200", bluelineInk: "#ed5741" }],
       ["roster", { press: "#65635f", blueline: "#a8a29e", pressInk: "#1c1917", bluelineInk: "#e7e5e4" }],
       ["megasquad", { press: "#0770da", blueline: "#52a8ff", pressInk: "#0b59a8", bluelineInk: "#52a8ff" }],
       ["retrospect", { press: "#96731a", blueline: "#d4af37", pressInk: "#684d1d", bluelineInk: "#d4af37" }],
+      ["tehon", { press: "#23604a", blueline: "#5c8b77", pressInk: "#23604a", bluelineInk: "#93bba8" }],
     ]);
   });
 
@@ -72,6 +74,7 @@ const closest = (list: readonly Marks[], state: (typeof STATES)[number]) =>
 describe("neighbors", () => {
   it("knows which pairs touch", () => {
     expect(touching(4)).toEqual([[0, 1], [1, 2], [2, 3], [0, 2], [1, 3]]);
+    expect(touching(6)).toEqual([[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [0, 2], [1, 3], [2, 4], [3, 5]]);
   });
 
   it.each(STATES)("can be told apart in normal, deutan and protan vision, on the %s", (state) => {
@@ -79,39 +82,42 @@ describe("neighbors", () => {
     expect(worst.apart, worst.pair).toBeGreaterThanOrEqual(10);
   });
 
-  /* The twin: the values before 23 Nov 2026, in this order. */
+  /* The twin: the values before 23 Nov 2026, in this order. The two new apps'
+     are the ones their first entries were drafted in. */
   it("twin: the old values in this order couldn't", () => {
     const old: Marks[] = [
       { slug: "game-verdict", world: { press: "#4b45c7", blueline: "#6d6bf2" } },
+      { slug: "bragging-rocks", world: { press: "#ba220d", blueline: "#f0654a" } },
       { slug: "roster", world: { press: "#0e9b74", blueline: "#12b886" } },
       { slug: "megasquad", world: { press: "#c62828", blueline: "#e23b3b" } },
       { slug: "retrospect", world: { press: "#b98a12", blueline: "#d9a82c" } },
+      { slug: "tehon", world: { press: "#23604a", blueline: "#ecd68c" } },
     ];
-    for (const [state, figure] of [["press", 9.1], ["blueline", 9.5]] as const) {
+    for (const [state, figure] of [["press", 2.9], ["blueline", 6.9]] as const) {
       const worst = closest(old, state);
-      expect(worst.pair).toBe("roster and retrospect");
-      expect(worst.apart).toBeCloseTo(figure, 1);
+      expect(worst.apart, worst.pair).toBeCloseTo(figure, 1);
     }
   });
 });
 
 describe("Roster's color bar", () => {
-  const PRESS = ["#3730a3", "#0770da", "#96731a"];
-  const BLUELINE = ["#6366f1", "#52a8ff", "#d4af37"];
+  const PRESS = ["#3730a3", "#ba220d", "#0770da", "#96731a"];
+  const BLUELINE = ["#6366f1", "#ed5741", "#52a8ff", "#d4af37"];
 
   it("is every project that runs on Roster, in page order, in both states", () => {
     expect(barColors("press")).toEqual(PRESS);
     expect(barColors("blueline")).toEqual(BLUELINE);
   });
 
-  it("twin: with Roster in it, it isn't", () => {
-    const withRoster = projects.map((p): Project => (p.slug === "roster" ? { ...p, onRoster: true } : p));
-    expect(barColors("press", withRoster)).toEqual(["#3730a3", "#65635f", "#0770da", "#96731a"]);
+  it("twin: with Tehon in it, which doesn't run on Roster, it isn't", () => {
+    const withTehon = projects.map((p): Project => (p.slug === "tehon" ? { ...p, onRoster: true } : p));
+    expect(barColors("press", withTehon)).toEqual([...PRESS, "#23604a"]);
+    expect(projects.filter((p) => !p.onRoster).map((p) => p.slug)).toEqual(["roster", "tehon"]);
   });
 
   it("is equal segments with hard stops, under the names the CSS reads", () => {
-    const strip = ([a, b, c]: string[]) =>
-      `linear-gradient(to right, ${a} 0% 33.333%, ${b} 33.333% 66.667%, ${c} 66.667% 100%)`;
+    const strip = ([a, b, c, d]: string[]) =>
+      `linear-gradient(to right, ${a} 0% 25%, ${b} 25% 50%, ${c} 50% 75%, ${d} 75% 100%)`;
     expect(barStyle()).toEqual({ "--bar-press": strip(PRESS), "--bar-blueline": strip(BLUELINE) });
     const css = read("app", "globals.css");
     expect(css).toMatch(/\n\.roster-bar \{[^}]*background: var\(--bar-press\);/);
@@ -141,13 +147,21 @@ describe("Roster's color bar", () => {
   });
 });
 
-describe("the résumé's four", () => {
-  it("are named, in order", () => {
-    expect(resumeProjects().map((p) => p.slug)).toEqual(["game-verdict", "roster", "retrospect", "megasquad"]);
+describe("the résumé's five", () => {
+  const FIVE = ["game-verdict", "bragging-rocks", "roster", "megasquad", "retrospect"];
+
+  it("are named, in the site's order, and Tehon isn't one until it launches in a store", () => {
+    expect(resumeProjects().map((p) => p.slug)).toEqual(FIVE);
+    expect(projects.map((p) => p.slug)).toContain("tehon");
   });
 
-  it("twin: the first four of the array, which it used to print, are in another order", () => {
-    expect(projects.slice(0, 4).map((p) => p.slug)).not.toEqual(resumeProjects().map((p) => p.slug));
+  /* The list matches the array's first five today, so only a reorder can tell
+     a list by slug from a list by place. */
+  it("twin: the first five of an array with Tehon at the front aren't the five", () => {
+    const tehon = projects.find((p) => p.slug === "tehon")!;
+    const moved = [tehon, ...projects.filter((p) => p !== tehon)];
+    expect(moved.slice(0, 5).map((p) => p.slug)).not.toEqual(FIVE);
+    expect(resumeProjects(moved).map((p) => p.slug)).toEqual(FIVE);
     expect(read("app", "resume", "page.tsx")).toContain("const SELECTED = resumeProjects();");
   });
 });

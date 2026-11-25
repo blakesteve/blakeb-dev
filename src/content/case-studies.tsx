@@ -19,6 +19,8 @@ import {
   getRosterComponents,
   getRosterMeta,
 } from "@/lib/roster";
+import { REPRINTED_APPS } from "./jobs";
+
 
 /* Counted from the installed package's own type definitions, so the tier
    breakdown in the Roster sidebar cannot drift from the count in its stat row.
@@ -28,8 +30,33 @@ const rosterTiers = getRosterComponents().reduce<Record<string, number>>(
   {},
 );
 
+import brCabinet from "@/images/bragging-rocks/bragging-rocks-cabinet.webp";
+import brEdit from "@/images/bragging-rocks/bragging-rocks-edit-mobile.png";
+import brNames from "@/images/bragging-rocks/bragging-rocks-names.webp";
+import brPass from "@/images/bragging-rocks/bragging-rocks-pass-mobile.png";
+import brPhone from "@/images/bragging-rocks/bragging-rocks-table-mobile.png";
+import brRock from "@/images/bragging-rocks/bragging-rocks-rock.webp";
+import brShelves from "@/images/bragging-rocks/bragging-rocks-what-is-it.webp";
+import brWall from "@/images/bragging-rocks/bragging-rocks-wall.webp";
+
+import thContentsDark from "@/images/tehon/tehon-contents-ipad-dark.png";
+import thContentsLight from "@/images/tehon/tehon-contents-ipad-light.png";
+import thCoverDark from "@/images/tehon/tehon-cover-dark.png";
+import thCoverLight from "@/images/tehon/tehon-cover-light.png";
+import thHeldDark from "@/images/tehon/tehon-held-line-dark.png";
+import thHeldLight from "@/images/tehon/tehon-held-line-light.png";
+import thSiteDark from "@/images/tehon/tehon-site-dark.png";
+import thSitePageDark from "@/images/tehon/tehon-site-first-page-dark.png";
+import thSitePageLight from "@/images/tehon/tehon-site-first-page-light.png";
+import thSiteLight from "@/images/tehon/tehon-site-light.png";
+import thTodayDark from "@/images/tehon/tehon-today-dark.png";
+import thTodayLight from "@/images/tehon/tehon-today-light.png";
+import thWatchedDark from "@/images/tehon/tehon-watched-line-mobile-dark.png";
+import thWatchedLight from "@/images/tehon/tehon-watched-line-mobile-light.png";
+
 import rsLanding from "@/images/retrospect/retrospect-landing.png";
 import rsLandingMobile from "@/images/retrospect/retrospect-landing-mobile.png";
+import rsSamples from "@/images/retrospect/retrospect-samples.png";
 import rsReveal from "@/images/retrospect/retrospect-reveal-mobile.png";
 import rsTonight from "@/images/retrospect/retrospect-tonight.png";
 import rsTonightMobile from "@/images/retrospect/retrospect-tonight-mobile.png";
@@ -45,8 +72,12 @@ import rsBirthChart from "@/images/retrospect/retrospect-birth-chart-mobile.png"
 
 import ncaamDark from "@/images/megasquad/megasquad-2.0-ncaam-dark.png";
 import ncaamLight from "@/images/megasquad/megasquad-2.0-ncaam-light.png";
-import squidDark from "@/images/megasquad/megasquad-2.0-sad-squid-dark.png";
-import squidLight from "@/images/megasquad/megasquad-2.0-sad-squid-light.png";
+import decemberDark from "@/images/megasquad/megasquad-2.0-december-dark.png";
+import decemberLight from "@/images/megasquad/megasquad-2.0-december-light.png";
+import decemberMobileDark from "@/images/megasquad/megasquad-2.0-december-mobile-dark.png";
+import decemberMobileLight from "@/images/megasquad/megasquad-2.0-december-mobile-light.png";
+import squidDark from "@/images/megasquad/megasquad-2.0-december-squid-dark.png";
+import squidLight from "@/images/megasquad/megasquad-2.0-december-squid-light.png";
 import mobileDark from "@/images/megasquad/megasquad-2.0-schedule-mobile-dark.png";
 import mobileLight from "@/images/megasquad/megasquad-2.0-schedule-mobile-light.png";
 import pickingDark from "@/images/megasquad/megasquad-2.0-picking-dark.png";
@@ -59,7 +90,6 @@ import expandedDark from "@/images/megasquad/megasquad-2.0-standings-expanded-da
 import expandedLight from "@/images/megasquad/megasquad-2.0-standings-expanded-light.png";
 
 import gvBrowse from "@/images/game-verdict/gameverdict-browsegames-filtered.png";
-import gvCompare from "@/images/game-verdict/gameverdict-compare.png";
 import gvCommunityBoards from "@/images/game-verdict/gameverdict-community-boards.png";
 import gvCommunityComposer from "@/images/game-verdict/gameverdict-community-composer.png";
 import gvCommunityTeaser from "@/images/game-verdict/gameverdict-community-teaser.png";
@@ -67,15 +97,17 @@ import gvCommunityThread from "@/images/game-verdict/gameverdict-community-threa
 import gvDiscordCompare from "@/images/game-verdict/gameverdict-discord-compare.png";
 import gvDiscordVerdict from "@/images/game-verdict/gameverdict-discord-verdict.png";
 import gvDetail from "@/images/game-verdict/gameverdict-gamedetail-herocrop.png";
-import gvContestedDesktop from "@/images/game-verdict/gameverdict-mostcontested-desktop.png";
-import gvContestedMobile from "@/images/game-verdict/gameverdict-mostcontested-mobile.png";
 import gvBadges from "@/images/game-verdict/gameverdict-profile-badgeshelf.png";
 import gvQuickVote from "@/images/game-verdict/gameverdict-quickvote-desktop.png";
 import gvQuickVoteLibrary from "@/images/game-verdict/gameverdict-quickvote-library.png";
 import gvQuickVoteMobile from "@/images/game-verdict/gameverdict-quickvote-mobile.png";
 import gvResults from "@/images/game-verdict/gameverdict-resultscard.png";
+import gvTie from "@/images/game-verdict/gameverdict-tie.png";
 import gvVerdictCard from "@/images/game-verdict/gameverdict-verdictcard.png";
 import gvCasting from "@/images/game-verdict/gameverdict-verdictcastingcard.png";
+import gvFiveReveal from "@/images/game-verdict/gameverdict-weekly-five-reveal.png";
+import gvFiveSealed from "@/images/game-verdict/gameverdict-weekly-five-sealed.png";
+import gvFiveSealedMobile from "@/images/game-verdict/gameverdict-weekly-five-sealed-mobile.png";
 import gvCrtOff from "@/images/game-verdict/gameverdict-crt-off.png";
 import gvCrtOn from "@/images/game-verdict/gameverdict-crt-on.png";
 import gvKonami1p from "@/images/game-verdict/gameverdict-konami-1p.png";
@@ -118,6 +150,8 @@ export type CaseStudy = {
   stats: CaseStudyStat[];
   stack: Row[];
   also: Row[];
+  /** The `also` panel's heading, for a project that hasn't shipped anything. */
+  alsoLabel?: string;
   body: ReactNode;
 };
 
@@ -240,6 +274,20 @@ function Code({ children }: { children: ReactNode }) {
   );
 }
 
+/** A link inside a paragraph, in the paragraph's own size. */
+function StudyLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <RLink
+      href={href}
+      underline="always"
+      className="text-[length:inherit] leading-[inherit]"
+      {...(href.startsWith("http") ? { external: true, showExternalIcon: false } : {})}
+    >
+      {children}
+    </RLink>
+  );
+}
+
 export const caseStudies: Record<string, CaseStudy> = {
   "game-verdict": {
     lede: "A crowdsourced answer to an argument PC gamers have been having forever: is this game better with a controller, or with a keyboard and mouse?",
@@ -248,8 +296,8 @@ export const caseStudies: Record<string, CaseStudy> = {
          cast is people turning up to settle the argument, which is the whole
          premise. Both are live; the values here are only the fallback. */
       /* api.gameverdict.app/api/stats, read once on 15 Nov 2026 at 09:59 CST. */
-      { value: "3,569", label: "Verdicts cast", source: "15 Nov 2026 snapshot", live: "verdicts" },
-      { value: "2,153", label: "Games tracked", source: "15 Nov 2026 snapshot", live: "games" },
+      { value: "3,569", label: "Verdicts cast", source: "Nov 2026 snapshot", live: "verdicts" },
+      { value: "2,153", label: "Games tracked", source: "Nov 2026 snapshot", live: "games" },
       /* Counted off `origin/main`. That is NOT this repo's default branch -
          game-verdict releases from `dev` - but `main` is its release line, so
          this counts shipped work rather than whatever `dev` is carrying, and it
@@ -257,8 +305,8 @@ export const caseStudies: Record<string, CaseStudy> = {
          is private, so there is nothing for the GitHub reader to reach, which
          makes it the only number on this card that can go stale silently. */
       /* `git rev-list --count origin/main` after a fetch: main is dev plus its
-         release merges, the count 4 Nov's 1,158 was taken by. 3c2f8c1. */
-      { value: "1,260", label: "Commits", source: "15 Nov 2026 snapshot · main · private repo" },
+         release merges. 1007395. */
+      { value: "1,274", label: "Commits", source: "Nov 2026 snapshot · main · private repo" },
       { value: "50 KB", label: "Per browse page", source: "was 1.8 MB" },
     ],
     stack: [
@@ -287,8 +335,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <p>
             Steam will tell you a game has “full controller support.” It won&rsquo;t tell you whether
             anyone actually <strong>prefers</strong> playing it that way. Game Verdict asks players
-            directly, dedupes anonymous votes with a browser fingerprint, and surfaces the leading
-            input method as a community badge.
+            directly, dedupes anonymous votes with a browser fingerprint, and surfaces the leading input method as a community badge. It&rsquo;s the most mature app here.
           </p>
           <p>
             Games are searched across Steam and IGDB in parallel, deduped and relevance-ranked, with
@@ -321,12 +368,12 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={gvQuickVote}
-            alt="Game Verdict's Quick Vote screen: a queue counter, a session counter, and a single large game card showing Counter-Strike 2."
+            alt="Game Verdict's Quick Vote screen: a queue counter, a session counter, and a single large card for Counter-Strike 2 with KBM, Both and Controller buttons."
             caption="Quick Vote: one game at a time, no account required"
           />
           <p>
-            A quarter of the traffic is on a phone, and the one-card-at-a-time shape was built for
-            exactly that. Nothing about the loop changes on a small screen.
+            The one-card-at-a-time shape was built for a phone, and nothing about the loop changes on
+            a small screen.
           </p>
           <Shot
             press={gvQuickVoteMobile}
@@ -344,12 +391,12 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={gvCasting}
-            alt="The verdict casting card on a game page, offering Keyboard & Mouse, Controller, Both, and a smaller Other option."
+            alt="The verdict casting card with Controller chosen and Xbox picked from a row of controller types, above a Submit Verdict button."
             caption="Casting a verdict without leaving the page"
           />
           <Shot
             press={gvResults}
-            alt="The results card showing a proportional tricolor bar with percentages for keyboard and mouse, controller, and both."
+            alt="The results card after a vote: a tricolor bar, a controller types bar, and 29% KBM, 56% Both and 15% Controller from 41 votes."
             caption="The breakdown, right after you vote"
           />
         </Section>
@@ -378,39 +425,97 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Tiers />
           <Shot
             press={gvQuickVoteLibrary}
-            alt="Quick Vote with a synced Steam library: the top card is TUNIC, tagged 'In your library', with a queue of 378 and 535 skipped."
+            alt="Quick Vote with a synced Steam library: the top card is TUNIC, tagged 'In your library', with 135 in the queue and 13 skipped."
             caption="Library synced: your own games surface first, tagged in place"
           />
         </Section>
 
         <Section
+          eyebrow="The front page"
+          title="The answer stays sealed until you vote"
+          dek="Anyone who sees the score first may just agree with it. The home page now offers a themed set of games each week, five at a time, and keeps each result hidden until you've cast your own vote."
+        >
+          <p>
+            A score shown first is a nudge, and a nudge isn&rsquo;t an opinion. So the home page opens on{" "}
+            <strong>the Weekly Five</strong>: five games, one at a time. Each card
+            keeps its split sealed until you vote. Then it shows where you landed against everyone else,
+            and the deck moves on by itself, or when you press Next game.
+          </p>
+          <Shot
+            press={gvFiveSealed}
+            alt="Game Verdict's Weekly Five, themed Steam Says Otherwise: game 1 of 5 is Baldur's Gate 3, with KBM, Both and Controller buttons, a Haven't played it link, and no result showing."
+            caption="Sealed: vote first, then see the split"
+          />
+          <Shot
+            press={gvFiveReveal}
+            alt="The same card after a vote for KBM: 'You're with 64% of players', a bar split 64% KBM, 20% Both and 16% Controller, and a Next game button."
+            caption="The split, once you've voted"
+          />
+          <Shot
+            press={gvFiveSealedMobile}
+            alt="The home page on a phone: the headline Controller or Keyboard & Mouse?, a search field, and a sealed Weekly Five card for Baldur's Gate 3 that fits on the first screen."
+            caption="The same card, on the first screen"
+            frame="phone"
+          />
+          <p>
+            The server chooses all of it. The theme is a pure function of the ISO week, in UTC, so
+            nothing is picked in the browser and the same games wait for everyone. A theme runs only
+            when at least five games fit it. When too few do, the next one in the rotation is tried,
+            and Most Contested goes last because it can always be filled.
+          </p>
+          <p>
+            &ldquo;Haven&rsquo;t played it&rdquo; is a full answer, because a guess would be worse than
+            no vote. After five, a last card shows what you did and offers five more.
+          </p>
+        </Section>
+
+        <Section
           eyebrow="One sentence, two audiences"
           title="Prose generated from data, not from a model"
-          dek="The plain-English verdict on each game page is assembled from the actual vote counts, not written by AI, so it can never invent a number."
+          dek="The plain-English verdict on each game page is assembled from the actual vote counts, not written by AI, so it can never invent a number. When a game is tied, it says so instead of picking a winner."
         >
           <p>
             Every game page ends with a plain-language verdict: how many people voted, which way they
             leaned, and which controller they tend to use. It&rsquo;s written by a{" "}
-            <Code>buildVerdictSummary()</Code> function, not by a language model. Four branches on the
-            leading choice, an extra clause when the top two land within ten points of each other, and
-            a controller-subtype sentence that only appears once at least two people have reported
-            one.
+            <Code>buildVerdictSummary()</Code> function, not by a language model. Four branches, three
+            for a leading choice and one for a tie, an extra clause once five people have voted and the
+            top two land within ten points of each other, and a controller-subtype sentence that only
+            appears once at least two people have reported one.
+          </p>
+          <p>
+            The tie used to be a win. <Code>topChoice()</Code> handed an even split to whichever choice
+            came first in line, so keyboard and mouse won every tie it was in. Now a tied
+            game has no verdict, and every place that shows one says it&rsquo;s tied.
           </p>
           <Shot
+            press={gvTie}
+            alt="Stardew Valley's page with a gray Tied badge beside its genres, results of 40% KBM, 20% Both and 40% Controller, and a verdict card also marked Tied."
+            caption="Tied at 40%, and marked that way"
+          />
+          <Shot
             press={gvVerdictCard}
-            alt="The Verdict card for Cyberpunk 2077, reading: based on 28 community verdicts, Cyberpunk 2077 works well either way, 53% of players say both inputs feel good, 11% lean controller, and 36% lean keyboard and mouse. Among controller players, Xbox is the most common setup."
+            alt="The Verdict card for Cyberpunk 2077, reading: based on 40 community verdicts, Cyberpunk 2077 works well either way, 55% of players say both inputs feel good, 15% lean controller, and 30% lean keyboard and mouse. Among controller players, Xbox is the most common setup."
             caption="Deterministic prose: same data in, same sentence out"
           />
           <p>
             The same string is also emitted as the <Code>FAQPage</Code> answer in structured data. So
-            roughly 880 pages that would otherwise be near-identical templates each carry unique
-            text answering the literal thing people search for, and the reader and the crawler are
-            served by one sentence rather than two systems.
+            every game with a verdict, whose page would otherwise be a near-identical template, carries
+            unique text answering the literal thing people search for, and the reader and the crawler
+            are served by one sentence rather than two systems.
           </p>
           <Pull cite="Why not an LLM">
             No latency, no per-call cost, no hallucinated percentages, and the same input always
             produces the same output. A model would have done this worse, slower, and for money.
           </Pull>
+          <p>
+            The game&rsquo;s description is a different job, and a model does do that one. Steam&rsquo;s
+            page already shows its own text, so a copy of it gives a search engine no reason to send
+            anyone here. Claude Haiku rewrites it, and no draft goes up unchecked. It has to keep every number in the original (&ldquo;12-gauge&rdquo; isn&rsquo;t
+            &ldquo;a dozen&rdquo;), it can&rsquo;t pad the text out, and a second, stronger model goes
+            through it claim by claim and fails it if Steam&rsquo;s text doesn&rsquo;t back one up. If
+            three drafts in a row fail, none of them is used, and a game with no rewrite shows the
+            original.
+          </p>
         </Section>
 
         <Section
@@ -450,7 +555,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={gvBrowse}
-            alt="Game Verdict's browse page with platform and sort filters applied, showing a grid of games with verdict badges and vote counts."
+            alt="Game Verdict's browse page filtered to games whose verdict is Both, on Windows, sorted by Most Contested: 20 of 160 games, with verdict badges and vote counts."
             caption="Browse: filtering, sorting and counting all happen in SQL"
           />
         </Section>
@@ -467,7 +572,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={gvBadges}
-            alt="A public Game Verdict profile showing a shelf of earned achievement badges."
+            alt="A public Game Verdict profile with a shelf of 20 earned badges, above a row of contested games from the member's library."
             caption="The badge shelf on a public profile"
           />
           <p>
@@ -486,32 +591,12 @@ export const caseStudies: Record<string, CaseStudy> = {
             alt="A Discord embed comparing two games side by side with their vote breakdowns."
             caption="/compare, side by side"
           />
-          <p>
-            And the home page keeps the most contested games up front, because a game the community
-            can&rsquo;t agree on is a better invitation to vote than one that is already settled.
-          </p>
-          <Shot
-            press={gvContestedDesktop}
-            alt="The Most Contested section of the Game Verdict home page, showing Steam hero art with the game logo composited on top, a tricolor vote bar, and inline vote buttons."
-            caption="Most Contested, with Steam hero art and the logo composited on top"
-          />
-          <Shot
-            press={gvContestedMobile}
-            alt="The Most Contested card on a phone, with the hero art, vote bar and buttons stacked."
-            caption="The same card, narrow"
-            frame="phone"
-          />
-          <Shot
-            press={gvCompare}
-            alt="Game Verdict's compare view: Counter-Strike 2 against ELDEN RING, with mirrored bars showing 97 percent keyboard and mouse against 80 percent controller."
-            caption="Compare: Counter-Strike 2 against ELDEN RING"
-          />
         </Section>
 
         <Section
           eyebrow="The empty room"
           title="Invite-only, on purpose"
-          dek="A forum with boards, markdown posts, direct messages, reporting and a moderation queue, opened to a handful of people first so it would have something in it before anyone was invited to look."
+          dek="A forum with boards, markdown posts, direct messages, reporting and a moderation queue, opened to a handful of people first so it would have something in it before anyone was invited to look. Friends can start a private board of their own."
         >
           <p>
             Comment threads on game pages were the small version of this. The community hub is the
@@ -523,7 +608,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={gvCommunityBoards}
-            alt="The Game Verdict community index: four boards down the left with unread badges, and a 'Hot right now' feed showing a pinned welcome post and a thread with an embedded game verdict."
+            alt="The Game Verdict community index: a Start a crew panel and four boards down the left, two marked new, and a 'Hot right now' feed with a pinned welcome post and threads carrying live verdicts."
             caption="Four boards, with unread counts and whatever is busiest on the right"
           />
           <p>
@@ -536,7 +621,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={gvCommunityThread}
-            alt="A Game Verdict community thread titled 'Oblivion remastered is such a nostalgia vibe', with the game's cover art and a live KBM verdict bar embedded under the title, moderator actions reading Delete, Pin, Lock and Report, and two replies below, one of them an animated GIF."
+            alt="A community thread titled 'Oblivion Remastered: I keep switching mid-dungeon', with the game and its live Controller verdict embedded under the title, and three replies below, one quoting another."
             caption="A thread carries the live verdict for the game it is arguing about"
           />
           <p>
@@ -552,22 +637,28 @@ export const caseStudies: Record<string, CaseStudy> = {
             caption="What everyone else sees, until an invite arrives"
           />
           <p>
+            A <strong>crew</strong> is the smaller room: a private board for a group of friends, run by
+            whoever started it. One person can start up to ten, and each holds up to 50 people, members
+            and pending invites together. Accepting an invite doesn&rsquo;t need early access, and it
+            opens that crew and nothing else in the hub. A block in either direction stops an invite,
+            and moderators see a crew&rsquo;s posts only when one is reported.
+          </p>
+          <p>
             Every post and comment carries a report button with four reasons, alerting mods and
             admins into a queue that gets worked by hand. Moderators pin and lock inline. Deletes
             are soft, so a removed post is still there to look at when someone asks why it went.
             Blocking is mutual and filters the feed rather than just hiding replies. None of that
-            was asked for by the fifteen or so accounts currently in there. It exists because the
-            first person who needs reporting shows up before the first moderator does, and that is
-            not something you can add in a hurry.
+            was asked for. It exists because the first person who needs reporting shows up before the
+            first moderator does, and that is not something you can add in a hurry.
           </p>
           <Shot
             press={gvCommunityComposer}
-            alt="Writing a post in Game Verdict: a title field, Write and Preview tabs, a markdown formatting toolbar, a body field, and an attached game showing that its live verdict breakdown will be embedded."
+            alt="Writing a post in Game Verdict: a title, Write and Preview tabs, a markdown toolbar, a body, and The Witcher 3 attached so its live verdict will be embedded."
             caption="Markdown, a formatting toolbar, and a game attached to the post"
           />
           <p>
-            The GIF picker got a harder problem than it deserved. Google shut off the Tenor API on
-            30 June 2026, taking GIF support out of Discord, X, WhatsApp and Bluesky with it, and
+            The GIF picker got a harder problem than it deserved. Google shut off the Tenor API in
+            June 2026, taking GIF support out of Discord, X, WhatsApp and Bluesky with it, and
             Giphy had already moved off free access. GIFs landed here two weeks later on Klipy,
             built by ex-Tenor engineers as a deliberate near-clone of the thing everyone had just
             lost. Rendering is restricted to an allowlist of CDN hosts rather than trusting whatever
@@ -607,7 +698,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             caption="Browse, with and without CRT. Flip the production state to compare"
           />
           <p>
-            It also lives in Settings, next to the Steam library import, which is where an easter egg
+            It also lives in Settings, on the same page as the Steam library import, which is where an easter egg
             stops being a joke and becomes a feature somebody might actually prefer.
           </p>
           <Shot
@@ -723,7 +814,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section
           eyebrow="The hard thing"
           title="Theme-aware without being theme-locked"
-          dek="The components had to look at home in four apps with four different color schemes, without keeping a separate copy of the code for each one."
+          dek="The components had to look at home in apps with different color schemes, without keeping a separate copy of the code for each one."
         >
           <p>
             A component library that hardcodes its palette is a library you can use exactly once.
@@ -755,6 +846,20 @@ export const caseStudies: Record<string, CaseStudy> = {
             second time would have put a competing :root block in the cascade and repainted the
             whole site.
           </Pull>
+          <p>
+            It goes further than two columns.{" "}
+            <RLink
+              href={SPECIMENS_PAGE.href}
+              underline="always"
+              className="text-[length:inherit] leading-[inherit]"
+            >
+              {SPECIMENS_PAGE.label}
+            </RLink>{" "}
+            reprints the same sheet in the palettes of {REPRINTED_APPS.words} of the apps Roster runs
+            in, and since 5.19.0 an app can do that to a part of a page on its own. <Code>data-roster-scope</Code> on any
+            element makes Roster&rsquo;s derived colors work themselves out again from the palette
+            inside it, where before they were worked out once, at the top of the page.
+          </p>
           <p>
             Dark mode is class-based rather than tied to the OS preference, which is what makes a
             manual toggle possible at all, and is why this page can have two production states
@@ -806,12 +911,36 @@ export const caseStudies: Record<string, CaseStudy> = {
             on the contact block, once on a case study sidebar, identical markup both times.
           </p>
           <p>
-            <strong>And one gap is still open.</strong> Roster&rsquo;s <Code>Button</Code> is typed
-            to <Code>HTMLButtonElement</Code> with no <Code>as</Code> and no <Code>href</Code>, so
-            the most common control on a portfolio, a button-shaped thing that navigates, can&rsquo;t be
-            built from it. Every workaround is bad: a button with an <Code>onClick</Code> router push
-            loses middle-click and the right role, and hand-rolling it is how the two above got
-            written twice. It is logged, not fixed.
+            <strong>A button-shaped link gets the button&rsquo;s classes.</strong> Roster&rsquo;s{" "}
+            <Code>Button</Code> is typed to <Code>HTMLButtonElement</Code>, as of 5.23.0, and the most
+            common control on a portfolio is a button-shaped thing that navigates. A button with an{" "}
+            <Code>onClick</Code> router push loses middle-click and the right role, and hand-rolling
+            the link is how the two above got written twice. So the library exports{" "}
+            <Code>buttonVariants</Code>, the same classes to put on a real link.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="How it spreads"
+          title="Building it isn't adopting it"
+          dek="A component nobody imports hasn't fixed anything. So three of the apps now run a lint rule: hand-write a button the library already has, and the check fails."
+        >
+          <p>
+            Publishing a component doesn&rsquo;t put it in an app. The library had the button for
+            months while apps beside it went on writing their own: a native <Code>button</Code>, or a
+            link wearing a button&rsquo;s classes. Nothing was wrong with either one. They just
+            weren&rsquo;t the library, so they couldn&rsquo;t get a fix it shipped.
+          </p>
+          <p>
+            So the rule moved out of my head and into the check. Three of the {ROSTER_APPS.words} run it:{" "}
+            <StudyLink href="/work/game-verdict">Game Verdict</StudyLink>,{" "}
+            <StudyLink href="/work/megasquad">MegaSquad</StudyLink>, and{" "}
+            <StudyLink href="https://tehon.app">Tehon&rsquo;s site</StudyLink>, which had it from its
+            first commit. It refuses a
+            native <Code>button</Code>, and any link whose classes hand-write one: a solid fill, or
+            rounded corners with padding and an edge or a fill. Classes kept in a constant hide from a
+            check that reads strings, so a link styled from one fails too. The files older than the rule
+            are on a list, each with its reason, and nothing is added to it.
           </p>
         </Section>
 
@@ -854,12 +983,13 @@ export const caseStudies: Record<string, CaseStudy> = {
               {SPECIMENS_PAGE.label}
             </RLink>{" "}
             reads them live from the installed package along with every token
-            ramp, and reprints itself in the palettes of the apps it runs in. And it doesn&rsquo;t walk through the CSS packaging
+            ramp, and reprints itself in the palettes of {REPRINTED_APPS.words} of the apps Roster
+            runs in. And it doesn&rsquo;t walk through the CSS packaging
             failure in detail, because that one earned its own post.
           </p>
           <p>
             What it does instead: press <Code>⌥X</Code> and every Roster component on this page
-            outlines itself and says its own name, including the buttons two sections up and the
+            outlines itself and says its own name, including the buttons under The hard thing and the
             nav you arrived through. The claim and the evidence are the same object.
           </p>
         </Section>
@@ -917,6 +1047,11 @@ export const caseStudies: Record<string, CaseStudy> = {
             sample set of answers.
           </p>
           <Shot
+            press={rsSamples}
+            alt="The four samples on Retrospect's landing page: a song's sky, a solar eclipse over Aquarius by Boards of Canada; a solar storm night in May 2024 under an aurora; tonight's wheel of planets; and twelve answers in four jars, 6 No, 3 Not clearly, 2 Too early and 1 Maybe."
+            caption="Four samples to open, on a made-up listener's history"
+          />
+          <Shot
             press={rsLandingMobile}
             alt="Retrospect's landing page on a phone: the Saturn mark, the headline, and the username field stacked on a narrow screen."
             caption="The same front door on a phone"
@@ -938,7 +1073,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             So the first visit is paced like a story rather than dropped as a dashboard. Four
             screens: the scale of your history against the sky, your wildest night, the song with
             the strangest sky, and only then the answers. Every listening figure from here on is one
-            real history, mine, as it stood in early October 2026: 500,413 plays since October 2009,
+            real history, mine, as it stood in October 2026: 500,413 plays since October 2009,
             through 216 times Venus changed
             sign and 201 solar storms. Someone else&rsquo;s numbers will be different, and that is the
             entire point of the thing.
@@ -948,7 +1083,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             to be willing to say so, and still be worth the wait.
           </Pull>
           <p>
-            My wildest night, by the sky, was the total solar eclipse of April 8, 2024. I played 80
+            My wildest night, by the sky, was the total solar eclipse of April 2024. I played 80
             songs. A usual Monday is 79. The last screen sorts the answers to twelve fixed
             questions, explained below, into jars. Mine came back zero Yes, three Maybe, two Not
             clearly and seven No.
@@ -956,7 +1091,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsReveal}
             alt="The last screen of the first visit on a phone: 'So, does the sky move you?' above five jars reading 0 Yes, 3 Maybe, 2 Not clearly, 7 No and 0 Too early, then 'Mostly no. Here's exactly how, and the three maybes.'"
-            caption="The payoff of the build-up is mostly no, said plainly"
+            caption="The payoff of the build-up is mostly no, said plainly · October 2026"
             frame="phone"
           />
         </Section>
@@ -968,26 +1103,26 @@ export const caseStudies: Record<string, CaseStudy> = {
         >
           <p>
             <strong>Tonight</strong> opens on the sky right now and lines it up with your own
-            answers: Venus is retrograde until November 13, and here is what Venus retrograde has
-            looked like in your listening so far. <strong>Every night</strong> is a calendar of
+            answers. On October 4 that was Venus, retrograde until November 13, and what Venus
+            retrograde had looked like in my listening so far. <strong>Every night</strong> is a calendar of
             every night you&rsquo;ve listened, filterable down to the storm nights, the flare
             nights, the eclipses and the full moons. <strong>Sky</strong> is a wheel of the planets
             with a timeline of all your years under it.
           </p>
           <Shot
             press={rsTonight}
-            alt="Retrospect's Tonight view: 'Sunday night, Oct 4' over a wheel of tonight's planets, then 'Tonight, for you' with rows for Venus retrograde marked Maybe, Venus in detriment marked Not clearly, and a solar storm marked Maybe."
-            caption="Tonight's real sky, and how this listener's listening went under skies like it"
+            alt="Retrospect's Tonight view: a Sunday night's date over a wheel of tonight's planets, then 'Tonight, for you' with rows for Venus retrograde marked Maybe, Venus in detriment marked Not clearly, and a solar storm marked Maybe."
+            caption="Tonight's real sky, and how this listener's listening went under skies like it · October 2026"
           />
           <Shot
             press={rsNights}
             alt="The Every night view: filter chips for all nights, 243 storm nights, 132 X-flare nights, 76 eclipses and full moons, above a calendar of September 2026 where each night carries its moon phase."
-            caption="Every night since 2009, each one a door"
+            caption="Every night since 2009, each one a door · October 2026"
           />
           <Shot
             press={rsSky}
             alt="The Sky view: a large zodiac wheel with tonight's planets and the date in its center, above a timeline of plays since 2009 with markers for events along it."
-            caption="Sixteen years on one timeline, and a wheel that turns with it"
+            caption="Sixteen years on one timeline, and a wheel that turns with it · October 2026"
           />
           <p>
             Anything you open, whether a song, a night, a planet or one of the questions, opens as
@@ -1003,8 +1138,8 @@ export const caseStudies: Record<string, CaseStudy> = {
           </p>
           <Shot
             press={rsTonightMobile}
-            alt="The Tonight view on a phone: the three view tabs, 'Sunday night, Oct 4', the wheel of tonight's sky, and the first row of 'Tonight, for you'."
-            caption="Built for a phone first"
+            alt="The Tonight view on a phone: the three view tabs, the night's date, the wheel of tonight's sky, and the first row of 'Tonight, for you'."
+            caption="Built for a phone first · October 2026"
             frame="phone"
           />
         </Section>
@@ -1016,7 +1151,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         >
           <p>
             One rule governs every line of copy. A pairing is a dated fact: I first played Twilight
-            by Elliott Smith at 4:04 p.m. on August 1, 2012, under a full moon, with Mercury
+            by Elliott Smith at 4:04 on a Wednesday afternoon in August 2012, under a full moon, with Mercury
             retrograde. I&rsquo;ve played it 148 times since. That is all true, and none of it says
             the moon did anything.
           </p>
@@ -1028,7 +1163,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsPairing}
             alt="A song sheet on a phone for Twilight: the night's space weather, NASA's picture of that day, 'You've played it 148 times since.', and a link reading 'Coincidence or pattern? Question 1, on Mercury retrograde, has the answer.'"
-            caption="A fact, and a pointer to where the claim would be tested"
+            caption="A fact, and a pointer to where the claim would be tested · October 2026"
             frame="phone"
           />
         </Section>
@@ -1070,7 +1205,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsQuestions}
             alt="A grid of the twelve questions with their words: Mercury retrograde No, Full moon Maybe, New moon No, Venus at home No, Strong Moon No, Venus and Mars No, Solar storms Maybe, Big flares No, Mars in water Not clearly, Venus in detriment Not clearly, Venus retrograde Maybe, Mars retrograde No."
-            caption="The same twelve for every listener. None of mine came back Yes."
+            caption="The same twelve for every listener. None of mine came back Yes · October 2026"
           />
         </Section>
 
@@ -1093,8 +1228,8 @@ export const caseStudies: Record<string, CaseStudy> = {
             other 24.
           </p>
           <p>
-            The redesign asks the full moon once, in a fixed question, with the correction. On 4
-            October 2026 it answers <strong>Maybe</strong>. Across 208 full moons, about a 40%
+            The redesign asks the full moon once, in a fixed question, with the correction. It
+            answers <strong>Maybe</strong>. Across 208 full moons, about a 40%
             bigger share of my plays came after midnight, so the swing held up. The evidence
             didn&rsquo;t: chance alone produces a swing that big about one time in eleven, and
             once the other eleven questions are allowed for, it isn&rsquo;t close to the bar for a
@@ -1104,7 +1239,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsFullMoon}
             alt="The full moon question sheet: 'Does a full moon change how late you listen?' answered Maybe, with 'a 40% bigger share of your plays came after midnight, which could be chance', a bar sitting at 'Could be chance', a range from 6% smaller to 108% bigger, 208 full moons, and the math: p = 0.091 from 2,000 shuffled skies, adjusted p 0.37."
-            caption="The swing survived. The evidence for it didn't."
+            caption="The swing survived. The evidence for it didn't · October 2026"
           />
           <p>
             The method got better, and the one striking finding didn&rsquo;t survive it.
@@ -1112,7 +1247,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsFullMoonMobile}
             alt="The same full moon question on a phone, reading Maybe with the chance bar and the range."
-            caption="Plain words first. The p-value is behind a switch."
+            caption="Plain words first. The p-value is behind a switch · October 2026"
             frame="phone"
           />
         </Section>
@@ -1120,7 +1255,7 @@ export const caseStudies: Record<string, CaseStudy> = {
         <Section
           eyebrow="The proof"
           title="A thousand listeners with no sky in them"
-          dek="To check the new bar, the app is run on a thousand made-up histories where the sky does nothing. Fewer than one in ten get a false yes. Without the correction, about four in ten would have had a result that looked real."
+          dek="To check the new bar, the app is run on a thousand made-up histories where the sky does nothing, and on two thousand more that are too young to say much. Fewer than one in ten get a false yes."
         >
           <p>
             The correction is only as good as its false alarms, so the repo tests it directly.{" "}
@@ -1134,6 +1269,14 @@ export const caseStudies: Record<string, CaseStudy> = {
             histories, 38.5%, had at least one question that cleared the usual bar by chance. That
             is the failure the correction exists for: ask twelve questions of a sky that does
             nothing, and four histories in ten turn up something that looks real.
+          </p>
+          <p>
+            Those thousand all run to about four years or more, and someone who joined Last.fm last
+            spring is a different case: their history often has nothing to test yet. So the
+            run adds two thousand younger ones, 500 in each of four bands from three months
+            to just under five years, each band held to the same 13% among the histories that had
+            anything tested. The worst of the four came to 9.6%, and the older thousand came to the
+            same 71.
           </p>
           <p>
             The full run is in CI too, on every pull request that touches the engine or the answer
@@ -1159,12 +1302,12 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={rsHabits}
             alt="Your habits: Comfort Creature at 66 percent, Crate Digger at 13 percent, Daylight Listener at 2 percent after midnight, then golden hour 3 to 5 p.m., Fridays, December, 81 a day with a best streak of 715 days, above a bar chart of plays by hour."
-            caption="Comfort Creature: 66% of my plays are songs I already knew"
+            caption="Comfort Creature: 66% of my plays are songs I already knew · October 2026"
           />
           <Shot
             press={rsHabitsMobile}
             alt="The same listening habits stacked on a phone screen."
-            caption="Dense figures that still hold their shape on a narrow screen"
+            caption="Dense figures that still hold their shape on a narrow screen · October 2026"
             frame="phone"
           />
           <p>
@@ -1237,11 +1380,11 @@ export const caseStudies: Record<string, CaseStudy> = {
     stats: [
       { value: "14", label: "Leagues supported", source: "five sports, 22 competitions" },
       { value: "285", label: "Games in one season", source: "scored, reconciled, settled" },
-      /* mega-squad's `playfulStrings.ts` on main, a90bb02, 15 Nov 2026: 13 hits
+      /* mega-squad's `playfulStrings.ts` on main, 97ad31d, 24 Nov 2026: 13 hits
          and 12 misses all year, 8 Halloween and 8 Christmas lines that stand in
          for them in their month, and 7 scoldings. Commented-out lines aren't counted. */
       { value: "48", label: "Ways it answers back", source: "25 all year, 16 seasonal, 7 scoldings" },
-      { value: "30 s", label: "Poll interval", source: "idle after 5 min" },
+      { value: "0", label: "Deploys to change season", source: "the date decides, in Central time" },
     ],
     stack: [
       { k: "Build", v: "Vite" },
@@ -1271,7 +1414,7 @@ export const caseStudies: Record<string, CaseStudy> = {
             picks before kickoff, score them afterwards, and settle it when two people remember the
             same result differently. MegaSquad is that arrangement with a source of truth: squads,
             leagues, weekly picks that lock the moment a game starts, and standings nobody can argue
-            with.
+            with. It&rsquo;s the oldest app here.
           </p>
           <Shot
             press={collapsedLight}
@@ -1302,7 +1445,7 @@ export const caseStudies: Record<string, CaseStudy> = {
           <Shot
             press={pickingLight}
             blueline={pickingDark}
-            alt="MegaSquad in picking mode: a sticky bar reading 5 of 16 with Cancel and Save Picks, a segmented progress strip showing five team crests, an active slot and ten question marks, and schedule cards rendered as perforated tickets with dashed tear lines, punched notches and lock-in countdowns."
+            alt="MegaSquad in picking mode: a sticky bar reading 5 of 16 with Cancel and Save Picks, a segmented progress strip showing five team crests, an active slot and ten question marks, and schedule cards rendered as perforated tickets with dashed tear lines, punched notches and lock-in countdowns, a confidence tray under each pick made."
             caption="Picking: the schedule, torn into tickets"
           />
           <p>
@@ -1377,28 +1520,545 @@ export const caseStudies: Record<string, CaseStudy> = {
             caption="390 pt"
             frame="phone"
           />
+        </Section>
+
+        <Section
+          eyebrow="By the calendar"
+          title="December moves nothing"
+          dek="In October and December the app dresses for the season, and nobody deploys anything. The rule was that no box may change size or position, no color may get harder to read, and nothing may take a tap."
+        >
           <p>
-            When no league is in season, a sleeping squid offers sports trivia instead. It&rsquo;s the
-            kind of thing nobody asks for in a spec.
+            A costume is easy to add and easy to regret. So the rules came first, and the date is the
+            only switch: <Code>seasonFor(date)</Code> reads the month in Central time, and a month that
+            isn&rsquo;t a season has none of this, not even the files. October is
+            Halloween and December is Christmas, with no release to make it so and none to undo it.
+          </p>
+          <p>
+            What a season brings is a tint at night, a tentacle along the nav, a scene behind the page
+            head, hats on the MegaSquid, and its own result lines. What it can&rsquo;t touch is the longer
+            list. Every tinted gray was solved to the luminance of the one it stands in for, so no pair
+            of colors loses contrast. Marigold still means you owe picks, and red and green still mean
+            lost and won. The art doesn&rsquo;t move, and it never takes a tap.
+          </p>
+          <Shot
+            press={decemberLight}
+            blueline={decemberDark}
+            alt="MegaSquad's schedule in December: a snowy tentacle strung with lights along the nav, a goalpost and a moon behind the page head with the MegaSquid asleep on the crossbar in a Santa hat, and settled games carrying the season's own result lines, Naughty among them."
+            caption="December, on the schedule"
+          />
+          <Shot
+            press={decemberMobileLight}
+            blueline={decemberMobileDark}
+            alt="December on a phone, in another week: the tentacle curls around the header, the MegaSquid sleeps in its hat on the crossbar and again beside a notice that the week is locked, and two games with no picks on them stack below."
+            caption="390 pt"
+            frame="phone"
+          />
+          <p>
+            The empty state belongs here, because even the MegaSquid dresses. When there are no games to
+            show, the MegaSquid sleeps through it beside some sports trivia, and in December it
+            sleeps in the hat.
           </p>
           <Shot
             press={squidLight}
             blueline={squidDark}
-            alt="MegaSquad's empty state: a cartoon squid asleep, the message “No games found for Week 1, Season 2026,” and a sports trivia card with a Get Another Fact button."
-            caption="No league in season"
+            alt="MegaSquad's empty state in December: the MegaSquid, a cartoon squid, asleep in a Santa hat, above the message “No games found for Week 2, Season 2026,” and a sports trivia card with a Get Another Fact button."
+            caption="No games to show, so the MegaSquid sleeps in its hat"
           />
         </Section>
 
         <Section
           eyebrow="Working to someone else's contract"
-          title="Two languages, one product"
-          dek="Half of this app is my brother’s and I can&rsquo;t change it. Building on someone else’s system means behaving like a guest: ask for only what you need, and stop asking once nobody is looking."
+          title="Send only what you changed"
+          dek="Half of this app is my brother's, and I can't change it. A settings page that sent everything back when one switch moved could undo something his server had just done, so now each switch sends only itself."
         >
           <p>
-            The API is my brother&rsquo;s, in Python. That makes the front end a consumer of a
-            contract it doesn&rsquo;t control, which is its own discipline: the app polls invitations
-            every 30 seconds but stops after five minutes of inactivity, so a tab left open for three
-            days isn&rsquo;t quietly hammering his server.
+            The API is my brother&rsquo;s, in Python, so the front end works to a contract it
+            doesn&rsquo;t control. What I do control is what I send it.
+          </p>
+          <p>
+            The settings page is where that mattered. Moving any switch sent the whole preferences
+            object back. A tab
+            left open since before an email bounced still believed email was on, so the next unrelated
+            switch turned it back on and wiped the reason his server had recorded for turning it off.
+            So each switch sends
+            its own field now. The email one sends
+            both of its contact flags together, because the server only drops someone from its list
+            when a single request says both are off.
+          </p>
+        </Section>
+      </>
+    ),
+  },
+
+  "bragging-rocks": {
+    lede: "A community where rock collectors around the world show off their collections. Each member keeps a cabinet, and each week the hosts set a theme and everyone may bring one rock to the table. Ask what a rock is, and the other members can help identify it.",
+    stats: [
+      /* Its GitHub releases, read 24 Nov 2026. */
+      { value: "31", label: "Releases", source: "0.1.0 to 0.25.0, since October 2026" },
+      { value: "0", label: "Location data in photos", source: "redrawn, then read back twice" },
+      { value: "3", label: "Seals name a rock", source: "and over two thirds agree" },
+      { value: "142 ms", label: "Hero paint", source: "production build, 4x throttle" },
+    ],
+    stack: [
+      { k: "Framework", v: "Next.js 16, App Router" },
+      { k: "Runtime", v: "React 19" },
+      { k: "Data", v: "Supabase Postgres, 29 migrations" },
+      { k: "Sign-in", v: "Emailed code or Google" },
+      { k: "Photos", v: "Cloudflare R2, sharp" },
+      { k: "UI", v: "@blakesteve/roster" },
+      { k: "Tests", v: "Vitest, Playwright, PGlite" },
+      { k: "Deploy", v: "Vercel, staged by GitHub Actions" },
+    ],
+    also: [
+      { k: "Words", v: "In catalogs, never typed into a view" },
+      { k: "Checks", v: "A pseudo-locale renders every view" },
+      { k: "Bundle", v: "Nine rules on what ships to a browser" },
+      { k: "Bell", v: "Love, comments, friends and names" },
+    ],
+    body: (
+      <>
+        <Section
+          eyebrow="The idea"
+          title="A table, not a feed"
+          dek="A feed scrolls a rock away and rewards whoever posts most. This gives each member a cabinet that stays put, and one weekly table that everyone brings a single rock to."
+        >
+          <p>
+            A feed rewards whoever posts most. A table doesn&rsquo;t. Each member keeps a cabinet of
+            their rocks, and each week the hosts set a theme and everyone may bring one. One rock
+            means choosing: you go through the cabinet and decide which rock answers the week.
+          </p>
+          <Shot
+            press={brCabinet}
+            alt="Blake B's cabinet: a printed landscape with the cabinet's name on a slip and a carved BB seal, a count of 8 rocks and 0 countries, since every origin is kept private, then all eight on printed tiles: Megalodon Tooth, Shamu, Smooth Labrador, mustard crackle, Malachi, Robin egg, Tigereye cicada and The beach."
+            caption="My own cabinet"
+            priority
+          />
+          <Shot
+            press={brWall}
+            alt="A week's table as a member sees it: six rocks on printed tiles, each with its name and a carved red seal of its owner's initials. Malachi, a polished green malachite, comes first, marked Yours, with its owner's words about it. Then Shamu, marked Friend, then Robin egg, Megalodon Tooth, Smooth Labrador and Tigereye cicada."
+            caption="My rocks, shared out among invented members"
+          />
+          <p>
+            There are no follower counts here, nothing trending, no streaks and no points. A wall is
+            ordered by who you are to it, your own rock first and your friends&rsquo; next, and never
+            by how many people pressed something.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Midnight, wherever you are"
+          dek="A week ends at midnight, wherever you are. That isn’t one moment but a day of them, and the rules have to hold for everyone the whole way through."
+        >
+          <p>
+            A week runs from Monday to Monday, and it ends at your own midnight. Someone in Auckland
+            and someone in Honolulu reach that midnight nearly a day apart, so &ldquo;this week&rdquo;
+            is a question about the member and not about the server&rsquo;s clock. A week counts as
+            past once it has ended everywhere. A member who moves zones keeps their current week and
+            changes at the later of the two midnights, so nobody lands in a week that&rsquo;s already
+            over for them.
+          </p>
+          <p>
+            One rock per person per week is a primary key on the theme and the member, so the database
+            refuses a second one whatever the app does. The close is the server&rsquo;s job, because
+            it depends on the member&rsquo;s zone. And what the public sees never reads a zone or a
+            time at all: a wall&rsquo;s order is a place number, so nothing on a table says when
+            someone was awake.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="What is it?"
+          title="Three seals name a rock"
+          dek="Members ask what a rock is and others say what they think, and why. A name goes on it only when at least three agree and they're more than two thirds of everyone who answered, and it comes off again if that stops being true."
+        >
+          <p>
+            A member who doesn&rsquo;t know what they have can ask. The others suggest a name from a
+            list, or write one in, and say why. Each suggestion is a seal on the rock, and three
+            seals that agree put the name on it, as long as they&rsquo;re over two thirds of the
+            answers that count. A suggestion counts once the member behind it has been around for 14
+            days. The owner&rsquo;s own doesn&rsquo;t count. They set a label instead, and the members
+            who got it right are credited for it.
+          </p>
+          <p>
+            None of it is stored as a verdict. The rule is worked out every time someone looks, so a
+            name that stops being true comes off by itself, and nobody has to take it down.
+            A near miss like agate and quartz is named as kin and never counted together.
+          </p>
+          <Shot
+            press={brNames}
+            alt="Smooth Labrador's page, with its photo of a polished gray stone flashing blue and gold at the edge, reading 'Community ID: labradorite, 3 of 4 agree', with plagioclase as its scientific name. Under What members think, labradorite has three carved seals with each member's reason, feldspar has one, and a line says labradorite is a kind of feldspar but they count as two names."
+            caption="My labradorite, with invented members naming it"
+          />
+          <p>
+            The questions wait on shelves sorted by what they need: nobody&rsquo;s looked yet, getting
+            close, still split, lately named. Not by which rock is liked. And because a rock&rsquo;s scientific
+            name is sometimes two names, an entry can list up to four, joined by &ldquo;or&rdquo; when
+            it&rsquo;s either and &ldquo;and&rdquo; when it&rsquo;s a blend, with a formula borrowed
+            from the nearest parent in the list that has one.
+          </p>
+          <Shot
+            press={brShelves}
+            alt="The What is it? page: a printed landscape, the line 'Rocks their owners can't place. Know one? Say what you think, and why.', and a shelf titled No one's looked yet with three rocks, The beach, Robin egg and mustard crackle, each asking what it is."
+            caption="Three of mine, still asking"
+          />
+        </Section>
+
+        <Section
+          eyebrow="Privacy"
+          title="Nothing travels with the photo"
+          dek="A photo from a phone can carry the exact spot it was taken, and here a member decides how much of a rock's origin anyone sees. So every photo is redrawn from its pixels, then checked again."
+        >
+          <p>
+            A member decides how much of where a rock is from anyone sees, and a phone photo can quietly
+            overrule that with GPS. So the server doesn&rsquo;t clean metadata out of a file. It decodes
+            the upload to raw pixels and encodes every version from those, which leaves nothing to
+            carry a location over.
+          </p>
+          <Shot
+            press={brEdit}
+            frame="phone"
+            alt="Editing Malachi on a phone: Bought it, the year 2022, then Where it's from, with Keep it private chosen over Country only, Region and The exact place. A note says the exact place is never shown unless it's picked."
+            caption="How much of a rock's origin to share, its owner's choice"
+          />
+          <p>
+            Then it doesn&rsquo;t trust that. Every file the server writes is read back through two
+            separate readers and refused if it has EXIF, XMP or IPTC in it, and that check sits inside
+            the server&rsquo;s storage writer, so none of its code can step around it. A lint rule and a source
+            scan refuse the image library&rsquo;s calls that keep metadata, and the test fixtures embed
+            fake GPS on purpose.
+          </p>
+          <Pull cite="The rule behind it">
+            It&rsquo;s a stronger promise to have nothing to remove than to remember to remove it.
+          </Pull>
+          <p>
+            The far end is the same idea. Photos are served from <Code>photos.bragging.rocks</Code>,
+            where Cloudflare keeps each one for a week. So when one is taken down, or its rock or
+            its account is deleted, the files go first and then Cloudflare&rsquo;s copies of it are
+            purged by their exact addresses. A deletion that only reached the bucket would leave a
+            photo up for days at an address somebody already has.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Holding it to its word"
+          title="A privacy page that can fail the build"
+          dek="A privacy page is a list of claims about the code, and code changes. Tests pin what the page says to what the app does, so one can't move without the other."
+        >
+          <p>
+            Privacy pages go stale quietly, because nothing connects the sentence to the code. Here
+            34 tests at release 0.25.0 pin the page&rsquo;s facts to the code they describe: what
+            analytics runs, how a photo is redrawn, how long a sign-in code lasts. Change one of those
+            and the suite fails until
+            the page says the new truth, so a true page can&rsquo;t drift false without anyone being
+            told.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Shipping"
+          title="Staged, then promoted"
+          dek="A release is built and tested on production's own setup before anyone can see it, then promoted and checked again, so a bad build fails where nobody is looking."
+        >
+          <p>
+            Merging a change doesn&rsquo;t reach production by itself. A merge runs a light set of
+            checks, migrates staging, deploys it and smoke-tests it. A release migrates production,
+            builds it staged with no domain, smoke-tests that, promotes it, then smoke-tests the live
+            site and checks it&rsquo;s serving that exact build. Release 0.25.0 passed
+            36 of 36 checks staged and 37 of 37 live, a real round trip through photo storage among
+            them.
+          </p>
+          <p>
+            Migrations run before promotion, so the build still live has to work with the new schema.
+            That one fact means every migration is written to add rather than replace.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The look"
+          title="Printed, not filtered"
+          dek="The site looks block printed, with edges a hand-cut block didn't quite hold. Those edges are drawn as real shapes, because the easy way looked different in one browser."
+        >
+          <p>
+            Buttons, photos and slips all have a printed edge, a rectangle that a hand-cut block
+            didn&rsquo;t quite hold. The first version used a displacement filter, and WebKit drew it
+            straight once a mask was stretched. So the tremor is now a seeded outline in the mask
+            itself, one unit to one CSS pixel and never stretched, in two corner layers. Both engines
+            draw the same edge.
+          </p>
+          <Shot
+            press={brRock}
+            alt="Malachi's page: a printed photo of a banded green malachite beside its name, its owner's carved seal, 'Labeled as malachite by the owner', its chemical formula, the story 'My first malachite', and its origin, kept private. Below, more from the same cabinet: Megalodon Tooth, Shamu and Smooth Labrador."
+            caption="Malachi's page. It's my rock"
+          />
+          <Shot
+            press={brPhone}
+            frame="phone"
+            alt="An invented week on a phone: a printed landscape with a made-up theme on a slip, its prompt, a block printed Bring a rock button, and a count of 6 rocks from 5 countries."
+            caption="A week on a phone, its theme, dates and counts invented"
+          />
+          <p>
+            The landscapes are generated too, seeded and drawn on the server, and a bundle check keeps
+            the generator out of the browser. It&rsquo;s the biggest thing on the page, and it
+            paints in 142 ms, the median of five traces of a production build in Chromium at 4x CPU
+            throttling.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Between members"
+          title="Nothing here keeps score"
+          dek="Love a rock, comment on it, help put a name to it. Each of those is something you do for its owner, and none of them adds up to a rank."
+        >
+          <p>
+            A rock shows how many people love it, and its owner sees who. Comments go one reply deep.
+            Friends are mutual, by request, and known to the two of them alone. A rock can be passed
+            round the table, one at a time, from the wall. And a cabinet keeps a list of the rocks its
+            owner helped name, which is as close as this gets to a trophy.
+          </p>
+          <Shot
+            press={brPass}
+            frame="phone"
+            alt="A rock passed round the table on a phone: Robin egg, 3 of 6 at the table, with its photo, its owner's seal and words, Love, Open its page and Report, and at the bottom Back and Pass it on, which names the next rock, Megalodon Tooth."
+            caption="My rock, passed round by invented members"
+          />
+          <p>
+            None of those add up. There&rsquo;s no score to climb, no place to hold on to and nothing
+            to lose by going quiet for a month.
+          </p>
+        </Section>
+      </>
+    ),
+  },
+
+  tehon: {
+    lede: "An app for practicing written Japanese: a page a day, each stroke graded as it ends against the model it copies. It’s coming soon to iPhone, iPad and Android and isn’t out yet. Nine of its twelve build steps are done.",
+    stats: [
+      /* A development build: ROADMAP step 3, Part A (461b4fe), "120 frames a
+         second of 120 Hz, 5 dropped of 463". It says "the Pixel", and the README
+         names the one this app is tested on. The prototype's 119.9 is another
+         measurement, so the study doesn't print it. */
+      { value: "120 fps", label: "Ink on a 120 Hz phone", source: "Pixel 9 Pro, 120 Hz" },
+      { value: "25 ms", label: "Opening a year's notebook", source: "Pixel, cold, median; was 495" },
+      { value: "2,843", label: "Tests", source: "CI at 14ef879, Nov 2026 snapshot" },
+      { value: "9 of 12", label: "Build steps done", source: "Nov 2026 snapshot" },
+    ],
+    stack: [
+      { k: "Framework", v: "Expo 58, expo-router" },
+      { k: "Runtime", v: "React Native 0.88, React 19" },
+      { k: "Ink", v: "Skia, Reanimated, Gesture Handler" },
+      { k: "Storage", v: "expo-sqlite" },
+      { k: "Tests", v: "Jest" },
+      { k: "CI", v: "GitHub Actions" },
+      { k: "UI", v: "Its own, no Roster" },
+      { k: "Site", v: "Next.js, static, with Roster" },
+    ],
+    alsoLabel: "So far",
+    also: [
+      { k: "Status", v: "Coming soon. Not on a store yet" },
+      { k: "Writes", v: "Hiragana, katakana, 35 kanji" },
+      { k: "Content", v: "96 words, 12 patterns, 11 particles" },
+      { k: "Stroke models", v: "KanjiVG, by Ulrich Apel, CC BY-SA 3.0" },
+    ],
+    body: (
+      <>
+        <Section
+          eyebrow="The question"
+          title="Is ink in React Native good enough?"
+          dek="Writing Japanese on a phone only works if the ink keeps up with your finger. Before building anything, I built a small prototype to find out whether it could, and measured it on three devices."
+        >
+          <p>
+            Everything about this app depends on one feeling: ink that keeps up with your hand. If it
+            lags, you stop writing and start waiting. So it began as a prototype called fude{" "}
+            <span lang="ja">筆</span> that asked one question: does drawing ink in React Native feel
+            good enough to build a Japanese handwriting app on? If it didn&rsquo;t, the alternative was
+            to build the app natively.
+          </p>
+          <p>
+            I wrote the 46 base hiragana on three devices, in Expo Go, and read the numbers. The Pixel 9 Pro
+            kept up with its 120 Hz screen and missed about 1 frame in 400. The iPhone 12
+            Pro held about 60 on its 60 Hz screen. The iPad Pro 9.7, on a chip from 2016, held 57.3 of its
+            60. So the answer was yes.
+          </p>
+          <Shot
+            press={thTodayLight}
+            blueline={thTodayDark}
+            frame="phone"
+            alt="Tehon's page for the day on a phone, from a sample notebook: Lesson 44, page No. 303, line 1 waiting with empty boxes under 'One of those, please.', then four handed-in lines of Japanese with a red circle around each box that was right."
+            caption="A day's page in a sample notebook"
+            priority
+          />
+        </Section>
+
+        <Section
+          eyebrow="The hard thing"
+          title="Ink that React never sees"
+          dek="If every touch went through the app's normal update cycle, the ink would lag behind your finger. So the drawing happens on its own fast path, and the app hears about a stroke only once it ends."
+        >
+          <p>
+            Touch samples go from the gesture handler to a Skia path in worklets on the UI thread.
+            React doesn&rsquo;t see anything until the stroke ends, which is when it gets graded.
+            That keeps React out of the way of the ink, and it means the interesting bugs live below
+            where React&rsquo;s tools can see.
+          </p>
+          <Shot
+            press={thWatchedLight}
+            blueline={thWatchedDark}
+            frame="phone"
+            alt="A watched line in Tehon on a phone: the model あ above a row of five boxes, and on the large pad the third stroke of あ partway drawn, with 'Stroke 2: right.' under it."
+            caption="With the model: the third stroke, still being drawn"
+          />
+          <p>
+            Checking the debug overlay against the device&rsquo;s own logs caught three of its numbers
+            misreading on the Pixel. And on iOS a finger&rsquo;s
+            first 10 to 27 points of travel went unsampled, so a stroke began after it had really
+            started. Sampling the raw touches fixed that. On the iPad, the second sample now arrives
+            108 ms after the finger lands, where it had taken 242.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The grader"
+          title="Taught by a real hand"
+          dek="The first grader was too strict: it passed 19 of 47 of my own honest tries. Loosening it was easy. Loosening it without letting a single planted mistake through took real handwriting on both sides of the line."
+        >
+          <p>
+            The app already knows which character you&rsquo;re writing, so this isn&rsquo;t handwriting
+            recognition. Each stroke is checked against KanjiVG&rsquo;s reference for direction, shape,
+            placement, size and order as it ends. The first limits came from synthetic
+            strokes, and real handwriting doesn&rsquo;t look like those: they passed 19 of 47 on the iPhone with a finger, and 16 of 46 on the iPad with the Pencil.
+          </p>
+          <p>
+            So I wrote the 46 hiragana as I&rsquo;d really write them, at the size of a
+            held line&rsquo;s box, and 13 mistakes on purpose on each device, one of which came out right and
+            counts as a try. Loosened to fit the honest
+            tries, the grader passes 28 of 47 on the iPhone and 24 of 46 on the iPad. All 25 planted
+            mistakes are still wrong, in both. At about twice those tolerances,{" "}
+            <span lang="ja">め</span> written for <span lang="ja">ぬ</span> would pass on one of them,
+            and <span lang="ja">わ</span> for <span lang="ja">れ</span> and{" "}
+            <span lang="ja">さ</span> for <span lang="ja">ち</span> on the other, so that&rsquo;s the
+            line.
+          </p>
+          <p>
+            About half of what&rsquo;s left to miss is a stroke order other than the taught one, which
+            is the app disagreeing with my habits rather than failing to read them. And the particles
+            it reads for one kind of line go wrong the safe way. It has never mistaken one particle for
+            another, in either device&rsquo;s session. It just says none, and on the iPhone it reads{" "}
+            <span lang="ja">は</span> as itself three times in five, where it was once.
+          </p>
+          <p>
+            The limits are data, and every attempt keeps the set that graded it. So the next hand can
+            teach the next set without changing a verdict already given.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="Held lines"
+          title="Silent until you hand it in"
+          dek="A line you write from memory gets no marks while you write. The result comes after, and if you disagree with it you can say so. The notebook keeps both answers."
+        >
+          <p>
+            In a watched line the model is in front of you and each stroke is answered as it ends. In a
+            held line there&rsquo;s no model and no answer. The grader runs as always, and only the ink
+            shows: no note, no tool and no pad that depends on a grade, because a pad that behaved
+            differently after a bad stroke would be a hint. There is one hint you can ask for, and a
+            box you used it on is never counted as right.
+          </p>
+          <p>
+            Hand it in and every box has its result, with the reason beside a wrong one. If you think
+            it&rsquo;s wrong, press <strong>I wrote it right</strong>. The box is right from then on,
+            everywhere, and you can undo it until you leave the result. Each of those is a record of
+            its own, beside the grader&rsquo;s verdict rather than in place of it, so nothing anyone
+            said about the box is lost.
+          </p>
+          <Shot
+            press={thHeldLight}
+            blueline={thHeldDark}
+            frame="phone"
+            alt="A held line's result in Tehon on a phone: 'It's sushi.', 1 of 2 boxes right. し is circled in red. す is uncircled, with the reason 'Stroke 1. Drawn the wrong way: start at the other end.' and an 'I wrote it right' button."
+            caption="Handed in: a reason beside the wrong box, and a way to disagree"
+          />
+        </Section>
+
+        <Section
+          eyebrow="The architecture"
+          title="Two things are hard to change"
+          dek="Everything the app shows about your progress is worked out from a log of what you wrote. That made opening a year's notebook slow, half a second on a phone, until the app learned to remember what it had already worked out."
+        >
+          <p>
+            The notebook is a log. Records are never updated or deleted, and database triggers refuse
+            every attempt to. Everything shown about progress is derived from that log, so the rules
+            for what counts can change later and the app just reworks it. Only two things
+            can&rsquo;t change without migrating people&rsquo;s notebooks: the log&rsquo;s shape and the
+            stroke encoding, which packs each sample into 6 or 7 bytes, 6.43 on my real strokes.
+          </p>
+          <p>
+            Deriving everything has a price. On the Pixel&rsquo;s release build, opening a sample year
+            took a median of 495 ms cold, so the app now keeps the last answer it worked out, and the
+            same open is 25 ms. But an open just after a hand-in was 594 ms, since each hand-in changes
+            what had been kept. Now the new work is folded in rather than rebuilt, and that open is 77 ms.
+            Those are medians on a Pixel 9 Pro, over a year of synthetic writing.
+          </p>
+        </Section>
+
+        <Section
+          eyebrow="The book"
+          title="One object, two places"
+          dek="The app is a practice book, with a cover, a spine and numbered pages. Its site is the same book: the cover opens onto today's page, and privacy and support are pages further in."
+        >
+          <p>
+            <span lang="ja">手本</span>, tehon, means the model you copy, and the app is built as
+            the book you copy it into. A cover you write your name on, a spine, pages that count up from
+            No. 1, and a seal that lands when a day is done.
+          </p>
+          <Shot
+            press={thCoverLight}
+            blueline={thCoverDark}
+            frame="phone"
+            alt="Tehon's cover on a phone: a label with 手本 in two boxes, 手 circled in red, TEHON · 練習帳 and an empty name line, above 'This is your practice book.' and an Open the book button."
+            caption="The cover, before you sign it"
+          />
+          <p>
+            tehon.app is that book again. It&rsquo;s a static site, and the cover is the first thing on
+            it, name field and all. Opening it turns to today&rsquo;s page. The privacy policy and
+            support are later pages, and the back cover closes every one. The mark and the stroke
+            models come from the app&rsquo;s own files, so the two can&rsquo;t drift into different
+            books.
+          </p>
+          <Shot
+            press={thSiteLight}
+            blueline={thSiteDark}
+            alt="tehon.app's cover on a desktop: a green book with a label reading 手本, 手 circled in red, a field for your name and an Open the book button, beside 'A practice book for writing Japanese by hand.'"
+            caption="tehon.app opens on the cover"
+          />
+          <Shot
+            press={thSitePageLight}
+            blueline={thSitePageDark}
+            alt="tehon.app's first page: a ruled sheet with a name line, No. 1 and the date. Line 1 says what the app does beside 手本 with 手 circled, and line 2, 'Stroke by stroke', has an empty box that writes あ as you scroll."
+            caption="Open the book and it turns to today's page"
+          />
+        </Section>
+
+        <Section
+          eyebrow="Where it stands"
+          title="Nine steps of twelve"
+          dek="Writing, reviewing, kanji, words, lessons and two quiet sounds are in. Three build steps are left before a beta. It's coming soon to both stores, and there's nothing to download yet."
+        >
+          <p>
+            Nine of the twelve steps are done: the log, the look, watched and held lines, the particle
+            check, the stroke data, the content, the book itself and its contents page. The tenth is
+            under way. It gives a learner&rsquo;s own hand a page of its own, and postcards come next.
+            Then racing your own ghost, and the way to take a notebook out and bring it back.
+          </p>
+          <Shot
+            press={thContentsLight}
+            blueline={thContentsDark}
+            alt="Tehon's contents on an iPad: a grid of lessons 1 to 4 across with the fifth running off the edge, and rows for kana, pattern, particle, words, kanji, and listening and reading. Each tile is marked with a dot."
+            caption="The contents page, on an iPad"
+          />
+          <p>
+            After that is a beta on both platforms. Stroke order and models come from KanjiVG, by Ulrich
+            Apel, under CC BY-SA 3.0.
           </p>
         </Section>
       </>

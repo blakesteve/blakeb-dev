@@ -305,14 +305,14 @@ export const posts: Post[] = [
           day on behalf of software.
         </P>
         <P>
-          The provider gave me until <strong className="font-semibold text-ink">7 July</strong>{" "}
+          The provider gave me until <strong className="font-semibold text-ink">July 7</strong>{" "}
           before fair use enforcement began. That is a real deadline attached to
           a real number, and it focuses the mind.
         </P>
         <Shot
           press={gvEgressJune}
-          alt="Supabase egress chart from 25 May to 24 June 2026, with daily bars mostly between 190MB and 380MB and one spike reaching 711MB on 28 May."
-          caption="Supabase egress, 25 May to 24 June 2026"
+          alt="Supabase egress chart from May 25 to June 24, 2026, with daily bars mostly between 190MB and 380MB and one spike reaching 711MB on May 28."
+          caption="Supabase egress, May 25 to June 24, 2026"
         />
 
         <H
@@ -338,7 +338,7 @@ bb/egress-hotfix
 bb/egress-again
 bb/egress-cont`}</Code>
         <P>
-          Eight of those merged between 10 June and 1 July. It worked. By August
+          Eight of those merged between June 10 and July 1. It worked. By August
           the site was steady in the mid twenties of megabytes a day, comfortably
           inside an allowance that works out to about 170MB a day. The fire was
           out, and I had earned a fairly detailed mental model of how this
@@ -346,7 +346,7 @@ bb/egress-cont`}</Code>
         </P>
         <Shot
           press={gvEgressAugust}
-          alt="The same Supabase egress chart from 30 July to 29 August 2026, with daily bars between roughly 9MB and 36MB."
+          alt="The same Supabase egress chart from July 30 to August 29, 2026, with daily bars between roughly 9MB and 36MB."
           caption="The same dashboard, two months later"
         />
 
@@ -1636,8 +1636,8 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-/** "14 August 2026". */
+/** "August 14, 2026". */
 export function formatPostDate(date: string): string {
   const [y, m, d] = date.split("-").map(Number);
-  return `${d} ${MONTHS[m - 1]} ${y}`;
+  return `${MONTHS[m - 1]} ${d}, ${y}`;
 }

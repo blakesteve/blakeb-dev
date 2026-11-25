@@ -11,16 +11,16 @@ import { formatPostDate, getPost, posts, postsByDate } from "./posts";
 
 describe("formatPostDate", () => {
   it("renders a long-form date", () => {
-    expect(formatPostDate("2026-08-14")).toBe("14 August 2026");
+    expect(formatPostDate("2026-08-14")).toBe("August 14, 2026");
   });
 
   it("does not zero-pad the day", () => {
-    expect(formatPostDate("2026-03-01")).toBe("1 March 2026");
+    expect(formatPostDate("2026-03-01")).toBe("March 1, 2026");
   });
 
   it("handles both ends of the year", () => {
-    expect(formatPostDate("2026-01-31")).toBe("31 January 2026");
-    expect(formatPostDate("2026-12-25")).toBe("25 December 2026");
+    expect(formatPostDate("2026-01-31")).toBe("January 31, 2026");
+    expect(formatPostDate("2026-12-25")).toBe("December 25, 2026");
   });
 
   // Off-by-one on the month index is the classic failure here, and it produces

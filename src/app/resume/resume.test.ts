@@ -30,7 +30,7 @@ describe("the résumé's selected work", () => {
   it("describes every project without pointing at this site", () => {
     expect(page).toContain("{project.resumeLine ?? project.tagline}");
     for (const project of projects) {
-      expect(project.resumeLine ?? project.tagline, project.slug).not.toMatch(/this (site|page)|here\b|above|below/i);
+      expect(project.resumeLine ?? project.tagline, project.slug).not.toMatch(/this (site|page)|\b(here|above|below)\b/i);
     }
     expect(projects.find((p) => p.slug === "roster")!.tagline).toContain("this site");
   });
@@ -39,7 +39,7 @@ describe("the résumé's selected work", () => {
     expect(page).toContain("[`https://blakeb.dev/work/${project.slug}`, project.links[0].href]");
   });
 
-  it("has a whole https address for every project's live link", () => {
+  it("has a whole https address for every project's first link", () => {
     for (const project of projects) expect(project.links[0].href, project.slug).toMatch(/^https:\/\/[^/]+\./);
   });
 

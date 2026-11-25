@@ -38,8 +38,8 @@ export default async function WorkIndexPage() {
           The work
         </h1>
         <p className="m-0 max-w-[56ch] text-[1.0625rem] leading-[1.58] text-ink-soft">
-          Four things I built and still run. Each one has a case study covering
-          what it does, the decision that was actually hard, and what it cost.
+          Six things I built, five of them running and one on its way. Each one has a
+          case study covering what it does and a decision that was actually hard.
         </p>
       </header>
 

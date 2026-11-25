@@ -67,9 +67,9 @@ function overrides(source, dark) {
   );
 }
 
-const date = new Intl.DateTimeFormat("en-GB", {
+const date = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
-  month: "short",
+  month: "long",
   year: "numeric",
   timeZone: "America/Chicago",
 }).format(new Date());
